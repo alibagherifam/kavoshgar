@@ -14,6 +14,9 @@ According to [Wikipedia](https://en.wikipedia.org/wiki/Simple_Service_Discovery_
 > configuration mechanisms, such as Dynamic Host Configuration Protocol (DHCP) or 
 > Domain Name System (DNS), and without special static configuration of a network host."
 
+In simple words, giving a network with a couple of nodes, some of them can decide to 
+become a server and, other nodes (i.e., clients) will be notified about the presence of servers.
+
 ## Usage
 
 Every node on the network (which is a client by default) should start discovering
@@ -33,7 +36,7 @@ You can get discovered servers as follow:
 ```
 
 On the other hand, only the nodes you want to be a server in the network should 
-be prepared to replying to client discoveries:
+be start replying to client discoveries:
 
 ```kotlin
     val server = DiscoveryReplyRepository(name = "Test Server")
@@ -58,8 +61,10 @@ I am developing a desktop version using Kotlin multiplatform. So stay tuned ;)
 
 ## 💡 Inspiration
 
-The subject was the final project for the Internet Engineering course during my 
-B.Sc. in Computer Engineering.
+This was the final project for the Internet Engineering course during my 
+B.Sc. in Computer Engineering. I was curious about how in multiplayer 
+video games (Dota2, for example), players join a lobby and start playing 
+the game without knowing each other's network address. And it took me to the SSDP.
 
 ## 🤝 Contribution
 
@@ -67,7 +72,8 @@ Feel free to create pull requests.
 
 ## 🙏 Acknowledgment
 
-Thanks to [Dr. Nastooh Taheri Javan](https://scholar.google.com/citations?user=PmjCrgMAAAAJ&hl=en) for his guidance toward the project.
+Thanks to [Dr. Nastooh Taheri Javan](https://scholar.google.com/citations?user=PmjCrgMAAAAJ&hl=en) 
+for his guidance toward the project.
 
 License
 -------
