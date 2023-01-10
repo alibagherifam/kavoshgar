@@ -13,7 +13,7 @@ import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.SocketException
 
-class LobbyDiscoveryRepository {
+class KavoshgarClient {
     private var discoverySocket: DatagramSocket? = null
     private lateinit var discoveryPacket: DatagramPacket
     private lateinit var serverReplyPacket: DatagramPacket
@@ -38,7 +38,7 @@ class LobbyDiscoveryRepository {
         closed socket exception. We should join both calls together somehow
         and using one try/finally block
      */
-    fun getDiscoveredLobbies(): Flow<Lobby> = flow {
+    fun discoveredServerFlow(): Flow<ServerInformation> = flow {
         while (true) {
             if (discoverySocket == null) {
                 delay(100)
@@ -82,7 +82,7 @@ class LobbyDiscoveryRepository {
         discoverySocket = null
     }
 
-    private fun mapToLobby(replyPacket: DatagramPacket) = Lobby(
+    private fun mapToLobby(replyPacket: DatagramPacket) = ServerInformation(
         name = String(replyPacket.data, 0, replyPacket.length),
         address = replyPacket.address.toString().drop(1),
         latency = calculateLatency(replyPacket.address)

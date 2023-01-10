@@ -23,15 +23,15 @@ Every node on the network (which is a client by default) should start discoverin
 available servers:
 
 ```kotlin
-    val client = LobbyDiscoveryRepository()
+    val client = KavoshgarClient()
     service.startDiscovery()
 ```
 
-You can get discovered servers as follow:
+You can collect discovered servers as follow:
 
 ```kotlin
-    client.getDiscoveredLobbies().collect { server ->
-        println("Discovered a server:${server.address}")
+    client.discoveredServerFlow().collect { serverInfo ->
+        println("Discovered a server:${serverInfo.address}")
     }
 ```
 
@@ -39,7 +39,7 @@ On the other hand, only the nodes you want to be a server in the network should
 be start replying to client discoveries:
 
 ```kotlin
-    val server = DiscoveryReplyRepository(name = "Test Server")
+    val server = KavoshgarServer(name = "Test Server")
     server.startDiscoveryReplying()
 ```
 

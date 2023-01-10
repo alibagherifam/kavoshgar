@@ -2,7 +2,7 @@ package com.alibagherifam.kavoshgar.demo.chat
 
 import com.alibagherifam.kavoshgar.chat.ChatRepository
 import com.alibagherifam.kavoshgar.chat.Message
-import com.alibagherifam.kavoshgar.lobby.DiscoveryReplyRepository
+import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ import java.util.Locale
 class ChatViewModel(
     private val viewModelScope: CoroutineScope,
     private val chatRepository: ChatRepository,
-    private val discoveryReplyRepository: DiscoveryReplyRepository? = null
+    private val server: KavoshgarServer? = null
 ) {
     private var discoveryReplyingJob: Job? = null
 
@@ -31,7 +31,7 @@ class ChatViewModel(
             launch {
                 receiveMessages()
             }
-            if (discoveryReplyRepository != null) {
+            if (server != null) {
                 discoveryReplyingJob = launch {
                     startDiscoveryReplying()
                 }
@@ -80,7 +80,7 @@ class ChatViewModel(
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
-        discoveryReplyRepository!!.startDiscoveryReplying()
+        server!!.startDiscoveryReplying()
     }
 
     private fun stopDiscoveryReplying() {

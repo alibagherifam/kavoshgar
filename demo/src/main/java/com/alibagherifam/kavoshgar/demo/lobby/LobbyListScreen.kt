@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.alibagherifam.kavoshgar.demo.R
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
-import com.alibagherifam.kavoshgar.lobby.Lobby
+import com.alibagherifam.kavoshgar.lobby.ServerInformation
 import java.util.Random
 
 @Composable
@@ -47,7 +47,7 @@ fun LobbyListScreen(
         uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
-            val selectedLobby = uiState.selectedLobby
+            val selectedLobby = uiState.selectedServer
             if (selectedLobby != null) {
                 val args = ChatNavigationArgs(
                     isLobbyOwner = false,
@@ -76,7 +76,7 @@ fun LobbyListScreen(
 @Composable
 fun LobbyListContent(
     uiState: LobbyListUiState,
-    onLobbySelectionChange: (Lobby) -> Unit,
+    onLobbySelectionChange: (ServerInformation) -> Unit,
     onCreateLobbyClick: () -> Unit,
     onJoinLobbyClick: () -> Unit
 ) {
@@ -85,7 +85,7 @@ fun LobbyListContent(
             LobbyTable(
                 contentPadding = innerPadding,
                 lobbies = uiState.lobbies,
-                selectedLobby = uiState.selectedLobby,
+                selectedServer = uiState.selectedServer,
                 onLobbySelectionChange
             )
         },
@@ -127,16 +127,16 @@ fun LobbyNavigationBar(
 @Composable
 fun LobbyTable(
     contentPadding: PaddingValues,
-    lobbies: List<Lobby>,
-    selectedLobby: Lobby?,
-    onLobbySelectionChange: (Lobby) -> Unit
+    lobbies: List<ServerInformation>,
+    selectedServer: ServerInformation?,
+    onLobbySelectionChange: (ServerInformation) -> Unit
 ) {
     LazyColumn(contentPadding = contentPadding) {
         item { TableHeader() }
         items(lobbies) {
             TableRow(
-                lobby = it,
-                isSelected = selectedLobby?.name == it.name,
+                serverInformation = it,
+                isSelected = selectedServer?.name == it.name,
                 onLobbySelectionChange
             )
             Box(
@@ -182,9 +182,9 @@ fun TableHeader() {
 
 @Composable
 fun TableRow(
-    lobby: Lobby,
+    serverInformation: ServerInformation,
     isSelected: Boolean,
-    onLobbySelectionChange: (Lobby) -> Unit
+    onLobbySelectionChange: (ServerInformation) -> Unit
 ) {
     val backgroundColor = when {
         isSelected -> MaterialTheme.colors.primaryVariant
@@ -195,23 +195,23 @@ fun TableRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onLobbySelectionChange(lobby) }
+            .clickable { onLobbySelectionChange(serverInformation) }
             .background(backgroundColor)
     ) {
         TableCell(
-            text = lobby.name,
+            text = serverInformation.name,
             weight = 4f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = lobby.address,
+            text = serverInformation.address,
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = lobby.latency.toString(),
+            text = serverInformation.latency.toString(),
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle
@@ -243,17 +243,17 @@ fun LobbyListContentPreview() {
     val names = listOf("Re{ali}ty", "Samsung", "JetBrains", "ABC_123", "New York")
     val networkAddress = "192.168.1."
     val lobbies = listOf(
-        Lobby(names[0], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        Lobby(names[1], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        Lobby(names[2], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        Lobby(names[3], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        Lobby(names[4], networkAddress + random.nextInt(255), latency = random.nextInt(120))
+        ServerInformation(names[0], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
+        ServerInformation(names[1], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
+        ServerInformation(names[2], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
+        ServerInformation(names[3], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
+        ServerInformation(names[4], networkAddress + random.nextInt(255), latency = random.nextInt(120))
     )
     AppTheme {
         LobbyListContent(
             LobbyListUiState(
                 lobbies,
-                selectedLobby = lobbies[1]
+                selectedServer = lobbies[1]
             ),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},

@@ -1,8 +1,8 @@
 package com.alibagherifam.kavoshgar.demo.lobby
 
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.lobby.Lobby
-import com.alibagherifam.kavoshgar.lobby.LobbyDiscoveryRepository
+import com.alibagherifam.kavoshgar.lobby.ServerInformation
+import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class LobbyListViewModel(
     viewModelScope: CoroutineScope,
-    private val lobbyDiscoveryRepo: LobbyDiscoveryRepository
+    private val lobbyDiscoveryRepo: KavoshgarClient
 ) {
     private val _uiState = MutableStateFlow(LobbyListUiState())
     val uiState: StateFlow<LobbyListUiState> get() = _uiState
@@ -26,7 +26,7 @@ class LobbyListViewModel(
                 lobbyDiscoveryRepo.startDiscovery()
             }
             launch {
-                lobbyDiscoveryRepo.getDiscoveredLobbies().collect { newLobby ->
+                lobbyDiscoveryRepo.discoveredServerFlow().collect { newLobby ->
                     lobbyTTLs[newLobby.address] = getNextTTL()
                     addNewLobby(newLobby)
                 }
@@ -40,9 +40,9 @@ class LobbyListViewModel(
         }
     }
 
-    fun selectLobby(selectedLobby: Lobby) {
+    fun selectLobby(selectedServer: ServerInformation) {
         _uiState.update {
-            it.copy(selectedLobby = selectedLobby)
+            it.copy(selectedServer = selectedServer)
         }
     }
 
@@ -62,15 +62,15 @@ class LobbyListViewModel(
         }
     }
 
-    private fun addNewLobby(newLobby: Lobby) {
+    private fun addNewLobby(information: ServerInformation) {
         _uiState.update { state ->
             val currentList = state.lobbies
-            val newList = if (currentList.any { it.name == newLobby.name }) {
+            val newList = if (currentList.any { it.name == information.name }) {
                 currentList.map {
-                    if (it.name == newLobby.name) newLobby else it
+                    if (it.name == information.name) information else it
                 }
             } else {
-                currentList + newLobby
+                currentList + information
             }
             state.copy(lobbies = newList)
         }

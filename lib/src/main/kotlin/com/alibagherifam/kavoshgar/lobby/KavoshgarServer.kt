@@ -8,7 +8,7 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.SocketAddress
 
-class DiscoveryReplyRepository(lobbyName: String) {
+class KavoshgarServer(lobbyName: String) {
     private var discoveryReplySocket: DatagramSocket? = null
     private lateinit var receivedPacket: DatagramPacket
     private val replyMessage = lobbyName.toByteArray()

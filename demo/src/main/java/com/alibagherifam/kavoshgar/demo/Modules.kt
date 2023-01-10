@@ -5,12 +5,12 @@ import com.alibagherifam.kavoshgar.chat.ClientChatSocketProvider
 import com.alibagherifam.kavoshgar.chat.ServerChatSocketProvider
 import com.alibagherifam.kavoshgar.demo.chat.ChatViewModel
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
-import com.alibagherifam.kavoshgar.lobby.DiscoveryReplyRepository
-import com.alibagherifam.kavoshgar.lobby.LobbyDiscoveryRepository
+import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
+import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
 import kotlinx.coroutines.CoroutineScope
 
 fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
-    LobbyListViewModel(viewModelScope, LobbyDiscoveryRepository())
+    LobbyListViewModel(viewModelScope, KavoshgarClient())
 
 fun provideChatViewModel(
     viewModelScope: CoroutineScope,
@@ -23,7 +23,7 @@ fun provideChatViewModel(
         isLobbyOwner,
         lobbyAddress
     ),
-    discoveryReplyRepository = provideDiscoveryReplyRepository(
+    server = provideDiscoveryReplyRepository(
         isLobbyOwner,
         lobbyName
     )
@@ -43,6 +43,6 @@ fun provideDiscoveryReplyRepository(
     isLobbyOwner: Boolean,
     lobbyName: String
 ) = when {
-    isLobbyOwner -> DiscoveryReplyRepository(lobbyName)
+    isLobbyOwner -> KavoshgarServer(lobbyName)
     else -> null
 }
