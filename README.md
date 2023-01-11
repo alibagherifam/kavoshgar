@@ -52,7 +52,10 @@ I am developing a desktop version using Kotlin multiplatform. So stay tuned ;)
 
 ## ⚙ Technologies
 
-- Socket Programming
+The project is based on socket programming.
+
+Other technologies used in demo application:
+
 - Kotlin Coroutines
 - Jetpack Compose
 - AndroidX Lifecycle
@@ -63,8 +66,9 @@ I am developing a desktop version using Kotlin multiplatform. So stay tuned ;)
 
 This was the final project for the Internet Engineering course during my 
 B.Sc. in Computer Engineering. I was curious about how in multiplayer 
-video games (Dota2, for example), players join a lobby and start playing 
-the game without knowing each other's network address. And it took me to the SSDP.
+video games ([Dota2](https://www.dota2.com), for example), players join a lobby 
+and start playing the game without knowing each other's network address. 
+And it took me to the SSDP.
 
 ## 🤝 Contribution
 
