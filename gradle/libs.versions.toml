@@ -1,5 +1,5 @@
 [versions]
-androidPlugin = "7.3.1"
+androidPlugin = "7.4.0"
 androidxLifecycle = "2.5.1"
 androidxNavigation = "2.5.3"
 coroutines = "1.6.4"
