@@ -239,25 +239,24 @@ fun RowScope.TableCell(
 @Preview
 @Composable
 fun LobbyListContentPreview() {
-    val random = Random()
-    val names = listOf("Re{ali}ty", "Samsung", "JetBrains", "ABC_123", "New York")
-    val networkAddress = "192.168.1."
-    val lobbies = listOf(
-        ServerInformation(names[0], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        ServerInformation(names[1], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        ServerInformation(names[2], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        ServerInformation(names[3], networkAddress + random.nextInt(255), latency = random.nextInt(120)),
-        ServerInformation(names[4], networkAddress + random.nextInt(255), latency = random.nextInt(120))
-    )
+    val servers = List(size = 5) { getRandomServerInformation() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(
-                lobbies,
-                selectedServer = lobbies[1]
-            ),
+            LobbyListUiState(servers, selectedServer = servers[1]),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}
         )
     }
+}
+
+fun getRandomServerInformation(): ServerInformation {
+    val random = Random()
+    val names = listOf("Re{ali}ty", "Samsung", "JetBrains", "ABC_123", "New York")
+    val networkAddress = "192.168.1."
+    return ServerInformation(
+        name = names[random.nextInt(5)],
+        address = networkAddress + random.nextInt(255),
+        latency = random.nextInt(120)
+    )
 }
