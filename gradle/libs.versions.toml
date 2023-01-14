@@ -1,5 +1,6 @@
 [versions]
 androidPlugin = "7.4.0"
+androidxComposeCompiler = "1.4.0-alpha02"
 androidxLifecycle = "2.5.1"
 androidxNavigation = "2.5.3"
 coroutines = "1.6.4"
