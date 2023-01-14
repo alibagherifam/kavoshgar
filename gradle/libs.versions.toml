@@ -3,7 +3,7 @@ androidPlugin = "7.4.0"
 androidxLifecycle = "2.5.1"
 androidxNavigation = "2.5.3"
 coroutines = "1.6.4"
-kotlin = "1.7.20"
+kotlin = "1.7.21"
 
 [libraries]
 # AndroidX
