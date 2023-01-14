@@ -9,7 +9,7 @@ kotlin = "1.7.20"
 # AndroidX
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.6.1" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.0-rc01" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2022.12.00" }
+androidx-compose-bom = { group = "dev.chrisbanes.compose", name = "compose-bom", version = "2023.02.00-alpha01" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
