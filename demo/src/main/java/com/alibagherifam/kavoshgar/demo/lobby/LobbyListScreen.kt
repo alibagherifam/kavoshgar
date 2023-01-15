@@ -257,6 +257,6 @@ fun getRandomServerInformation(): ServerInformation {
     return ServerInformation(
         name = "Server #" + random.nextInt(100),
         address = InetAddress.getByName("192.168.1." + random.nextInt(255)),
-        latency = random.nextInt(120)
+        latency = random.nextInt(300).toLong()
     )
 }

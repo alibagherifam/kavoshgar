@@ -88,11 +88,11 @@ class KavoshgarClient {
         latency = calculateLatency(replyPacket.address)
     )
 
-    private fun calculateLatency(destinationAddress: InetAddress): Int {
+    private fun calculateLatency(destinationAddress: InetAddress): Long {
         val currentTime = System.currentTimeMillis()
         val timeOut = Constants.PING_TIME_OUT.toInt()
         return if (destinationAddress.isReachable(timeOut)) {
-            (System.currentTimeMillis() - currentTime).toInt()
+            (System.currentTimeMillis() - currentTime)
         } else {
             -1
         }
