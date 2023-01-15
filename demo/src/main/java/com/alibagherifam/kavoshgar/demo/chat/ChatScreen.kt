@@ -16,19 +16,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -76,6 +77,7 @@ fun ChatScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatContent(
     lobbyName: String,
@@ -91,12 +93,6 @@ fun ChatContent(
                 onBackPressed = onBackPressed
             )
         },
-        content = { innerPadding ->
-            MessageList(
-                messages = uiState.messages,
-                contentPadding = innerPadding
-            )
-        },
         bottomBar = {
             MessageInputBar(
                 inputValue = uiState.messageInputValue,
@@ -105,9 +101,15 @@ fun ChatContent(
                 onMessageInputValueChange = onMessageInputValueChange
             )
         }
-    )
+    ) { innerPadding ->
+        MessageList(
+            messages = uiState.messages,
+            contentPadding = innerPadding
+        )
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     title: String,
@@ -148,10 +150,12 @@ fun MessageItem(message: Message) {
     ) {
         Card(
             modifier = Modifier.widthIn(min = 80.dp, max = 300.dp),
-            backgroundColor = when {
-                message.isMine -> MaterialTheme.colors.primary
-                else -> MaterialTheme.colors.secondary
-            }
+            colors = CardDefaults.cardColors(
+                containerColor = when {
+                    message.isMine -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.tertiary
+                }
+            )
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -162,12 +166,12 @@ fun MessageItem(message: Message) {
                 Text(
                     modifier = Modifier.align(Alignment.End),
                     text = message.content,
-                    style = MaterialTheme.typography.body1,
+                    style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.End
                 )
                 Text(
                     text = message.timestamp,
-                    style = MaterialTheme.typography.overline
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
         }
@@ -184,7 +188,7 @@ fun MessageInputBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -203,6 +207,7 @@ fun MessageInputBar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageInputField(
     modifier: Modifier,
@@ -221,7 +226,7 @@ fun MessageInputField(
         value = inputValue,
         enabled = enabled,
         onValueChange = onMessageInputValueChange,
-        textStyle = MaterialTheme.typography.body1,
+        textStyle = MaterialTheme.typography.bodyLarge,
         placeholder = {
             Text(stringResource(R.string.placeholder_message_input))
         },
@@ -235,19 +240,19 @@ fun MessageInputField(
 @OptIn(ExperimentalComposeUiApi::class)
 fun KeyEvent.isEnterClick() = (key == Key.Enter) && (type == KeyEventType.KeyDown)
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
     val contentColor = when {
-        enabled -> MaterialTheme.colors.onPrimary
-        else -> MaterialTheme.colors.onSurface.copy(alpha = 0.38f)
+        enabled -> MaterialTheme.colorScheme.onPrimary
+        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
     }
     val containerColor = when {
-        enabled -> MaterialTheme.colors.primary
-        else -> MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+        enabled -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
     }
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
     val shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50))

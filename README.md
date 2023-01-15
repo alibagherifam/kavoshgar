@@ -57,6 +57,7 @@ Other technologies used in demo application:
 
 - Kotlin Coroutines
 - Jetpack Compose
+- Material 3
 - AndroidX Lifecycle
 - Version Catalog
 - Coil
