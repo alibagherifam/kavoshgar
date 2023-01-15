@@ -1,8 +1,8 @@
 package com.alibagherifam.kavoshgar.demo.lobby
 
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.lobby.ServerInformation
 import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
+import com.alibagherifam.kavoshgar.lobby.ServerInformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ class LobbyListViewModel(
             }
             launch {
                 lobbyDiscoveryRepo.discoveredServerFlow().collect { newLobby ->
-                    lobbyTTLs[newLobby.address] = getNextTTL()
+                    lobbyTTLs[newLobby.addressName] = getNextTTL()
                     addNewLobby(newLobby)
                 }
             }
@@ -56,7 +56,7 @@ class LobbyListViewModel(
         expiredLobbies.forEach { lobbyTTLs.remove(it) }
         _uiState.update { state ->
             val newList = state.lobbies.filterNot {
-                it.address in expiredLobbies
+                it.addressName in expiredLobbies
             }
             state.copy(lobbies = newList)
         }

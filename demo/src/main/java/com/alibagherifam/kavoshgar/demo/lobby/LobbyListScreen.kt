@@ -35,6 +35,7 @@ import com.alibagherifam.kavoshgar.demo.R
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 import com.alibagherifam.kavoshgar.lobby.ServerInformation
+import java.net.InetAddress
 import java.util.Random
 
 @Composable
@@ -53,7 +54,7 @@ fun LobbyListScreen(
                 val args = ChatNavigationArgs(
                     isLobbyOwner = false,
                     lobbyName = selectedLobby.name,
-                    lobbyAddress = selectedLobby.address
+                    serverAddress = selectedLobby.address
                 )
                 onChatPageRequest(args)
             }
@@ -206,7 +207,7 @@ fun TableRow(
             textStyle = textStyle
         )
         TableCell(
-            text = serverInformation.address,
+            text = serverInformation.addressName,
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
@@ -254,8 +255,8 @@ fun LobbyListContentPreview() {
 fun getRandomServerInformation(): ServerInformation {
     val random = Random()
     return ServerInformation(
-        name = "Server #"+random.nextInt(100),
-        address = "192.168.1." + random.nextInt(255),
+        name = "Server #" + random.nextInt(100),
+        address = InetAddress.getByName("192.168.1." + random.nextInt(255)),
         latency = random.nextInt(120)
     )
 }

@@ -84,7 +84,7 @@ class KavoshgarClient {
 
     private fun mapToLobby(replyPacket: DatagramPacket) = ServerInformation(
         name = String(replyPacket.data, 0, replyPacket.length),
-        address = replyPacket.address.toString().drop(1),
+        address = replyPacket.address,
         latency = calculateLatency(replyPacket.address)
     )
 

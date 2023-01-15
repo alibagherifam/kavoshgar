@@ -5,9 +5,10 @@ import com.alibagherifam.kavoshgar.chat.ClientChatSocketProvider
 import com.alibagherifam.kavoshgar.chat.ServerChatSocketProvider
 import com.alibagherifam.kavoshgar.demo.chat.ChatViewModel
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
-import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
+import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope
+import java.net.InetAddress
 
 fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
     LobbyListViewModel(viewModelScope, KavoshgarClient())
@@ -15,13 +16,13 @@ fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
 fun provideChatViewModel(
     viewModelScope: CoroutineScope,
     isLobbyOwner: Boolean,
-    lobbyAddress: String?,
+    serverAddress: InetAddress?,
     lobbyName: String
 ) = ChatViewModel(
     viewModelScope,
     chatRepository = provideChatRepository(
         isLobbyOwner,
-        lobbyAddress
+        serverAddress
     ),
     server = provideDiscoveryReplyRepository(
         isLobbyOwner,
@@ -31,11 +32,11 @@ fun provideChatViewModel(
 
 fun provideChatRepository(
     isLobbyOwner: Boolean,
-    lobbyAddress: String?
+    serverAddress: InetAddress?
 ) = ChatRepository(
     socketProvider = when {
         isLobbyOwner -> ServerChatSocketProvider()
-        else -> ClientChatSocketProvider(lobbyAddress!!)
+        else -> ClientChatSocketProvider(serverAddress!!)
     }
 )
 

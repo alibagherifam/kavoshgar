@@ -55,7 +55,7 @@ fun ChatDestination(
         provideChatViewModel(
             viewModelScope = chatScope,
             isLobbyOwner = args.isLobbyOwner,
-            lobbyAddress = args.lobbyAddress,
+            serverAddress = args.serverAddress,
             lobbyName = args.lobbyName
         )
     }
