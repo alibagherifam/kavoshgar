@@ -1,6 +1,7 @@
 package com.alibagherifam.kavoshgar.lobby
 
 import com.alibagherifam.kavoshgar.Constants
+import com.alibagherifam.kavoshgar.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +18,7 @@ import java.net.SocketException
  * This client constantly broadcasts advertisement packets over the network and
  * simultaneously listens to potential [servers'][KavoshgarServer] replies.
  */
-class KavoshgarClient {
+class KavoshgarClient(private val logger: Logger = Logger.Default) {
     private var discoverySocket: DatagramSocket? = null
     private lateinit var discoveryPacket: DatagramPacket
     private lateinit var serverReplyPacket: DatagramPacket
@@ -31,9 +32,9 @@ class KavoshgarClient {
             try {
                 openSocket()
                 while (true) {
-                    // Log.i("LAN", "Client: Sending discovery...")
+                    logger.log(tag = "Client", message = "Client: Sending discovery...")
                     discoverySocket!!.send(discoveryPacket)
-                    // Log.i("LAN", "Client: Discovery sent!")
+                    logger.log(tag = "Client", message = "Discovery sent!")
                     delay(Constants.DISCOVERY_INTERVALS)
                 }
             } finally {
@@ -57,9 +58,9 @@ class KavoshgarClient {
                 delay(100)
                 continue
             }
-            // Log.i("LAN", "Client: Receiving discovery reply...")
+            logger.log(tag = "Client", message = "Client: Receiving discovery reply...")
             discoverySocket!!.receive(serverReplyPacket)
-            // Log.i("LAN", "Client: Discovery reply received!")
+            logger.log(tag = "Client", message = "Client: Discovery reply received!")
             emit(mapToLobby(serverReplyPacket))
             serverReplyPacket.length = Constants.LOBBY_NAME_MAX_SIZE
         }
@@ -87,7 +88,7 @@ class KavoshgarClient {
         discoverySocket = DatagramSocket().apply {
             broadcast = true
         }
-        // Log.i("LAN", "Client: Discovery socket created!")
+        logger.log(tag = "Client", message = "Client: Discovery socket created!")
     }
 
     private fun closeSocket() {

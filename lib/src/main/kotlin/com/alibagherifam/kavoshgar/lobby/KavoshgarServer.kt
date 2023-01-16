@@ -1,6 +1,7 @@
 package com.alibagherifam.kavoshgar.lobby
 
 import com.alibagherifam.kavoshgar.Constants
+import com.alibagherifam.kavoshgar.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -14,7 +15,10 @@ import java.net.SocketAddress
  *
  * @param[serverName] an arbitrary name will be shown to clients.
  */
-class KavoshgarServer(serverName: String) {
+class KavoshgarServer(
+    serverName: String,
+    private val logger: Logger = Logger.Default
+) {
     private var discoveryReplySocket: DatagramSocket? = null
     private lateinit var receivedPacket: DatagramPacket
     private val replyMessage = serverName.toByteArray()
@@ -40,9 +44,9 @@ class KavoshgarServer(serverName: String) {
     }
 
     private fun receiveDiscovery() {
-        // Log.i("LAN", "Server: Receiving discovery...")
+        logger.log(tag = "Server", message = "Server: Receiving discovery...")
         discoveryReplySocket!!.receive(receivedPacket)
-        // Log.i("LAN", "Server: Discovery received!")
+        logger.log(tag = "Server", message = "Server: Discovery received!")
         receivedPacket.length = Constants.DISCOVERY_PACKET_SIZE
     }
 
@@ -52,9 +56,9 @@ class KavoshgarServer(serverName: String) {
             replyMessage.size,
             destinationAddress
         )
-        // Log.i("LAN", "Server: Sending discovery reply...")
+        logger.log(tag = "Server", message = "Server: Sending discovery reply...")
         discoveryReplySocket!!.send(replyPacket)
-        // Log.i("LAN", "Server: Discovery reply sent!")
+        logger.log(tag = "Server", message = "Server: Discovery reply sent!")
     }
 
     private fun openSocket() {
@@ -66,7 +70,7 @@ class KavoshgarServer(serverName: String) {
             Constants.DISCOVERY_PACKET_SIZE
         )
         discoveryReplySocket = DatagramSocket(Constants.LOBBY_DISCOVERY_PORT)
-        // Log.i("LAN", "Server: Discovery reply socket created!")
+        logger.log(tag = "Server", message = "Server: Discovery reply socket created!")
     }
 
     private fun closeSocket() {
