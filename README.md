@@ -44,23 +44,29 @@ client discoveries:
 
 ## ▶ Demo
 
-Kavoshgar comes with a demo application. It is a LAN messenger that you can chat with anybody on the
-same network. The application is built on top of Kavoshgar to showcase its usage and features.
-Currently, only Android version of the messenger is available, but I am developing a desktop version
-using Kotlin multiplatform. So stay tuned ;)
+This repo contains a demo application that is built on top of Kavoshgar to showcase its features and
+usage. It is a LAN messenger that you can chat with anybody on the same network. The application
+supports both Android and Desktop platforms:
+
+- [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android) - Built
+  natively with [Jetpack Compose](https://developer.android.com/jetpack/compose)
+- [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop) - Built with
+  [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) technology
+  and [Compose for Desktop](https://www.jetbrains.com/lp/compose-desktop)
 
 ## ⚙ Technologies
 
 The project is based on socket programming.
 
-Other technologies used in demo application:
+Other technologies used in demo applications:
 
 - Kotlin Coroutines
+- Kotlin Multiplatform
+- Compose for Desktop
 - Jetpack Compose
 - Material 3
 - AndroidX Lifecycle
 - Version Catalog
-- Coil
 
 ## 💡 Inspiration
 
