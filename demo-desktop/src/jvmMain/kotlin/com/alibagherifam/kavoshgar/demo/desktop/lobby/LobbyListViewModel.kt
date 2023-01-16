@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.lobby
+package com.alibagherifam.kavoshgar.demo.desktop.lobby
 
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
@@ -40,9 +40,9 @@ class LobbyListViewModel(
         }
     }
 
-    fun selectLobby(selectedServer: ServerInformation) {
+    fun selectLobby(selectedLobby: ServerInformation) {
         _uiState.update {
-            it.copy(selectedServer = selectedServer)
+            it.copy(selectedLobby = selectedLobby)
         }
     }
 
@@ -62,15 +62,15 @@ class LobbyListViewModel(
         }
     }
 
-    private fun addNewLobby(information: ServerInformation) {
+    private fun addNewLobby(newLobby: ServerInformation) {
         _uiState.update { state ->
             val currentList = state.lobbies
-            val newList = if (currentList.any { it.name == information.name }) {
+            val newList = if (currentList.any { it.name == newLobby.name }) {
                 currentList.map {
-                    if (it.name == information.name) information else it
+                    if (it.name == newLobby.name) newLobby else it
                 }
             } else {
-                currentList + information
+                currentList + newLobby
             }
             state.copy(lobbies = newList)
         }

@@ -1,5 +1,6 @@
-package com.alibagherifam.kavoshgar.demo.lobby
+package com.alibagherifam.kavoshgar.demo.desktop.lobby
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,12 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,13 +27,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alibagherifam.kavoshgar.demo.R
-import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
-import com.alibagherifam.kavoshgar.demo.theme.AppTheme
+import com.alibagherifam.kavoshgar.demo.desktop.StringResources
+import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatNavigationArgs
+import com.alibagherifam.kavoshgar.demo.desktop.theme.AppTheme
 import com.alibagherifam.kavoshgar.lobby.ServerInformation
 import com.alibagherifam.kavoshgar.lobby.getRandomServerInformation
 
@@ -48,7 +46,7 @@ fun LobbyListScreen(
         uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
-            val selectedLobby = uiState.selectedServer
+            val selectedLobby = uiState.selectedLobby
             if (selectedLobby != null) {
                 val args = ChatNavigationArgs(
                     isLobbyOwner = false,
@@ -74,7 +72,6 @@ fun LobbyListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LobbyListContent(
     uiState: LobbyListUiState,
@@ -83,20 +80,21 @@ fun LobbyListContent(
     onJoinLobbyClick: () -> Unit
 ) {
     Scaffold(
+        content = { innerPadding ->
+            LobbyTable(
+                contentPadding = innerPadding,
+                lobbies = uiState.lobbies,
+                selectedLobby = uiState.selectedLobby,
+                onLobbySelectionChange
+            )
+        },
         bottomBar = {
             LobbyNavigationBar(
                 onCreateLobbyClick = onCreateLobbyClick,
                 onJoinLobbyClick = onJoinLobbyClick
             )
         }
-    ) { innerPadding ->
-        LobbyTable(
-            contentPadding = innerPadding,
-            lobbies = uiState.lobbies,
-            selectedServer = uiState.selectedServer,
-            onLobbySelectionChange
-        )
-    }
+    )
 }
 
 @Composable
@@ -114,13 +112,13 @@ fun LobbyNavigationBar(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onCreateLobbyClick
         ) {
-            Text(stringResource(R.string.label_create_lobby))
+            Text(StringResources.LABEL_CREATE_LOBBY)
         }
         Button(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onJoinLobbyClick
         ) {
-            Text(stringResource(R.string.label_join_lobby))
+            Text(StringResources.LABEL_JOIN_LOBBY)
         }
     }
 }
@@ -129,22 +127,22 @@ fun LobbyNavigationBar(
 fun LobbyTable(
     contentPadding: PaddingValues,
     lobbies: List<ServerInformation>,
-    selectedServer: ServerInformation?,
+    selectedLobby: ServerInformation?,
     onLobbySelectionChange: (ServerInformation) -> Unit
 ) {
     LazyColumn(contentPadding = contentPadding) {
         item { TableHeader() }
         items(lobbies) {
             TableRow(
-                serverInformation = it,
-                isSelected = selectedServer?.name == it.name,
+                lobby = it,
+                isSelected = selectedLobby?.name == it.name,
                 onLobbySelectionChange
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colorScheme.onBackground)
+                    .background(MaterialTheme.colors.onBackground)
             )
         }
     }
@@ -152,28 +150,28 @@ fun LobbyTable(
 
 @Composable
 fun TableHeader() {
-    val backgroundColor = MaterialTheme.colorScheme.primary
+    val backgroundColor = MaterialTheme.colors.primary
     val contentColor = contentColorFor(backgroundColor)
-    val textStyle = MaterialTheme.typography.titleLarge
+    val textStyle = MaterialTheme.typography.h6
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
     ) {
         TableCell(
-            text = stringResource(R.string.label_lobby_name),
+            text = StringResources.LABEL_LOBBY_NAME,
             weight = 4f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(R.string.label_lobby_address),
+            text = StringResources.LABEL_LOBBY_ADDRESS,
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(R.string.label_lobby_latency),
+            text = StringResources.LABEL_LOBBY_LATENCY,
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle
@@ -183,36 +181,36 @@ fun TableHeader() {
 
 @Composable
 fun TableRow(
-    serverInformation: ServerInformation,
+    lobby: ServerInformation,
     isSelected: Boolean,
     onLobbySelectionChange: (ServerInformation) -> Unit
 ) {
     val backgroundColor = when {
-        isSelected -> MaterialTheme.colorScheme.primaryContainer
+        isSelected -> MaterialTheme.colors.primaryVariant
         else -> Color.Transparent
     }
     val contentColor = contentColorFor(backgroundColor)
-    val textStyle = MaterialTheme.typography.titleMedium
+    val textStyle = MaterialTheme.typography.subtitle1
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onLobbySelectionChange(serverInformation) }
+            .clickable { onLobbySelectionChange(lobby) }
             .background(backgroundColor)
     ) {
         TableCell(
-            text = serverInformation.name,
+            text = lobby.name,
             weight = 4f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = serverInformation.addressName,
+            text = lobby.addressName,
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = serverInformation.latency.toString(),
+            text = lobby.latency.toString(),
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle
@@ -243,7 +241,7 @@ fun LobbyListContentPreview() {
     val servers = List(size = 5) { getRandomServerInformation() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(servers, selectedServer = servers[1]),
+            LobbyListUiState(servers, selectedLobby = servers[1]),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}
