@@ -14,8 +14,8 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-rootProject.name = "Kavoshgar"
+rootProject.name = "kavoshgar"
 
-include(":lib")
+include(":kavoshgar")
 include(":demo:android")
 include(":demo:desktop")
