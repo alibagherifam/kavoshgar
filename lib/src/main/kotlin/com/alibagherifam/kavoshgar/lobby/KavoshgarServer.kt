@@ -8,11 +8,22 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.SocketAddress
 
-class KavoshgarServer(lobbyName: String) {
+/**
+ * A server that constantly listens for [client][KavoshgarClient] advertisements and
+ * replies to them to notify clients about its presence and IP address.
+ *
+ * @param[serverName] an arbitrary name will be shown to clients.
+ */
+class KavoshgarServer(serverName: String) {
     private var discoveryReplySocket: DatagramSocket? = null
     private lateinit var receivedPacket: DatagramPacket
-    private val replyMessage = lobbyName.toByteArray()
+    private val replyMessage = serverName.toByteArray()
 
+    /**
+     * Listening to [client][KavoshgarClient] advertisements and replying to
+     * them in an infinite loop until the caller scope gets canceled. This function
+     * is main-safe runs on the background thread.
+     */
     suspend fun startDiscoveryReplying() {
         withContext(Dispatchers.IO) {
             try {

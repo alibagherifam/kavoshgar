@@ -13,11 +13,19 @@ import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.SocketException
 
+/**
+ * This client constantly broadcasts advertisement packets over the network and
+ * simultaneously listens to potential [servers'][KavoshgarServer] replies.
+ */
 class KavoshgarClient {
     private var discoverySocket: DatagramSocket? = null
     private lateinit var discoveryPacket: DatagramPacket
     private lateinit var serverReplyPacket: DatagramPacket
 
+    /**
+     * Broadcasts advertisement packets in an infinite loop until the caller scope
+     * gets canceled. This function is main-safe and runs on the background thread.
+     */
     suspend fun startDiscovery() {
         withContext(Dispatchers.IO) {
             try {
@@ -35,8 +43,13 @@ class KavoshgarClient {
     }
 
     /* TODO: Remove checking whether socket is open and also catching
-        closed socket exception. We should join both calls together somehow
-        and using one try/finally block
+        closed socket exception. We should join both startDiscovery and
+        this functions together somehow and using one try/finally block
+     */
+    /**
+     * Listens for potential [server][KavoshgarServer] replies and notifies the caller
+     * about the [information][ServerInformation] of responding servers in a reactive way.
+     * @return a [Flow] that emits [information][ServerInformation] of discovered servers.
      */
     fun discoveredServerFlow(): Flow<ServerInformation> = flow {
         while (true) {
