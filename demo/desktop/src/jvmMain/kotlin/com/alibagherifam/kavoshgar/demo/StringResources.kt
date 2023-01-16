@@ -1,7 +1,7 @@
 package com.alibagherifam.kavoshgar.demo
 
 object StringResources {
-    const val APP_NAME: String = "LAN Chatroom"
+    const val APP_NAME: String = "Kavoshgar Demo"
     const val LABEL_DISMISS: String = "بازگشت"
     const val LABEL_CREATE_LOBBY: String = "ایجاد گروه"
     const val LABEL_JOIN_LOBBY: String = "ورود به گروه"
