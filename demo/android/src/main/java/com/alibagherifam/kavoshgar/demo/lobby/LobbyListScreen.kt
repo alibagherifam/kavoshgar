@@ -92,7 +92,7 @@ fun LobbyListContent(
     ) { innerPadding ->
         LobbyTable(
             contentPadding = innerPadding,
-            lobbies = uiState.lobbies,
+            lobbies = uiState.servers,
             selectedServer = uiState.selectedServer,
             onLobbySelectionChange
         )

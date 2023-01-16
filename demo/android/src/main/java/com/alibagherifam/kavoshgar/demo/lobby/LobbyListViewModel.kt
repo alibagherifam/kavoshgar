@@ -55,24 +55,24 @@ class LobbyListViewModel(
         }.keys
         expiredLobbies.forEach { lobbyTTLs.remove(it) }
         _uiState.update { state ->
-            val newList = state.lobbies.filterNot {
+            val newList = state.servers.filterNot {
                 it.addressName in expiredLobbies
             }
-            state.copy(lobbies = newList)
+            state.copy(servers = newList)
         }
     }
 
-    private fun addNewLobby(information: ServerInformation) {
+    private fun addNewLobby(server: ServerInformation) {
         _uiState.update { state ->
-            val currentList = state.lobbies
-            val newList = if (currentList.any { it.name == information.name }) {
+            val currentList = state.servers
+            val newList = if (currentList.any { it.name == server.name }) {
                 currentList.map {
-                    if (it.name == information.name) information else it
+                    if (it.name == server.name) server else it
                 }
             } else {
-                currentList + information
+                currentList + server
             }
-            state.copy(lobbies = newList)
+            state.copy(servers = newList)
         }
     }
 }

@@ -46,7 +46,7 @@ fun LobbyListScreen(
         uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
-            val selectedLobby = uiState.selectedLobby
+            val selectedLobby = uiState.selectedServer
             if (selectedLobby != null) {
                 val args = ChatNavigationArgs(
                     isLobbyOwner = false,
@@ -83,8 +83,8 @@ fun LobbyListContent(
         content = { innerPadding ->
             LobbyTable(
                 contentPadding = innerPadding,
-                lobbies = uiState.lobbies,
-                selectedLobby = uiState.selectedLobby,
+                lobbies = uiState.servers,
+                selectedLobby = uiState.selectedServer,
                 onLobbySelectionChange
             )
         },
@@ -241,7 +241,7 @@ fun LobbyListContentPreview() {
     val servers = List(size = 5) { getRandomServerInformation() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(servers, selectedLobby = servers[1]),
+            LobbyListUiState(servers, selectedServer = servers[1]),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}
