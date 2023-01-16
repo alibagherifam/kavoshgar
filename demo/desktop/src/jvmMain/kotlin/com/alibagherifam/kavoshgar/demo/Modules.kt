@@ -1,11 +1,11 @@
-package com.alibagherifam.kavoshgar.demo.desktop
+package com.alibagherifam.kavoshgar.demo
 
 import com.alibagherifam.kavoshgar.Logger
 import com.alibagherifam.kavoshgar.chat.ChatRepository
 import com.alibagherifam.kavoshgar.chat.ClientChatSocketProvider
 import com.alibagherifam.kavoshgar.chat.ServerChatSocketProvider
-import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatViewModel
-import com.alibagherifam.kavoshgar.demo.desktop.lobby.LobbyListViewModel
+import com.alibagherifam.kavoshgar.demo.chat.ChatViewModel
+import com.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
 import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
 import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.lobby
+package com.alibagherifam.kavoshgar.demo.lobby
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.alibagherifam.kavoshgar.demo.desktop.StringResources
-import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatNavigationArgs
-import com.alibagherifam.kavoshgar.demo.desktop.theme.AppTheme
+import com.alibagherifam.kavoshgar.demo.StringResources
+import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
+import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 import com.alibagherifam.kavoshgar.lobby.ServerInformation
 import com.alibagherifam.kavoshgar.lobby.getRandomServerInformation
 

@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.lobby
+package com.alibagherifam.kavoshgar.demo.lobby
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.demo.desktop.StringResources
+import com.alibagherifam.kavoshgar.demo.StringResources
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

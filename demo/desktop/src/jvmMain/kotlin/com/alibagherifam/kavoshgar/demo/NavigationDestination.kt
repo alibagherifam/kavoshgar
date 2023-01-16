@@ -1,6 +1,6 @@
-package com.alibagherifam.kavoshgar.demo.desktop
+package com.alibagherifam.kavoshgar.demo
 
-import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatNavigationArgs
+import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 
 sealed class NavigationDestination {
     object LobbyList : NavigationDestination()

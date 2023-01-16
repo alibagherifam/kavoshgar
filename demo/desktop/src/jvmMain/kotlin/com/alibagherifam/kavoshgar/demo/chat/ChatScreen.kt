@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.chat
+package com.alibagherifam.kavoshgar.demo.chat
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
@@ -26,8 +26,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alibagherifam.kavoshgar.chat.Message
-import com.alibagherifam.kavoshgar.demo.desktop.StringResources
-import com.alibagherifam.kavoshgar.demo.desktop.theme.AppTheme
+import com.alibagherifam.kavoshgar.demo.StringResources
+import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
 fun ChatScreen(

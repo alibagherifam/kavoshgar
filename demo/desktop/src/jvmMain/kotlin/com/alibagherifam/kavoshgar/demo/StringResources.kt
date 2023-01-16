@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop
+package com.alibagherifam.kavoshgar.demo
 
 object StringResources {
     const val APP_NAME: String = "LAN Chatroom"

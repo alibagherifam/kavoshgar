@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.chat
+package com.alibagherifam.kavoshgar.demo.chat
 
 import java.net.InetAddress
 

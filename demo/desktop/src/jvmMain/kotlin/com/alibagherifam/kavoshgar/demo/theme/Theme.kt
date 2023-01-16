@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.theme
+package com.alibagherifam.kavoshgar.demo.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors

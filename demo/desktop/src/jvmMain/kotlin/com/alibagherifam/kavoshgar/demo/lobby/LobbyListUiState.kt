@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop.lobby
+package com.alibagherifam.kavoshgar.demo.lobby
 
 import com.alibagherifam.kavoshgar.lobby.ServerInformation
 

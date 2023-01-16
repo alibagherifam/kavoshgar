@@ -19,7 +19,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.alibagherifam.kavoshgar.demo.desktop.MainKt"
+        mainClass = "com.alibagherifam.kavoshgar.demo.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Msi)

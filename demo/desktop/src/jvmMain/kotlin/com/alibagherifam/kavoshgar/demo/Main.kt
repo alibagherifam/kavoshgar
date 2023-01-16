@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.demo.desktop
+package com.alibagherifam.kavoshgar.demo
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,10 +8,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatNavigationArgs
-import com.alibagherifam.kavoshgar.demo.desktop.chat.ChatScreen
-import com.alibagherifam.kavoshgar.demo.desktop.lobby.LobbyListScreen
-import com.alibagherifam.kavoshgar.demo.desktop.theme.AppTheme
+import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
+import com.alibagherifam.kavoshgar.demo.chat.ChatScreen
+import com.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
+import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 fun main() = application {
     Window(
