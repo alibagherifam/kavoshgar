@@ -23,14 +23,14 @@ Every node on the network (which is a client by default) should start discoverin
 
 ```kotlin
 val client = KavoshgarClient()
-service.startDiscovery()
+client.startDiscovery()
 ```
 
 You can collect discovered servers as follow:
 
 ```kotlin
 client.discoveredServerFlow().collect { serverInfo ->
-    println("Discovered a server:${serverInfo.addressName}")
+    println("Server discovered: ${serverInfo.addressName}")
 }
 ```
 
