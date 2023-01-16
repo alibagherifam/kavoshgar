@@ -8,16 +8,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.alibagherifam.kavoshgar.Logger
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.chat.ChatScreen
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
+import com.alibagherifam.kavoshgar.logger.Log
+import com.alibagherifam.kavoshgar.logger.LogPriority
+import com.alibagherifam.kavoshgar.logger.Logger
 
 fun main() = application {
-    logger = Logger { tag, message ->
-        println("${System.currentTimeMillis()}   $tag: $message")
-    }
+    Log.install(getLogger())
     Window(
         title = StringResources.APP_NAME,
         onCloseRequest = ::exitApplication
@@ -78,4 +78,12 @@ fun LobbyListDestination(
         provideLobbyListViewModel(lobbyScope)
     }
     LobbyListScreen(viewModel, onChatPageRequest)
+}
+
+private fun getLogger() = Logger { priority, tag, message, error ->
+    val formattedMessage = when (priority) {
+        LogPriority.INFO -> message!!
+        LogPriority.ERROR -> error!!.let { it.message + it.stackTraceToString() }
+    }
+    println("${System.currentTimeMillis()}   $tag: $formattedMessage")
 }

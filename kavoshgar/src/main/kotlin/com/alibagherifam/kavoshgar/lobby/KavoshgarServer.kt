@@ -1,7 +1,7 @@
 package com.alibagherifam.kavoshgar.lobby
 
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.Logger
+import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -15,10 +15,7 @@ import java.net.SocketAddress
  *
  * @param[serverName] an arbitrary name will be shown to clients.
  */
-class KavoshgarServer(
-    serverName: String,
-    private val logger: Logger = Logger.Default
-) {
+class KavoshgarServer(serverName: String) {
     private var discoveryReplySocket: DatagramSocket? = null
     private lateinit var receivedPacket: DatagramPacket
     private val replyMessage = serverName.toByteArray()
@@ -44,9 +41,9 @@ class KavoshgarServer(
     }
 
     private fun receiveDiscovery() {
-        logger.log(tag = "Server", message = "Server: Receiving discovery...")
+        Log.i(tag = "Server", message = "Server: Receiving discovery...")
         discoveryReplySocket!!.receive(receivedPacket)
-        logger.log(tag = "Server", message = "Server: Discovery received!")
+        Log.i(tag = "Server", message = " Server : Discovery received!")
         receivedPacket.length = Constants.DISCOVERY_PACKET_SIZE
     }
 
@@ -56,9 +53,9 @@ class KavoshgarServer(
             replyMessage.size,
             destinationAddress
         )
-        logger.log(tag = "Server", message = "Server: Sending discovery reply...")
+        Log.i(tag = "Server", message = "Server: Sending discovery reply...")
         discoveryReplySocket!!.send(replyPacket)
-        logger.log(tag = "Server", message = "Server: Discovery reply sent!")
+        Log.i(tag = "Server", message = "Server: Discovery reply sent!")
     }
 
     private fun openSocket() {
@@ -70,7 +67,7 @@ class KavoshgarServer(
             Constants.DISCOVERY_PACKET_SIZE
         )
         discoveryReplySocket = DatagramSocket(Constants.LOBBY_DISCOVERY_PORT)
-        logger.log(tag = "Server", message = "Server: Discovery reply socket created!")
+        Log.i(tag = "Server", message = "Server: Discovery reply socket created!")
     }
 
     private fun closeSocket() {

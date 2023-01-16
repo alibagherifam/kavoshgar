@@ -1,7 +1,7 @@
 package com.alibagherifam.kavoshgar.lobby
 
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.Logger
+import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +18,7 @@ import java.net.SocketException
  * This client constantly broadcasts advertisement packets over the network and
  * simultaneously listens to potential [servers'][KavoshgarServer] replies.
  */
-class KavoshgarClient(private val logger: Logger = Logger.Default) {
+class KavoshgarClient {
     private var discoverySocket: DatagramSocket? = null
     private lateinit var discoveryPacket: DatagramPacket
     private lateinit var serverReplyPacket: DatagramPacket
@@ -32,9 +32,9 @@ class KavoshgarClient(private val logger: Logger = Logger.Default) {
             try {
                 openSocket()
                 while (true) {
-                    logger.log(tag = "Client", message = "Client: Sending discovery...")
+                    Log.i(tag = "Client", message = "Client: Sending discovery...")
                     discoverySocket!!.send(discoveryPacket)
-                    logger.log(tag = "Client", message = "Discovery sent!")
+                    Log.i(tag = "Client", message = "Discovery sent!")
                     delay(Constants.DISCOVERY_INTERVALS)
                 }
             } finally {
@@ -58,9 +58,9 @@ class KavoshgarClient(private val logger: Logger = Logger.Default) {
                 delay(100)
                 continue
             }
-            logger.log(tag = "Client", message = "Client: Receiving discovery reply...")
+            Log.i(tag = "Client", message = "Client: Receiving discovery reply...")
             discoverySocket!!.receive(serverReplyPacket)
-            logger.log(tag = "Client", message = "Client: Discovery reply received!")
+            Log.i(tag = "Client", message = "Client: Discovery reply received!")
             emit(mapToLobby(serverReplyPacket))
             serverReplyPacket.length = Constants.LOBBY_NAME_MAX_SIZE
         }
@@ -88,7 +88,7 @@ class KavoshgarClient(private val logger: Logger = Logger.Default) {
         discoverySocket = DatagramSocket().apply {
             broadcast = true
         }
-        logger.log(tag = "Client", message = "Client: Discovery socket created!")
+        Log.i(tag = "Client", message = "Client: Discovery socket created!")
     }
 
     private fun closeSocket() {

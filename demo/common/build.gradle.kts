@@ -9,6 +9,7 @@ java {
 }
 
 dependencies {
+    implementation(project(":logger"))
     implementation(project(":kavoshgar"))
     implementation(libs.kotlinx.coroutines.core)
 }

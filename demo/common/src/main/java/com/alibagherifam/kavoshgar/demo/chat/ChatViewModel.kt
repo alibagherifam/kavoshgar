@@ -2,8 +2,8 @@ package com.alibagherifam.kavoshgar.demo.chat
 
 import com.alibagherifam.kavoshgar.chat.ChatRepository
 import com.alibagherifam.kavoshgar.chat.Message
-import com.alibagherifam.kavoshgar.demo.logger
 import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
+import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,7 +61,7 @@ class ChatViewModel(
 
     private suspend fun receiveMessages() {
         chatRepository.receiveMessages().catch {
-            logger.log(tag = "ChatViewModel", message = it.stackTrace.toString())
+            Log.e(tag = "ChatViewModel", error = it)
             _uiState.update { state ->
                 state.copy(isConnectionLost = true)
             }
