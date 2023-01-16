@@ -22,37 +22,40 @@ and, other nodes (i.e., clients) will be notified about the presence of servers.
 Every node on the network (which is a client by default) should start discovering available servers:
 
 ```kotlin
-    val client = KavoshgarClient()
-    service.startDiscovery()
+val client = KavoshgarClient()
+service.startDiscovery()
 ```
 
 You can collect discovered servers as follow:
 
 ```kotlin
-    client.discoveredServerFlow().collect { serverInfo ->
-        println("Discovered a server:${serverInfo.address}")
-    }
+client.discoveredServerFlow().collect { serverInfo ->
+    println("Discovered a server:${serverInfo.addressName}")
+}
 ```
 
 On the other hand, only the nodes you want to be a server in the network should be start replying to
 client discoveries:
 
 ```kotlin
-    val server = KavoshgarServer(name = "Test Server")
-    server.startDiscoveryReplying()
+val server = KavoshgarServer(name = "Test Server")
+server.startDiscoveryReplying()
 ```
 
 ## ▶ Demo
 
-This repo contains a demo application that is built on top of Kavoshgar to showcase its features and
+This repository contains a demo application built on top of Kavoshgar to showcase its features and
 usage. It is a LAN messenger that you can chat with anybody on the same network. The application
 supports both Android and Desktop platforms:
 
 - [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android) - Built
-  natively with [Jetpack Compose](https://developer.android.com/jetpack/compose)
+  natively with [Jetpack Compose](https://developer.android.com/jetpack/compose).
 - [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop) - Built with
   [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) technology
-  and [Compose for Desktop](https://www.jetbrains.com/lp/compose-desktop)
+  and [Compose for Desktop](https://www.jetbrains.com/lp/compose-desktop).
+
+I will merge the Android version into the multiplatform one for code-sharing benefits. So stay tuned
+;)
 
 ## ⚙ Technologies
 
