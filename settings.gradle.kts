@@ -17,5 +17,5 @@ dependencyResolutionManagement {
 rootProject.name = "Kavoshgar"
 
 include(":lib")
-include(":demo")
-include(":demo-desktop")
+include(":demo:android")
+include(":demo:desktop")
