@@ -31,7 +31,9 @@ fun provideChatViewModel(
     )
 )
 
-val logger = Logger { tag, message -> println("$tag: $message") }
+val logger = Logger { tag, message ->
+    println("${System.currentTimeMillis()}   $tag: $message")
+}
 
 fun provideChatRepository(
     isLobbyOwner: Boolean,
