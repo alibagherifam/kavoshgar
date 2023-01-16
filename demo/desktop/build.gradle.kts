@@ -14,6 +14,7 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation(project(":kavoshgar"))
+                implementation(project(":demo:common"))
             }
         }
     }

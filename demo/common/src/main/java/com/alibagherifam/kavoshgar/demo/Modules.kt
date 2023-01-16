@@ -11,6 +11,8 @@ import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope
 import java.net.InetAddress
 
+lateinit var logger: Logger
+
 fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
     LobbyListViewModel(viewModelScope, provideClient())
 
@@ -30,10 +32,6 @@ fun provideChatViewModel(
         lobbyName
     )
 )
-
-val logger = Logger { tag, message ->
-    println("${System.currentTimeMillis()}   $tag: $message")
-}
 
 fun provideChatRepository(
     isLobbyOwner: Boolean,

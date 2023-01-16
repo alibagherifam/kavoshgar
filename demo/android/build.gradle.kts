@@ -52,6 +52,7 @@ android {
 
 dependencies {
     implementation(project(":kavoshgar"))
+    implementation(project(":demo:common"))
 
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)

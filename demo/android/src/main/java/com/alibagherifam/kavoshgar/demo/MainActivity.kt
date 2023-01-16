@@ -1,6 +1,7 @@
 package com.alibagherifam.kavoshgar.demo
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.alibagherifam.kavoshgar.Logger
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.chat.ChatScreen
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
@@ -17,6 +19,7 @@ import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        logger = Logger { tag, message -> Log.i(tag, message) }
         setContent {
             AppTheme {
                 NavHost()

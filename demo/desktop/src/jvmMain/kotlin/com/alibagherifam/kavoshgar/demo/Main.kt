@@ -8,12 +8,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import com.alibagherifam.kavoshgar.Logger
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.chat.ChatScreen
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 fun main() = application {
+    logger = Logger { tag, message ->
+        println("${System.currentTimeMillis()}   $tag: $message")
+    }
     Window(
         title = StringResources.APP_NAME,
         onCloseRequest = ::exitApplication
