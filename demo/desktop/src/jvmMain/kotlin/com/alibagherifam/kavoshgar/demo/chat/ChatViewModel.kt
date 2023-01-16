@@ -2,6 +2,7 @@ package com.alibagherifam.kavoshgar.demo.chat
 
 import com.alibagherifam.kavoshgar.chat.ChatRepository
 import com.alibagherifam.kavoshgar.chat.Message
+import com.alibagherifam.kavoshgar.demo.logger
 import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -60,7 +61,7 @@ class ChatViewModel(
 
     private suspend fun receiveMessages() {
         chatRepository.receiveMessages().catch {
-            it.printStackTrace()
+            logger.log(tag = "ChatViewModel", message = it.stackTrace.toString())
             _uiState.update { state ->
                 state.copy(isConnectionLost = true)
             }
