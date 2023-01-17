@@ -1,7 +1,7 @@
 package com.alibagherifam.kavoshgar.demo.chat
 
-import com.alibagherifam.kavoshgar.chat.ChatRepository
-import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
+import com.alibagherifam.kavoshgar.messenger.MessengerService
+import com.alibagherifam.kavoshgar.discovery.KavoshgarServer
 import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -14,9 +14,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ChatViewModel(
+class MessengerViewModel(
     private val viewModelScope: CoroutineScope,
-    private val chatRepository: ChatRepository,
+    private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
 ) {
     private var discoveryReplyingJob: Job? = null
@@ -48,7 +48,7 @@ class ChatViewModel(
     fun sendMessage() {
         viewModelScope.launch {
             val message = uiState.value.messageInputValue
-            chatRepository.sendMessage(message)
+            messenger.sendMessage(message)
             _uiState.update {
                 it.copy(
                     messages = addMessageToList(message, isFromUser = true),
@@ -59,7 +59,7 @@ class ChatViewModel(
     }
 
     private suspend fun receiveMessages() {
-        chatRepository.receiveMessages().catch {
+        messenger.receiveMessages().catch {
             Log.e(tag = "ChatViewModel", error = it)
             _uiState.update { state ->
                 state.copy(isConnectionLost = true)

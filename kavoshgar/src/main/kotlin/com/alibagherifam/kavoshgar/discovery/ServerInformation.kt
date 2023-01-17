@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.lobby
+package com.alibagherifam.kavoshgar.discovery
 
 import java.net.InetAddress
 import java.util.Random

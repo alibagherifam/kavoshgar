@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.lobby
+package com.alibagherifam.kavoshgar.discovery
 
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
@@ -62,11 +62,11 @@ class KavoshgarClient {
                 message,
                 message.size,
                 InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-                Constants.LOBBY_DISCOVERY_PORT
+                Constants.SERVER_DISCOVERY_PORT
             )
             serverResponsePacket = DatagramPacket(
-                ByteArray(Constants.LOBBY_NAME_MAX_SIZE),
-                Constants.LOBBY_NAME_MAX_SIZE
+                ByteArray(Constants.SERVER_NAME_MAX_SIZE),
+                Constants.SERVER_NAME_MAX_SIZE
             )
             discoverySocket = DatagramSocket().apply {
                 broadcast = true
@@ -116,6 +116,6 @@ class KavoshgarClient {
     )
 
     private fun clearResponsePacket() {
-        serverResponsePacket.length = Constants.LOBBY_NAME_MAX_SIZE
+        serverResponsePacket.length = Constants.SERVER_NAME_MAX_SIZE
     }
 }

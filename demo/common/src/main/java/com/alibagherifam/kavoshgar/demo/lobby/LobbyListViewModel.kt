@@ -1,8 +1,8 @@
 package com.alibagherifam.kavoshgar.demo.lobby
 
 import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
-import com.alibagherifam.kavoshgar.lobby.ServerInformation
+import com.alibagherifam.kavoshgar.discovery.KavoshgarClient
+import com.alibagherifam.kavoshgar.discovery.ServerInformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.lobby
+package com.alibagherifam.kavoshgar.discovery
 
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
@@ -70,7 +70,7 @@ class KavoshgarServer(serverName: String) {
             ByteArray(Constants.DISCOVERY_PACKET_SIZE),
             Constants.DISCOVERY_PACKET_SIZE
         )
-        discoveryReplySocket = DatagramSocket(Constants.LOBBY_DISCOVERY_PORT)
+        discoveryReplySocket = DatagramSocket(Constants.SERVER_DISCOVERY_PORT)
         Log.i(TAG, message = "Discovery respond socket created!")
     }
 

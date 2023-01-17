@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.chat
+package com.alibagherifam.kavoshgar.messenger
 
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
@@ -12,7 +12,7 @@ import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.net.Socket
 
-class ChatRepository(private val socketProvider: ChatSocketProvider) {
+class MessengerService(private val socketProvider: SocketProvider) {
     private var socket: Socket? = null
     private lateinit var reader: BufferedReader
     private lateinit var writer: BufferedWriter

@@ -1,26 +1,26 @@
 package com.alibagherifam.kavoshgar.demo
 
-import com.alibagherifam.kavoshgar.chat.ChatRepository
-import com.alibagherifam.kavoshgar.chat.ClientChatSocketProvider
-import com.alibagherifam.kavoshgar.chat.ServerChatSocketProvider
-import com.alibagherifam.kavoshgar.demo.chat.ChatViewModel
+import com.alibagherifam.kavoshgar.messenger.MessengerService
+import com.alibagherifam.kavoshgar.messenger.ClientSocketProvider
+import com.alibagherifam.kavoshgar.messenger.ServerSocketProvider
+import com.alibagherifam.kavoshgar.demo.chat.MessengerViewModel
 import com.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
-import com.alibagherifam.kavoshgar.lobby.KavoshgarClient
-import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
+import com.alibagherifam.kavoshgar.discovery.KavoshgarClient
+import com.alibagherifam.kavoshgar.discovery.KavoshgarServer
 import kotlinx.coroutines.CoroutineScope
 import java.net.InetAddress
 
 fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
     LobbyListViewModel(viewModelScope, provideClient())
 
-fun provideChatViewModel(
+fun provideMessengerViewModel(
     viewModelScope: CoroutineScope,
     isLobbyOwner: Boolean,
     serverAddress: InetAddress?,
     lobbyName: String
-) = ChatViewModel(
+) = MessengerViewModel(
     viewModelScope,
-    chatRepository = provideChatRepository(
+    messenger = provideMessengerService(
         isLobbyOwner,
         serverAddress
     ),
@@ -30,13 +30,13 @@ fun provideChatViewModel(
     )
 )
 
-fun provideChatRepository(
+fun provideMessengerService(
     isLobbyOwner: Boolean,
     serverAddress: InetAddress?
-) = ChatRepository(
+) = MessengerService(
     socketProvider = when {
-        isLobbyOwner -> ServerChatSocketProvider()
-        else -> ClientChatSocketProvider(serverAddress!!)
+        isLobbyOwner -> ServerSocketProvider()
+        else -> ClientSocketProvider(serverAddress!!)
     }
 )
 

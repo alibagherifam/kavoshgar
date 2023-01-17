@@ -55,7 +55,7 @@ fun ChatDestination(
 ) {
     val chatScope = rememberCoroutineScope()
     val viewModel = remember {
-        provideChatViewModel(
+        provideMessengerViewModel(
             viewModelScope = chatScope,
             isLobbyOwner = args.isLobbyOwner,
             serverAddress = args.serverAddress,
