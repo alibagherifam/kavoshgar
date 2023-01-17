@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.chat
+package com.alibagherifam.kavoshgar.demo.chat
 
 data class Message(
     val isMine: Boolean,

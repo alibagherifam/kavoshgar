@@ -15,7 +15,6 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation(project(":logger"))
                 implementation(project(":demo:common"))
-                implementation(project(":kavoshgar"))
             }
         }
     }

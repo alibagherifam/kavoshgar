@@ -1,7 +1,6 @@
 package com.alibagherifam.kavoshgar.demo.chat
 
 import com.alibagherifam.kavoshgar.chat.ChatRepository
-import com.alibagherifam.kavoshgar.chat.Message
 import com.alibagherifam.kavoshgar.lobby.KavoshgarServer
 import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.CoroutineScope

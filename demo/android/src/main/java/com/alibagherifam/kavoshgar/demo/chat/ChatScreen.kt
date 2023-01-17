@@ -49,7 +49,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alibagherifam.kavoshgar.chat.Message
 import com.alibagherifam.kavoshgar.demo.R
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 
