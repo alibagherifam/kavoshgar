@@ -1,4 +1,4 @@
-package com.alibagherifam.kavoshgar.lobby
+package com.alibagherifam.kavoshgar.discovery
 
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log

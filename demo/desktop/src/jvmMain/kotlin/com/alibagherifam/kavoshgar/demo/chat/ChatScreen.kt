@@ -31,7 +31,7 @@ import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 @Composable
 fun ChatScreen(
     lobbyName: String,
-    viewModel: ChatViewModel,
+    viewModel: MessengerViewModel,
     onCloseRequest: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
