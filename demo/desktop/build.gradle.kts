@@ -26,12 +26,27 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Msi)
-            packageName = "KavoshgarDesktop"
+            packageName = "KavoshgarDemo"
             packageVersion = "1.0.0"
 
+            // Metadata
+            version = "1.0.0"
+            description = "Demonstrates features of Kavoshgar library"
+            copyright = "© 2023 Ali Bagherifam. All rights reserved."
+            licenseFile.set(project.file("LICENSE"))
+
             windows {
-                menu = true
-                // see https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
+                menuGroup = packageName
+                perUserInstall = true
+                dirChooser = true
+
+                val iconPath = "src/jvmMain/resources/images/ic_launcher_windows"
+                iconFile.set(project.file(iconPath))
+
+                // a unique ID, which enables users to update an app via installer, when an
+                // updated version is newer, than an installed version. The value must
+                // remain constant for a single application. See the links for more details:
+                // https://wixtoolset.org/documentation/manual/v3/howtos/general/generate_guids.html
                 upgradeUuid = "AF792DA6-2EA3-495A-95E5-C3C6CBCB9948"
             }
         }
