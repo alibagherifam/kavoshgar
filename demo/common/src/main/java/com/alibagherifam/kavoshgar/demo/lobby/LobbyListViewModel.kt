@@ -23,10 +23,7 @@ class LobbyListViewModel(
     init {
         viewModelScope.launch {
             launch {
-                client.startDiscovery()
-            }
-            launch {
-                client.discoveredServerFlow().collect { newLobby ->
+                client.startDiscovery().collect { newLobby ->
                     lobbyTTLs[newLobby.addressName] = getNextTTL()
                     addNewLobby(newLobby)
                 }

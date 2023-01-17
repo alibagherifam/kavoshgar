@@ -82,7 +82,7 @@ class ChatViewModel(
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
-        server!!.startDiscoveryReplying()
+        server!!.respondToDiscoveries()
     }
 
     private fun stopDiscoveryReplying() {

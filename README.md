@@ -19,27 +19,20 @@ and, other nodes (i.e., clients) will be notified about the presence of servers.
 
 ## Usage
 
-Every node on the network (which is a client by default) should start discovering available servers:
-
-```kotlin
-val client = KavoshgarClient()
-client.startDiscovery()
-```
-
-You can collect discovered servers as follow:
-
-```kotlin
-client.discoveredServerFlow().collect { serverInfo ->
-    println("Server discovered: ${serverInfo.addressName}")
-}
-```
-
-On the other hand, only the nodes you want to be a server in the network should be start replying to
-client discoveries:
+Only the network nodes you want to be a server should start responding to client discoveries:
 
 ```kotlin
 val server = KavoshgarServer(name = "Test Server")
-server.startDiscoveryReplying()
+server.respondToDiscoveries()
+```
+
+All other network nodes are clients by default and should start discovering available servers:
+
+```kotlin
+val client = KavoshgarClient()
+client.startDiscovery().collect { serverInfo ->
+    println("Server discovered: ${serverInfo.addressName}")
+}
 ```
 
 ## ▶ Demo

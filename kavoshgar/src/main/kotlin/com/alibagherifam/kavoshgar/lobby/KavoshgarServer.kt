@@ -16,16 +16,20 @@ import java.net.SocketAddress
  * @param[serverName] an arbitrary name will be shown to clients.
  */
 class KavoshgarServer(serverName: String) {
+    companion object {
+        private const val TAG = "Client"
+    }
+
     private var discoveryReplySocket: DatagramSocket? = null
     private lateinit var receivedPacket: DatagramPacket
     private val replyMessage = serverName.toByteArray()
 
     /**
-     * Listening to [client][KavoshgarClient] advertisements and replying to
-     * them in an infinite loop until the caller scope gets canceled. This function
-     * is main-safe runs on the background thread.
+     * Listens to [client][KavoshgarClient] advertisements and responds to them in
+     * an infinite loop until the caller scope gets canceled. This function is
+     * main-safe runs on the background thread.
      */
-    suspend fun startDiscoveryReplying() {
+    suspend fun respondToDiscoveries() {
         withContext(Dispatchers.IO) {
             try {
                 openSocket()
@@ -41,9 +45,9 @@ class KavoshgarServer(serverName: String) {
     }
 
     private fun receiveDiscovery() {
-        Log.i(tag = "Server", message = "Server: Receiving discovery...")
+        Log.i(TAG, message = "Listening for advertisment...")
         discoveryReplySocket!!.receive(receivedPacket)
-        Log.i(tag = "Server", message = " Server : Discovery received!")
+        Log.i(TAG, message = "Advertisment received!")
         receivedPacket.length = Constants.DISCOVERY_PACKET_SIZE
     }
 
@@ -53,9 +57,9 @@ class KavoshgarServer(serverName: String) {
             replyMessage.size,
             destinationAddress
         )
-        Log.i(tag = "Server", message = "Server: Sending discovery reply...")
+        Log.i(TAG, message = "Sending discovery response...")
         discoveryReplySocket!!.send(replyPacket)
-        Log.i(tag = "Server", message = "Server: Discovery reply sent!")
+        Log.i(TAG, message = "Discovery response sent!")
     }
 
     private fun openSocket() {
@@ -67,7 +71,7 @@ class KavoshgarServer(serverName: String) {
             Constants.DISCOVERY_PACKET_SIZE
         )
         discoveryReplySocket = DatagramSocket(Constants.LOBBY_DISCOVERY_PORT)
-        Log.i(tag = "Server", message = "Server: Discovery reply socket created!")
+        Log.i(TAG, message = "Discovery respond socket created!")
     }
 
     private fun closeSocket() {

@@ -3,104 +3,84 @@ package com.alibagherifam.kavoshgar.lobby
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-import java.net.SocketException
 
 /**
  * This client constantly broadcasts advertisement packets over the network and
- * simultaneously listens to potential [servers'][KavoshgarServer] replies.
+ * simultaneously listens to potential [server][KavoshgarServer] replies.
  */
 class KavoshgarClient {
-    private var discoverySocket: DatagramSocket? = null
-    private lateinit var discoveryPacket: DatagramPacket
-    private lateinit var serverReplyPacket: DatagramPacket
-
-    /**
-     * Broadcasts advertisement packets in an infinite loop until the caller scope
-     * gets canceled. This function is main-safe and runs on the background thread.
-     */
-    suspend fun startDiscovery() {
-        withContext(Dispatchers.IO) {
-            try {
-                openSocket()
-                while (true) {
-                    Log.i(tag = "Client", message = "Client: Sending discovery...")
-                    discoverySocket!!.send(discoveryPacket)
-                    Log.i(tag = "Client", message = "Discovery sent!")
-                    delay(Constants.DISCOVERY_INTERVALS)
-                }
-            } finally {
-                closeSocket()
-            }
-        }
+    companion object {
+        private const val TAG = "Client"
     }
 
-    /* TODO: Remove checking whether socket is open and also catching
-        closed socket exception. We should join both startDiscovery and
-        this functions together somehow and using one try/finally block
-     */
+    private var discoverySocket: DatagramSocket? = null
+    private lateinit var advertisementPacket: DatagramPacket
+    private lateinit var serverResponsePacket: DatagramPacket
+
     /**
-     * Listens for potential [server][KavoshgarServer] replies and notifies the caller
-     * about the [information][ServerInformation] of responding servers in a reactive way.
+     * Broadcasts advertisement packets and listens for potential [server][KavoshgarServer] replies
+     * in an infinite loop until the caller scope gets canceled. Notifies the caller about the
+     * [information][ServerInformation] of responding servers in a reactive way.
      * @return a [Flow] that emits [information][ServerInformation] of discovered servers.
      */
-    fun discoveredServerFlow(): Flow<ServerInformation> = flow {
-        while (true) {
-            if (discoverySocket == null) {
-                delay(100)
-                continue
+    fun startDiscovery(): Flow<ServerInformation> = flow {
+        openSocket()
+        coroutineScope {
+            val socket = discoverySocket!!
+            launch {
+                while (true) {
+                    socket.broadcastAdvertisement()
+                    delay(Constants.DISCOVERY_INTERVALS)
+                }
             }
-            Log.i(tag = "Client", message = "Client: Receiving discovery reply...")
-            discoverySocket!!.receive(serverReplyPacket)
-            Log.i(tag = "Client", message = "Client: Discovery reply received!")
-            emit(mapToLobby(serverReplyPacket))
-            serverReplyPacket.length = Constants.LOBBY_NAME_MAX_SIZE
+            launch {
+                while (true) {
+                    emit(socket.receiveResponse().asServerInformation())
+                    clearResponsePacket()
+                }
+            }
         }
-    }.catch {
-        if (it !is SocketException) {
-            throw it
-        }
-    }.flowOn(Dispatchers.IO)
+    }.onCompletion { closeSocket() }
 
-    private fun openSocket() {
+    private suspend fun openSocket() {
         if (discoverySocket != null) {
             return
         }
-        val message = "A".toByteArray()
-        discoveryPacket = DatagramPacket(
-            message,
-            message.size,
-            InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-            Constants.LOBBY_DISCOVERY_PORT
-        )
-        serverReplyPacket = DatagramPacket(
-            ByteArray(Constants.LOBBY_NAME_MAX_SIZE),
-            Constants.LOBBY_NAME_MAX_SIZE
-        )
-        discoverySocket = DatagramSocket().apply {
-            broadcast = true
+        withContext(Dispatchers.IO) {
+            val message = "A".toByteArray()
+            advertisementPacket = DatagramPacket(
+                message,
+                message.size,
+                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
+                Constants.LOBBY_DISCOVERY_PORT
+            )
+            serverResponsePacket = DatagramPacket(
+                ByteArray(Constants.LOBBY_NAME_MAX_SIZE),
+                Constants.LOBBY_NAME_MAX_SIZE
+            )
+            discoverySocket = DatagramSocket().apply {
+                broadcast = true
+            }
+            Log.i(TAG, message = "Discovery socket created!")
         }
-        Log.i(tag = "Client", message = "Client: Discovery socket created!")
     }
 
-    private fun closeSocket() {
-        discoverySocket?.close()
-        discoverySocket = null
+    private suspend fun closeSocket() {
+        withContext(Dispatchers.IO) {
+            discoverySocket?.close()
+            discoverySocket = null
+        }
     }
-
-    private fun mapToLobby(replyPacket: DatagramPacket) = ServerInformation(
-        name = String(replyPacket.data, 0, replyPacket.length),
-        address = replyPacket.address,
-        latency = calculateLatency(replyPacket.address)
-    )
 
     private fun calculateLatency(destinationAddress: InetAddress): Long {
         val currentTime = System.currentTimeMillis()
@@ -110,5 +90,32 @@ class KavoshgarClient {
         } else {
             -1
         }
+    }
+
+    private suspend fun DatagramSocket.broadcastAdvertisement() {
+        withContext(Dispatchers.IO) {
+            Log.i(TAG, message = "Broadcasting advertisement...")
+            send(advertisementPacket)
+            Log.i(TAG, message = "Advertisement broadcasted!")
+        }
+    }
+
+    private suspend fun DatagramSocket.receiveResponse(): DatagramPacket {
+        return withContext(Dispatchers.IO) {
+            Log.i(TAG, message = "Listening for discovery response...")
+            receive(serverResponsePacket)
+            Log.i(TAG, message = "Discovery response received!")
+            serverResponsePacket
+        }
+    }
+
+    private fun DatagramPacket.asServerInformation() = ServerInformation(
+        name = String(data, 0, length),
+        address = address,
+        latency = calculateLatency(address)
+    )
+
+    private fun clearResponsePacket() {
+        serverResponsePacket.length = Constants.LOBBY_NAME_MAX_SIZE
     }
 }
