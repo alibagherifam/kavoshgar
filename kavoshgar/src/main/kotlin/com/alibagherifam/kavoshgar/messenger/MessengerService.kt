@@ -13,17 +13,21 @@ import java.io.BufferedWriter
 import java.net.Socket
 
 class MessengerService(private val socketProvider: SocketProvider) {
+    companion object {
+        private const val TAG = "Messenger"
+    }
+
     private var socket: Socket? = null
     private lateinit var reader: BufferedReader
     private lateinit var writer: BufferedWriter
 
     suspend fun sendMessage(message: String) {
         withContext(Dispatchers.IO) {
-            Log.i(tag = "Chat", message = "Chat: Sending message...")
+            Log.i(TAG, message = "Sending message...")
             writer.write(message)
             writer.newLine()
             writer.flush()
-            Log.i(tag = "Chat", message = "Chat: Message sent!")
+            Log.i(TAG, message = "Message sent!")
         }
     }
 
@@ -35,9 +39,9 @@ class MessengerService(private val socketProvider: SocketProvider) {
             connect()
             emit("")
             while (true) {
-                Log.i(tag = "Chat", message = "Chat: Receiving message...")
+                Log.i(TAG, message = "Receiving message...")
                 reader.readLine()?.let { emit(it) }
-                Log.i(tag = "Chat", message = "Chat: Message received!")
+                Log.i(TAG, message = "Message received!")
                 delay(Constants.MESSAGING_INTERVALS)
             }
         } finally {
@@ -49,11 +53,11 @@ class MessengerService(private val socketProvider: SocketProvider) {
         if (socket != null) {
             return
         }
-        Log.i(tag = "Chat", message = "Chat: Creating chat socket...")
+        Log.i(TAG, message = "Creating chat socket...")
         socket = socketProvider.openSocket()
         reader = socket!!.getInputStream().bufferedReader()
         writer = socket!!.getOutputStream().bufferedWriter()
-        Log.i(tag = "Chat", message = "Chat: Chat socket created!")
+        Log.i(TAG, message = "Chat socket created!")
     }
 
     private fun disconnect() {
