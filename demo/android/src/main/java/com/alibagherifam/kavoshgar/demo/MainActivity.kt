@@ -60,7 +60,7 @@ fun ChatDestination(
         provideMessengerViewModel(
             viewModelScope = chatScope,
             isLobbyOwner = args.isLobbyOwner,
-            serverAddress = args.serverAddress,
+            lobbyAddress = args.lobbyAddress,
             lobbyName = args.lobbyName
         )
     }

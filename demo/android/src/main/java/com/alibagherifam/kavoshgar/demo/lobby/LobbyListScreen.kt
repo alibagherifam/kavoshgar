@@ -34,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.alibagherifam.kavoshgar.demo.R
 import com.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import com.alibagherifam.kavoshgar.demo.theme.AppTheme
-import com.alibagherifam.kavoshgar.lobby.ServerInformation
-import com.alibagherifam.kavoshgar.lobby.getRandomServerInformation
 
 @Composable
 fun LobbyListScreen(
@@ -48,12 +46,12 @@ fun LobbyListScreen(
         uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
-            val selectedLobby = uiState.selectedServer
+            val selectedLobby = uiState.selectedLobby
             if (selectedLobby != null) {
                 val args = ChatNavigationArgs(
                     isLobbyOwner = false,
                     lobbyName = selectedLobby.name,
-                    serverAddress = selectedLobby.address
+                    lobbyAddress = selectedLobby.address
                 )
                 onChatPageRequest(args)
             }
@@ -78,7 +76,7 @@ fun LobbyListScreen(
 @Composable
 fun LobbyListContent(
     uiState: LobbyListUiState,
-    onLobbySelectionChange: (ServerInformation) -> Unit,
+    onLobbySelectionChange: (Lobby) -> Unit,
     onCreateLobbyClick: () -> Unit,
     onJoinLobbyClick: () -> Unit
 ) {
@@ -92,8 +90,8 @@ fun LobbyListContent(
     ) { innerPadding ->
         LobbyTable(
             contentPadding = innerPadding,
-            lobbies = uiState.servers,
-            selectedServer = uiState.selectedServer,
+            lobbies = uiState.lobbies,
+            selectedLobby = uiState.selectedLobby,
             onLobbySelectionChange
         )
     }
@@ -128,16 +126,16 @@ fun LobbyNavigationBar(
 @Composable
 fun LobbyTable(
     contentPadding: PaddingValues,
-    lobbies: List<ServerInformation>,
-    selectedServer: ServerInformation?,
-    onLobbySelectionChange: (ServerInformation) -> Unit
+    lobbies: List<Lobby>,
+    selectedLobby: Lobby?,
+    onLobbySelectionChange: (Lobby) -> Unit
 ) {
     LazyColumn(contentPadding = contentPadding) {
         item { TableHeader() }
         items(lobbies) {
             TableRow(
-                serverInformation = it,
-                isSelected = selectedServer?.name == it.name,
+                lobby = it,
+                isSelected = selectedLobby?.name == it.name,
                 onLobbySelectionChange
             )
             Box(
@@ -183,9 +181,9 @@ fun TableHeader() {
 
 @Composable
 fun TableRow(
-    serverInformation: ServerInformation,
+    lobby: Lobby,
     isSelected: Boolean,
-    onLobbySelectionChange: (ServerInformation) -> Unit
+    onLobbySelectionChange: (Lobby) -> Unit
 ) {
     val backgroundColor = when {
         isSelected -> MaterialTheme.colorScheme.primaryContainer
@@ -196,23 +194,23 @@ fun TableRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onLobbySelectionChange(serverInformation) }
+            .clickable { onLobbySelectionChange(lobby) }
             .background(backgroundColor)
     ) {
         TableCell(
-            text = serverInformation.name,
+            text = lobby.name,
             weight = 4f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = serverInformation.addressName,
+            text = lobby.addressName,
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = serverInformation.latency.toString(),
+            text = lobby.latency.toString(),
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle
@@ -240,10 +238,10 @@ fun RowScope.TableCell(
 @Preview
 @Composable
 fun LobbyListContentPreview() {
-    val servers = List(size = 5) { getRandomServerInformation() }
+    val lobbies = List(size = 5) { getRandomLobbies() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(servers, selectedServer = servers[1]),
+            LobbyListUiState(lobbies, selectedLobby = lobbies[1]),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}

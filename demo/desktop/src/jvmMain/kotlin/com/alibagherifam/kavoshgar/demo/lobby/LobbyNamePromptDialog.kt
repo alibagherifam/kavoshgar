@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.demo.StringResources
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,14 +44,8 @@ fun LobbyNamePromptDialog(
                 TextButton(
                     modifier = Modifier.widthIn(min = 100.dp),
                     onClick = {
-                        when {
-                            // TODO: Check here
-                            inputValue.isBlank() -> {}
-                            inputValue.toByteArray().size > Constants.LOBBY_NAME_MAX_SIZE -> {
-                            }
-                            else -> {
-                                onCreateButtonClick(inputValue)
-                            }
+                        if (isValidLobbyName(inputValue)) {
+                            onCreateButtonClick(inputValue)
                         }
                     }
                 ) {

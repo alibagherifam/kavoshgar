@@ -16,13 +16,13 @@ fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
 fun provideMessengerViewModel(
     viewModelScope: CoroutineScope,
     isLobbyOwner: Boolean,
-    serverAddress: InetAddress?,
+    lobbyAddress: InetAddress?,
     lobbyName: String
 ) = MessengerViewModel(
     viewModelScope,
     messenger = provideMessengerService(
         isLobbyOwner,
-        serverAddress
+        lobbyAddress
     ),
     server = provideServer(
         isLobbyOwner,
