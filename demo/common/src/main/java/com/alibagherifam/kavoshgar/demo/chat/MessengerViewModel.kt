@@ -9,9 +9,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MessengerViewModel(
     viewModelScope: CoroutineScope,
@@ -19,8 +16,6 @@ class MessengerViewModel(
     private val server: KavoshgarServer? = null
 ) : BaseViewModel<ChatUiState>(viewModelScope, initialState = ChatUiState()) {
     private var serverAdvertismentJob: Job? = null
-
-    private val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     init {
         launchInUi {
@@ -89,8 +84,7 @@ class MessengerViewModel(
     ): List<Message> {
         val newMessage = Message(
             isMine = isFromUser,
-            content = message,
-            timestamp = timeFormatter.format(Date(System.currentTimeMillis()))
+            content = message
         )
         return uiState.value.messages + newMessage
     }
