@@ -10,13 +10,15 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import kotlin.system.measureTimeMillis
 
 /**
- * This client constantly broadcasts advertisement packets over the network and
- * simultaneously listens to potential [server][KavoshgarServer] replies.
+ * A client that constantly broadcasts server discovery packets over the network
+ * and simultaneously receives any potential [ServerInformation].
  */
 class KavoshgarClient {
     companion object {
@@ -24,29 +26,29 @@ class KavoshgarClient {
     }
 
     private var discoverySocket: DatagramSocket? = null
-    private lateinit var advertisementPacket: DatagramPacket
-    private lateinit var serverResponsePacket: DatagramPacket
+    private lateinit var serverDiscoveryPacket: DatagramPacket
+    private lateinit var serverInformationPacket: DatagramPacket
 
     /**
-     * Broadcasts advertisement packets and listens for potential [server][KavoshgarServer] replies
-     * in an infinite loop until the caller scope gets canceled. Notifies the caller about the
-     * [information][ServerInformation] of responding servers in a reactive way.
-     * @return a [Flow] that emits [information][ServerInformation] of discovered servers.
+     * Starts broadcasting server discovery packets and awaits for [ServerInformation]
+     * in an infinite loop until the caller scope gets canceled.
+     *
+     * @return a [Flow] that emits receiving service [information][ServerInformation].
      */
-    fun startDiscovery(): Flow<ServerInformation> = flow {
+    fun startServerDiscovery(): Flow<ServerInformation> = flow {
         openSocket()
         coroutineScope {
-            val socket = discoverySocket!!
             launch {
                 while (true) {
-                    socket.broadcastAdvertisement()
+                    broadcastServerDiscovery()
                     delay(Constants.DISCOVERY_INTERVALS)
                 }
             }
             launch {
                 while (true) {
-                    emit(socket.receiveResponse().asServerInformation())
-                    clearResponsePacket()
+                    emit(awaitServerResponse().asServerInformation())
+                    flushServerInformationPacket()
+                    yield()
                 }
             }
         }
@@ -58,13 +60,13 @@ class KavoshgarClient {
         }
         withContext(Dispatchers.IO) {
             val message = "A".toByteArray()
-            advertisementPacket = DatagramPacket(
+            serverDiscoveryPacket = DatagramPacket(
                 message,
                 message.size,
                 InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-                Constants.SERVER_DISCOVERY_PORT
+                Constants.DISCOVERY_PORT
             )
-            serverResponsePacket = DatagramPacket(
+            serverInformationPacket = DatagramPacket(
                 ByteArray(Constants.SERVER_NAME_MAX_SIZE),
                 Constants.SERVER_NAME_MAX_SIZE
             )
@@ -75,47 +77,47 @@ class KavoshgarClient {
         }
     }
 
-    private suspend fun closeSocket() {
+    private suspend fun broadcastServerDiscovery() {
         withContext(Dispatchers.IO) {
-            discoverySocket?.close()
-            discoverySocket = null
+            Log.i(TAG, message = "Broadcasting server discovery...")
+            discoverySocket!!.send(serverDiscoveryPacket)
+            Log.i(TAG, message = "Server discovery is broadcast!")
         }
     }
 
-    private fun calculateLatency(destinationAddress: InetAddress): Long {
-        val currentTime = System.currentTimeMillis()
-        val timeOut = Constants.PING_TIME_OUT.toInt()
-        return if (destinationAddress.isReachable(timeOut)) {
-            (System.currentTimeMillis() - currentTime)
-        } else {
-            -1
-        }
-    }
-
-    private suspend fun DatagramSocket.broadcastAdvertisement() {
-        withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Broadcasting advertisement...")
-            send(advertisementPacket)
-            Log.i(TAG, message = "Advertisement broadcasted!")
-        }
-    }
-
-    private suspend fun DatagramSocket.receiveResponse(): DatagramPacket {
+    private suspend fun awaitServerResponse(): DatagramPacket {
         return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Listening for discovery response...")
-            receive(serverResponsePacket)
-            Log.i(TAG, message = "Discovery response received!")
-            serverResponsePacket
+            Log.i(TAG, message = "Awaiting server information...")
+            discoverySocket!!.receive(serverInformationPacket)
+            Log.i(TAG, message = "Server information received!")
+            serverInformationPacket
         }
     }
 
-    private fun DatagramPacket.asServerInformation() = ServerInformation(
+    private suspend fun DatagramPacket.asServerInformation() = ServerInformation(
         name = String(data, 0, length),
         address = address,
         latency = calculateLatency(address)
     )
 
-    private fun clearResponsePacket() {
-        serverResponsePacket.length = Constants.SERVER_NAME_MAX_SIZE
+    private suspend fun calculateLatency(destinationAddress: InetAddress): Long {
+        return withContext(Dispatchers.IO) {
+            val isReachable: Boolean
+            val latency = measureTimeMillis {
+                isReachable = destinationAddress.isReachable(Constants.PING_TIMEOUT)
+            }
+            if (isReachable) latency else -1
+        }
+    }
+
+    private fun flushServerInformationPacket() {
+        serverInformationPacket.length = Constants.SERVER_NAME_MAX_SIZE
+    }
+
+    private suspend fun closeSocket() {
+        withContext(Dispatchers.IO) {
+            discoverySocket?.close()
+            discoverySocket = null
+        }
     }
 }

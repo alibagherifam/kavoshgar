@@ -22,7 +22,7 @@ class LobbyListViewModel(
     init {
         viewModelScope.launch {
             launch {
-                client.startDiscovery().collect { serverInformation ->
+                client.startServerDiscovery().collect { serverInformation ->
                     val lobby = serverInformation.toLobby()
                     lobbyTTLs[lobby.addressName] = getNextTTL()
                     addNewLobby(lobby)

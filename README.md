@@ -19,19 +19,19 @@ and, other nodes (i.e., clients) will be notified about the presence of servers.
 
 ## Usage
 
-Only the network nodes you want to be a server should start responding to client discoveries:
+Only the network nodes you want to be a server should start advertising presence information:
 
 ```kotlin
 val server = KavoshgarServer(name = "Test Server")
-server.respondToDiscoveries()
+server.advertisePresence()
 ```
 
 All other network nodes are clients by default and should start discovering available servers:
 
 ```kotlin
 val client = KavoshgarClient()
-client.startDiscovery().collect { serverInfo ->
-    println("Server discovered: ${serverInfo.addressName}")
+client.startServerDiscovery().collect { server ->
+    println("Server discovered: ${server.addressName}")
 }
 ```
 

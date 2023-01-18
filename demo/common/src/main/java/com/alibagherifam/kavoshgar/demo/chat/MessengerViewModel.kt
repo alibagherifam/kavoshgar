@@ -81,7 +81,7 @@ class MessengerViewModel(
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
-        server!!.respondToDiscoveries()
+        server!!.advertisePresence()
     }
 
     private fun stopDiscoveryReplying() {

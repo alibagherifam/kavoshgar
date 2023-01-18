@@ -10,72 +10,80 @@ import java.net.DatagramSocket
 import java.net.SocketAddress
 
 /**
- * A server that constantly listens for [client][KavoshgarClient] advertisements and
- * replies to them to notify clients about its presence and IP address.
+ * A server that constantly listens for [client's][KavoshgarClient] discoveries and
+ * responds to them to advertise the presence of itself.
  *
  * @param[serverName] an arbitrary name will be shown to clients.
  */
-class KavoshgarServer(serverName: String) {
+class KavoshgarServer(private val serverName: String) {
     companion object {
         private const val TAG = "Client"
     }
 
-    private var discoveryReplySocket: DatagramSocket? = null
-    private lateinit var receivedPacket: DatagramPacket
-    private val replyMessage = serverName.toByteArray()
+    private var advertismentSocket: DatagramSocket? = null
+    private lateinit var serverDiscoveryPacket: DatagramPacket
+    private lateinit var serverInformationPacket: DatagramPacket
 
     /**
-     * Listens to [client][KavoshgarClient] advertisements and responds to them in
-     * an infinite loop until the caller scope gets canceled. This function is
-     * main-safe runs on the background thread.
+     * Starts listening to [client's][KavoshgarClient] discoveries and responds to them
+     *  in an infinite loop until the caller scope gets canceled. This function is main-safe.
      */
-    suspend fun respondToDiscoveries() {
-        withContext(Dispatchers.IO) {
-            try {
-                openSocket()
-                while (true) {
-                    receiveDiscovery()
-                    yield()
-                    replyToDiscovery(receivedPacket.socketAddress)
-                }
-            } finally {
-                closeSocket()
+    suspend fun advertisePresence() {
+        try {
+            openSocket()
+            while (true) {
+                val clientAddress = awaitServerDiscovery().socketAddress
+                sendServerInformation(clientAddress)
+                flushDiscoveryPacket()
+                yield()
             }
+        } finally {
+            closeSocket()
         }
     }
 
-    private fun receiveDiscovery() {
-        Log.i(TAG, message = "Listening for advertisment...")
-        discoveryReplySocket!!.receive(receivedPacket)
-        Log.i(TAG, message = "Advertisment received!")
-        receivedPacket.length = Constants.DISCOVERY_PACKET_SIZE
-    }
-
-    private fun replyToDiscovery(destinationAddress: SocketAddress) {
-        val replyPacket = DatagramPacket(
-            replyMessage,
-            replyMessage.size,
-            destinationAddress
-        )
-        Log.i(TAG, message = "Sending discovery response...")
-        discoveryReplySocket!!.send(replyPacket)
-        Log.i(TAG, message = "Discovery response sent!")
-    }
-
-    private fun openSocket() {
-        if (discoveryReplySocket != null) {
+    private suspend fun openSocket() {
+        if (advertismentSocket != null) {
             return
         }
-        receivedPacket = DatagramPacket(
-            ByteArray(Constants.DISCOVERY_PACKET_SIZE),
-            Constants.DISCOVERY_PACKET_SIZE
-        )
-        discoveryReplySocket = DatagramSocket(Constants.SERVER_DISCOVERY_PORT)
-        Log.i(TAG, message = "Discovery respond socket created!")
+        withContext(Dispatchers.IO) {
+            serverDiscoveryPacket = DatagramPacket(
+                ByteArray(Constants.DISCOVERY_PACKET_SIZE),
+                Constants.DISCOVERY_PACKET_SIZE
+            )
+            serverInformationPacket = serverName
+                .toByteArray().let { DatagramPacket(it, it.size) }
+            advertismentSocket = DatagramSocket(Constants.DISCOVERY_PORT)
+            Log.i(TAG, message = "Advertisment socket created!")
+        }
     }
 
-    private fun closeSocket() {
-        discoveryReplySocket?.close()
-        discoveryReplySocket = null
+    private suspend fun awaitServerDiscovery(): DatagramPacket {
+        return withContext(Dispatchers.IO) {
+            Log.i(TAG, message = "Awaiting server discovery from client...")
+            advertismentSocket!!.receive(serverDiscoveryPacket)
+            Log.i(TAG, message = "Server discovery received!")
+            serverDiscoveryPacket
+        }
+    }
+
+    private suspend fun sendServerInformation(clientAddress: SocketAddress) {
+        withContext(Dispatchers.IO) {
+            serverInformationPacket.socketAddress = clientAddress
+            Log.i(TAG, message = "Sending server information to client...")
+            advertismentSocket!!.send(serverInformationPacket)
+            Log.i(TAG, message = "Server information sent!")
+        }
+    }
+
+    private fun flushDiscoveryPacket() {
+        serverDiscoveryPacket.length = Constants.DISCOVERY_PACKET_SIZE
+    }
+
+    private suspend fun closeSocket() {
+        withContext(Dispatchers.IO) {
+            advertismentSocket?.close()
+            advertismentSocket = null
+        }
     }
 }
