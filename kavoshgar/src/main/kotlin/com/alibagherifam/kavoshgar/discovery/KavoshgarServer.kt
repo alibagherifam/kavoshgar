@@ -3,39 +3,37 @@ package com.alibagherifam.kavoshgar.discovery
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.yield
 import java.net.DatagramPacket
 import java.net.DatagramSocket
-import java.net.SocketAddress
+import java.net.InetAddress
 
 /**
- * A server that constantly listens for [client's][KavoshgarClient] discoveries and
- * responds to them to advertise the presence of itself.
+ * A server that constantly advertises its presence information for
+ * any potential [client][KavoshgarClient] listening to the network.
  *
  * @param[serverName] an arbitrary name will be shown to clients.
  */
 class KavoshgarServer(private val serverName: String) {
     companion object {
-        private const val TAG = "Client"
+        private const val TAG = "Server"
     }
 
     private var advertismentSocket: DatagramSocket? = null
-    private lateinit var serverDiscoveryPacket: DatagramPacket
     private lateinit var serverInformationPacket: DatagramPacket
 
     /**
-     * Starts listening to [client's][KavoshgarClient] discoveries and responds to them
-     *  in an infinite loop until the caller scope gets canceled. This function is main-safe.
+     * Starts broadcasting the server's presence information over
+     * the network in an infinite loop until the caller scope gets canceled.
+     * This function is main-safe.
      */
     suspend fun advertisePresence() {
         try {
             openSocket()
             while (true) {
-                val clientAddress = awaitServerDiscovery().socketAddress
-                sendServerInformation(clientAddress)
-                flushDiscoveryPacket()
-                yield()
+                broadcastServerInformation()
+                delay(Constants.ADVERTISMENT_INTERVALS)
             }
         } finally {
             closeSocket()
@@ -47,37 +45,26 @@ class KavoshgarServer(private val serverName: String) {
             return
         }
         withContext(Dispatchers.IO) {
-            serverDiscoveryPacket = DatagramPacket(
-                ByteArray(Constants.DISCOVERY_PACKET_SIZE),
-                Constants.DISCOVERY_PACKET_SIZE
+            val data = serverName.toByteArray()
+            serverInformationPacket = DatagramPacket(
+                data,
+                data.size,
+                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
+                Constants.ADVERTISMENT_PORT
             )
-            serverInformationPacket = serverName
-                .toByteArray().let { DatagramPacket(it, it.size) }
-            advertismentSocket = DatagramSocket(Constants.DISCOVERY_PORT)
+            advertismentSocket = DatagramSocket().apply {
+                broadcast = true
+            }
             Log.i(TAG, message = "Advertisment socket created!")
         }
     }
 
-    private suspend fun awaitServerDiscovery(): DatagramPacket {
-        return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Awaiting server discovery from client...")
-            advertismentSocket!!.receive(serverDiscoveryPacket)
-            Log.i(TAG, message = "Server discovery received!")
-            serverDiscoveryPacket
-        }
-    }
-
-    private suspend fun sendServerInformation(clientAddress: SocketAddress) {
+    private suspend fun broadcastServerInformation() {
         withContext(Dispatchers.IO) {
-            serverInformationPacket.socketAddress = clientAddress
-            Log.i(TAG, message = "Sending server information to client...")
+            Log.i(TAG, message = "Broadcasting server information...")
             advertismentSocket!!.send(serverInformationPacket)
-            Log.i(TAG, message = "Server information sent!")
+            Log.i(TAG, message = "Server information broadcast!")
         }
-    }
-
-    private fun flushDiscoveryPacket() {
-        serverDiscoveryPacket.length = Constants.DISCOVERY_PACKET_SIZE
     }
 
     private suspend fun closeSocket() {

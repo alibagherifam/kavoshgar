@@ -3,12 +3,9 @@ package com.alibagherifam.kavoshgar.discovery
 import com.alibagherifam.kavoshgar.Constants
 import com.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import java.net.DatagramPacket
@@ -17,8 +14,7 @@ import java.net.InetAddress
 import kotlin.system.measureTimeMillis
 
 /**
- * A client that constantly broadcasts server discovery packets over the network
- * and simultaneously receives any potential [ServerInformation].
+ * A client constantly listens to the network to discover available servers.
  */
 class KavoshgarClient {
     companion object {
@@ -26,31 +22,20 @@ class KavoshgarClient {
     }
 
     private var discoverySocket: DatagramSocket? = null
-    private lateinit var serverDiscoveryPacket: DatagramPacket
-    private lateinit var serverInformationPacket: DatagramPacket
+    private lateinit var serverAdvertismentPacket: DatagramPacket
 
     /**
-     * Starts broadcasting server discovery packets and awaits for [ServerInformation]
-     * in an infinite loop until the caller scope gets canceled.
+     * Starts awaiting server advertisement in an infinite loop
+     * until the caller scope gets canceled.
      *
-     * @return a [Flow] that emits receiving service [information][ServerInformation].
+     * @return a [Flow] that emits discovered server's [information][ServerInformation].
      */
     fun startServerDiscovery(): Flow<ServerInformation> = flow {
         openSocket()
-        coroutineScope {
-            launch {
-                while (true) {
-                    broadcastServerDiscovery()
-                    delay(Constants.DISCOVERY_INTERVALS)
-                }
-            }
-            launch {
-                while (true) {
-                    emit(awaitServerResponse().asServerInformation())
-                    flushServerInformationPacket()
-                    yield()
-                }
-            }
+        while (true) {
+            emit(awaitServerAdvertisment().asServerInformation())
+            flushServerAdvertismentPacket()
+            yield()
         }
     }.onCompletion { closeSocket() }
 
@@ -59,38 +44,21 @@ class KavoshgarClient {
             return
         }
         withContext(Dispatchers.IO) {
-            val message = "A".toByteArray()
-            serverDiscoveryPacket = DatagramPacket(
-                message,
-                message.size,
-                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-                Constants.DISCOVERY_PORT
-            )
-            serverInformationPacket = DatagramPacket(
+            serverAdvertismentPacket = DatagramPacket(
                 ByteArray(Constants.SERVER_NAME_MAX_SIZE),
                 Constants.SERVER_NAME_MAX_SIZE
             )
-            discoverySocket = DatagramSocket().apply {
-                broadcast = true
-            }
+            discoverySocket = DatagramSocket(Constants.ADVERTISMENT_PORT)
             Log.i(TAG, message = "Discovery socket created!")
         }
     }
 
-    private suspend fun broadcastServerDiscovery() {
-        withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Broadcasting server discovery...")
-            discoverySocket!!.send(serverDiscoveryPacket)
-            Log.i(TAG, message = "Server discovery is broadcast!")
-        }
-    }
-
-    private suspend fun awaitServerResponse(): DatagramPacket {
+    private suspend fun awaitServerAdvertisment(): DatagramPacket {
         return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Awaiting server information...")
-            discoverySocket!!.receive(serverInformationPacket)
-            Log.i(TAG, message = "Server information received!")
-            serverInformationPacket
+            Log.i(TAG, message = "Awaiting server advertisment...")
+            discoverySocket!!.receive(serverAdvertismentPacket)
+            Log.i(TAG, message = "Server advertisment received!")
+            serverAdvertismentPacket
         }
     }
 
@@ -110,8 +78,8 @@ class KavoshgarClient {
         }
     }
 
-    private fun flushServerInformationPacket() {
-        serverInformationPacket.length = Constants.SERVER_NAME_MAX_SIZE
+    private fun flushServerAdvertismentPacket() {
+        serverAdvertismentPacket.length = Constants.SERVER_NAME_MAX_SIZE
     }
 
     private suspend fun closeSocket() {

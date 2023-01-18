@@ -31,7 +31,7 @@ class LobbyListViewModel(
             launch {
                 while (isActive) {
                     removeExpiredLobbies()
-                    delay(Constants.DISCOVERY_INTERVALS)
+                    delay(Constants.ADVERTISMENT_INTERVALS)
                 }
             }
         }

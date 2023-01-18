@@ -19,7 +19,7 @@ class MessengerViewModel(
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
 ) {
-    private var discoveryReplyingJob: Job? = null
+    private var serverAdvertismentJob: Job? = null
 
     private val _uiState = MutableStateFlow(ChatUiState())
     val uiState: StateFlow<ChatUiState> get() = _uiState
@@ -28,13 +28,11 @@ class MessengerViewModel(
 
     init {
         viewModelScope.launch {
-            launch {
-                receiveMessages()
-            }
-            if (server != null) {
-                discoveryReplyingJob = launch {
-                    startDiscoveryReplying()
-                }
+            receiveMessages()
+        }
+        if (server != null) {
+            serverAdvertismentJob = viewModelScope.launch {
+                startServerAdvertisment()
             }
         }
     }
@@ -66,8 +64,8 @@ class MessengerViewModel(
             }
         }.collect { message ->
             if (message.isBlank()) {
-                if (discoveryReplyingJob?.isActive == true) {
-                    stopDiscoveryReplying()
+                if (serverAdvertismentJob?.isActive == true) {
+                    stopServerAdvertisment()
                 }
             } else {
                 _uiState.update {
@@ -77,15 +75,15 @@ class MessengerViewModel(
         }
     }
 
-    private suspend fun startDiscoveryReplying() {
+    private suspend fun startServerAdvertisment() {
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
         server!!.advertisePresence()
     }
 
-    private fun stopDiscoveryReplying() {
-        discoveryReplyingJob!!.cancel()
+    private fun stopServerAdvertisment() {
+        serverAdvertismentJob!!.cancel()
         _uiState.update {
             it.copy(isLookingForClient = false)
         }
