@@ -13,6 +13,7 @@ kotlin {
         named("jvmMain") {
             dependencies {
                 implementation(compose.desktop.currentOs)
+                implementation(libs.compose.desktop.material3)
                 implementation(project(":logger"))
                 implementation(project(":demo:common"))
             }

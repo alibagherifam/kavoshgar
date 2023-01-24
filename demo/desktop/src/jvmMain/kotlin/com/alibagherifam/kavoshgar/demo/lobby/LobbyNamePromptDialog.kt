@@ -1,14 +1,30 @@
 package com.alibagherifam.kavoshgar.demo.lobby
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alibagherifam.kavoshgar.demo.StringResources
+import com.alibagherifam.kavoshgar.demo.theme.AppTheme
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun LobbyNamePromptDialog(
     onCreateButtonClick: (String) -> Unit,
@@ -25,8 +41,8 @@ fun LobbyNamePromptDialog(
                 Text(
                     modifier = Modifier.align(Alignment.End),
                     text = StringResources.MESSAGE_LOBBY_NAME_SELECTION,
-                    color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h5
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.headlineSmall
                 )
                 Spacer(Modifier.size(16.dp))
                 OutlinedTextField(
@@ -35,30 +51,33 @@ fun LobbyNamePromptDialog(
                 )
             }
         },
-        buttons = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp, start = 16.dp),
-            ) {
-                TextButton(
-                    modifier = Modifier.widthIn(min = 100.dp),
-                    onClick = {
-                        if (isValidLobbyName(inputValue)) {
-                            onCreateButtonClick(inputValue)
-                        }
+        confirmButton = {
+            TextButton(
+                modifier = Modifier.widthIn(min = 100.dp),
+                onClick = {
+                    if (isValidLobbyName(inputValue)) {
+                        onCreateButtonClick(inputValue)
                     }
-                ) {
-                    Text(StringResources.LABEL_CREATE_LOBBY)
                 }
-                Spacer(Modifier.size(8.dp))
-                TextButton(
-                    modifier = Modifier.width(100.dp),
-                    onClick = onDismissRequest
-                ) {
-                    Text(StringResources.LABEL_DISMISS)
-                }
+            ) {
+                Text(StringResources.LABEL_CREATE_LOBBY)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                modifier = Modifier.width(100.dp),
+                onClick = onDismissRequest
+            ) {
+                Text(StringResources.LABEL_DISMISS)
             }
         }
     )
+}
+
+@Preview
+@Composable
+fun LobbyNamePromptDialogPreview() {
+    AppTheme {
+        LobbyNamePromptDialog({}, {})
+    }
 }

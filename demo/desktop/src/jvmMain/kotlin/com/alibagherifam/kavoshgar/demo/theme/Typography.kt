@@ -1,80 +1,103 @@
 package com.alibagherifam.kavoshgar.demo.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.platform.Font
 import androidx.compose.ui.unit.sp
 
-val IranSans = FontFamily(
+val IranSansFamily = FontFamily(
     Font("fonts/iran_sans_regular.ttf"),
     Font("fonts/iran_sans_bold.ttf", FontWeight.Bold)
 )
 
 val AppTypography = Typography(
-    defaultFontFamily = IranSans,
-    h1 = TextStyle(
+    displayLarge = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         letterSpacing = 0.sp
     ),
-    h2 = TextStyle(
+    displayMedium = TextStyle(
         fontWeight = FontWeight.Bold,
         fontSize = 21.sp,
         letterSpacing = 0.sp
     ),
-    h3 = TextStyle(
+    displaySmall = TextStyle(
+        fontFamily = IranSansFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 19.sp,
         letterSpacing = 0.sp
     ),
-    h4 = TextStyle(
+    headlineMedium = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
         letterSpacing = 0.sp
     ),
-    h5 = TextStyle(
+    headlineSmall = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 17.sp,
         letterSpacing = 0.sp
     ),
-    h6 = TextStyle(
+    titleLarge = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         letterSpacing = 0.sp
     ),
-    subtitle1 = TextStyle(
+    titleMedium = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 15.sp,
         letterSpacing = 0.sp
     ),
-    subtitle2 = TextStyle(
+    titleSmall = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         letterSpacing = 0.sp
     ),
-    body1 = TextStyle(
+    bodyLarge = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 15.sp,
         letterSpacing = 0.sp
     ),
-    body2 = TextStyle(
+    bodyMedium = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         letterSpacing = 0.sp
     ),
-    button = TextStyle(
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        letterSpacing = 0.sp
-    ),
-    caption = TextStyle(
+    bodySmall = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         letterSpacing = 0.sp
     ),
-    overline = TextStyle(
+    labelLarge = TextStyle(
+        fontFamily = IranSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        letterSpacing = 0.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = IranSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        letterSpacing = 0.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = IranSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 10.sp,
         letterSpacing = 0.sp

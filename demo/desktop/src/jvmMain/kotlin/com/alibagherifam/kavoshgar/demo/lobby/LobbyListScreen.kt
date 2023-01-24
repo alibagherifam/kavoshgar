@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -70,6 +71,7 @@ fun LobbyListScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LobbyListContent(
     uiState: LobbyListUiState,
@@ -78,21 +80,20 @@ fun LobbyListContent(
     onJoinLobbyClick: () -> Unit
 ) {
     Scaffold(
-        content = { innerPadding ->
-            LobbyTable(
-                contentPadding = innerPadding,
-                lobbies = uiState.lobbies,
-                selectedLobby = uiState.selectedLobby,
-                onLobbySelectionChange
-            )
-        },
         bottomBar = {
             LobbyNavigationBar(
                 onCreateLobbyClick = onCreateLobbyClick,
                 onJoinLobbyClick = onJoinLobbyClick
             )
         }
-    )
+    ) { innerPadding ->
+        LobbyTable(
+            contentPadding = innerPadding,
+            lobbies = uiState.lobbies,
+            selectedLobby = uiState.selectedLobby,
+            onLobbySelectionChange
+        )
+    }
 }
 
 @Composable
@@ -140,7 +141,7 @@ fun LobbyTable(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp)
-                    .background(MaterialTheme.colors.onBackground)
+                    .background(MaterialTheme.colorScheme.onBackground)
             )
         }
     }
@@ -148,9 +149,9 @@ fun LobbyTable(
 
 @Composable
 fun TableHeader() {
-    val backgroundColor = MaterialTheme.colors.primary
+    val backgroundColor = MaterialTheme.colorScheme.primary
     val contentColor = contentColorFor(backgroundColor)
-    val textStyle = MaterialTheme.typography.h6
+    val textStyle = MaterialTheme.typography.titleLarge
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,11 +185,11 @@ fun TableRow(
     onLobbySelectionChange: (Lobby) -> Unit
 ) {
     val backgroundColor = when {
-        isSelected -> MaterialTheme.colors.primaryVariant
+        isSelected -> MaterialTheme.colorScheme.primaryContainer
         else -> Color.Transparent
     }
     val contentColor = contentColorFor(backgroundColor)
-    val textStyle = MaterialTheme.typography.subtitle1
+    val textStyle = MaterialTheme.typography.titleMedium
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -5,6 +5,7 @@ androidxLifecycle = "2.5.1"
 androidxNavigation = "2.5.3"
 coroutines = "1.6.4"
 kotlin = "1.7.20"
+multiplatform = "1.3.0-rc05"
 
 [libraries]
 # AndroidX
@@ -19,14 +20,17 @@ androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.9.0" 
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 
-# Coroutines
+# KotlinX
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# Others
+compose-desktop-material3 = { group = "org.jetbrains.compose.material3", name = "material3-desktop", version.ref = "multiplatform" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidPlugin" }
 android-library = { id = "com.android.library", version.ref = "androidPlugin" }
-composeMultiplatform = { id = "org.jetbrains.compose", version = "1.2.2" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "multiplatform" }
 dependencyVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
 gradleDoctor = { id = "com.osacky.doctor", version = "0.8.1" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
