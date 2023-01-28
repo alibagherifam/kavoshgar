@@ -42,10 +42,10 @@ usage. It is a LAN messenger that you can chat with anybody on the same network.
 supports both Android and Desktop platforms:
 
 - [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android) - Built
-  natively with [Jetpack Compose](https://developer.android.com/jetpack/compose).
+  with [Jetpack Compose](https://developer.android.com/jetpack/compose).
 - [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop) - Built with
-  [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) technology
-  and [Compose for Desktop](https://www.jetbrains.com/lp/compose-desktop).
+  [KMP](https://kotlinlang.org/docs/multiplatform.html)
+  and [Compose Multiplatform](https://www.jetbrains.com/lp/compose-desktop) technologies.
 
 I will merge the Android version into the multiplatform one for code-sharing benefits. So stay tuned
 ;)
