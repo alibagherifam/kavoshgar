@@ -1,7 +1,7 @@
-package com.alibagherifam.kavoshgar.messenger
+package dev.alibagherifam.kavoshgar.messenger
 
-import com.alibagherifam.kavoshgar.Constants
-import com.alibagherifam.kavoshgar.logger.Log
+import dev.alibagherifam.kavoshgar.Constants
+import dev.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
