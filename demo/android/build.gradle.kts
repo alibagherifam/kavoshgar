@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.alibagherifam.kavoshgar.demo"
+    namespace = "dev.alibagherifam.kavoshgar.demo"
     compileSdk = 33
     buildToolsVersion = "33.0.1"
 
     defaultConfig {
-        applicationId = "com.alibagherifam.kavoshgar.demo"
+        applicationId = "dev.alibagherifam.kavoshgar.demo"
         minSdk = 23
         targetSdk = 33
         versionCode = 1
