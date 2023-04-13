@@ -1,9 +1,9 @@
 [versions]
-androidPlugin = "7.4.2"
-androidxComposeCompiler = "1.4.4"
+androidPlugin = "8.0.0"
+androidxComposeCompiler = "1.4.5"
 androidxLifecycle = "2.6.1"
 coroutines = "1.6.4"
-kotlin = "1.8.10"
+kotlin = "1.8.20"
 multiplatform = "1.4.0"
 
 [libraries]
