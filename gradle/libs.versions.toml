@@ -1,21 +1,21 @@
 [versions]
-androidPlugin = "8.0.0"
-androidxComposeCompiler = "1.4.5"
+androidPlugin = "8.0.2"
+androidxComposeCompiler = "1.4.7"
 androidxLifecycle = "2.6.1"
-coroutines = "1.6.4"
+coroutines = "1.7.1"
 kotlin = "1.8.20"
 multiplatform = "1.4.0"
 
 [libraries]
 # AndroidX
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.7.0-beta01" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version = "1.7.2" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.04.00" }
 androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.9.0" }
+androidx-core = { group = "androidx.core", name = "core-ktx", version = "1.10.1" }
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
 

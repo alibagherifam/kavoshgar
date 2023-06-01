@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "dev.alibagherifam.kavoshgar.demo"
     compileSdk = 33
-    buildToolsVersion = "34.0.0-rc2"
+    buildToolsVersion = "34.0.0-rc4"
 
     defaultConfig {
         applicationId = "dev.alibagherifam.kavoshgar.demo"
