@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.BufferedWriter
@@ -17,51 +17,58 @@ class MessengerService(private val socketProvider: SocketProvider) {
         private const val TAG = "Messenger"
     }
 
-    private var socket: Socket? = null
+    private var messagingSocket: Socket? = null
     private lateinit var reader: BufferedReader
     private lateinit var writer: BufferedWriter
 
     suspend fun sendMessage(message: String) {
         withContext(Dispatchers.IO) {
             Log.i(TAG, message = "Sending message...")
-            writer.write(message)
-            writer.newLine()
-            writer.flush()
+            writer.run {
+                write(message)
+                newLine()
+                flush()
+            }
             Log.i(TAG, message = "Message sent!")
         }
     }
 
     /* TODO: Change isConnected signaling mechanism (Perhaps
-        we should move DiscoveryReplyRepository into ChatRepository)
+        we should move [KavoshgarServer] into [MessagingService])
     * */
     fun receiveMessages(): Flow<String> = flow {
-        try {
-            connect()
-            emit("")
-            while (true) {
-                Log.i(TAG, message = "Receiving message...")
-                reader.readLine()?.let { emit(it) }
-                Log.i(TAG, message = "Message received!")
-                delay(Constants.MESSAGING_INTERVALS)
-            }
-        } finally {
-            disconnect()
+        connect()
+        emit("")
+        while (true) {
+            readMessage()?.let { emit(it) }
+            delay(Constants.MESSAGING_INTERVALS)
         }
-    }.flowOn(Dispatchers.IO)
+    }.onCompletion { disconnect() }
 
-    private fun connect() {
-        if (socket != null) {
-            return
+    private suspend fun readMessage(): String? {
+        return withContext(Dispatchers.IO) {
+            Log.i(TAG, message = "Receiving message...")
+            val message = reader.readLine()
+            Log.i(TAG, message = "Message received!")
+            message
         }
-        Log.i(TAG, message = "Creating chat socket...")
-        socket = socketProvider.openSocket()
-        reader = socket!!.getInputStream().bufferedReader()
-        writer = socket!!.getOutputStream().bufferedWriter()
-        Log.i(TAG, message = "Chat socket created!")
     }
 
-    private fun disconnect() {
-        socket?.close()
-        socket = null
+    private suspend fun connect() {
+        val socket = messagingSocket ?: return
+        withContext(Dispatchers.IO) {
+            Log.i(TAG, message = "Creating messaging socket...")
+            messagingSocket = socketProvider.openSocket()
+            reader = socket.getInputStream().bufferedReader()
+            writer = socket.getOutputStream().bufferedWriter()
+            Log.i(TAG, message = "Messaging socket created!")
+        }
+    }
+
+    private suspend fun disconnect() {
+        withContext(Dispatchers.IO) {
+            messagingSocket?.close()
+            messagingSocket = null
+        }
     }
 }
