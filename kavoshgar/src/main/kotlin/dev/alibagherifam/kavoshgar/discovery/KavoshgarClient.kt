@@ -22,7 +22,7 @@ class KavoshgarClient {
     }
 
     private var discoverySocket: DatagramSocket? = null
-    private lateinit var serverAdvertismentPacket: DatagramPacket
+    private lateinit var serverAdvertisementPacket: DatagramPacket
 
     /**
      * Starts awaiting server advertisement in an infinite loop
@@ -33,8 +33,8 @@ class KavoshgarClient {
     fun startServerDiscovery(): Flow<ServerInformation> = flow {
         openSocket()
         while (true) {
-            emit(awaitServerAdvertisment().asServerInformation())
-            flushServerAdvertismentPacket()
+            emit(awaitServerAdvertisement().asServerInformation())
+            flushServerAdvertisementPacket()
             yield()
         }
     }.onCompletion { closeSocket() }
@@ -44,21 +44,21 @@ class KavoshgarClient {
             return
         }
         withContext(Dispatchers.IO) {
-            serverAdvertismentPacket = DatagramPacket(
+            serverAdvertisementPacket = DatagramPacket(
                 ByteArray(Constants.SERVER_NAME_MAX_SIZE),
                 Constants.SERVER_NAME_MAX_SIZE
             )
-            discoverySocket = DatagramSocket(Constants.ADVERTISMENT_PORT)
+            discoverySocket = DatagramSocket(Constants.ADVERTISEMENT_PORT)
             Log.i(TAG, message = "Discovery socket created!")
         }
     }
 
-    private suspend fun awaitServerAdvertisment(): DatagramPacket {
+    private suspend fun awaitServerAdvertisement(): DatagramPacket {
         return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Awaiting server advertisment...")
-            discoverySocket!!.receive(serverAdvertismentPacket)
-            Log.i(TAG, message = "Server advertisment received!")
-            serverAdvertismentPacket
+            Log.i(TAG, message = "Awaiting server advertisement...")
+            discoverySocket!!.receive(serverAdvertisementPacket)
+            Log.i(TAG, message = "Server advertisement received!")
+            serverAdvertisementPacket
         }
     }
 
@@ -78,8 +78,8 @@ class KavoshgarClient {
         }
     }
 
-    private fun flushServerAdvertismentPacket() {
-        serverAdvertismentPacket.length = Constants.SERVER_NAME_MAX_SIZE
+    private fun flushServerAdvertisementPacket() {
+        serverAdvertisementPacket.length = Constants.SERVER_NAME_MAX_SIZE
     }
 
     private suspend fun closeSocket() {

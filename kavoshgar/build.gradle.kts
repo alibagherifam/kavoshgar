@@ -3,12 +3,14 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
 }
 
+group = "dev.alibagherifam.kavoshgar"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
-    implementation(project(":logger"))
+    implementation(projects.logger)
     implementation(libs.kotlinx.coroutines.core)
 }

@@ -12,9 +12,6 @@ import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.chat.ChatScreen
 import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.NavigationDestination
-import dev.alibagherifam.kavoshgar.demo.provideLobbyListViewModel
-import dev.alibagherifam.kavoshgar.demo.provideMessengerViewModel
 import dev.alibagherifam.kavoshgar.logger.Log
 import dev.alibagherifam.kavoshgar.logger.LogPriority
 import dev.alibagherifam.kavoshgar.logger.Logger
@@ -42,6 +39,7 @@ fun NavHost() {
                 currentDestination = NavigationDestination.Chat(args)
             }
         )
+
         is NavigationDestination.Chat -> ChatDestination(
             args = (currentDestination as NavigationDestination.Chat).args,
             onCloserRequest = {

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.StringResources
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun LookingForClientDialog(
     onDismissRequest: () -> Unit

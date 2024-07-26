@@ -33,10 +33,6 @@ import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.StringResources
 import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.lobby.Lobby
-import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListUiState
-import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
-import dev.alibagherifam.kavoshgar.demo.lobby.getRandomLobbies
 
 @Composable
 fun LobbyListScreen(

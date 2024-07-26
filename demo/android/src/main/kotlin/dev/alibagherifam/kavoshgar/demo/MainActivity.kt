@@ -1,7 +1,6 @@
 package dev.alibagherifam.kavoshgar.demo
 
 import android.os.Bundle
-import android.util.Log as AndroidLog
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -14,12 +13,10 @@ import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.chat.ChatScreen
 import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListScreen
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.NavigationDestination
-import dev.alibagherifam.kavoshgar.demo.provideLobbyListViewModel
-import dev.alibagherifam.kavoshgar.demo.provideMessengerViewModel
 import dev.alibagherifam.kavoshgar.logger.Log
 import dev.alibagherifam.kavoshgar.logger.LogPriority
 import dev.alibagherifam.kavoshgar.logger.Logger
+import android.util.Log as AndroidLog
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

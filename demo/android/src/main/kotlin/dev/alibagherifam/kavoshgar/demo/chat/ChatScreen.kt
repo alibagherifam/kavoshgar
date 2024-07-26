@@ -17,8 +17,8 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,7 +35,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.key.Key
@@ -51,9 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.R
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.chat.ChatUiState
-import dev.alibagherifam.kavoshgar.demo.chat.Message
-import dev.alibagherifam.kavoshgar.demo.chat.MessengerViewModel
 
 @Composable
 fun ChatScreen(
@@ -79,7 +75,6 @@ fun ChatScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatContent(
     lobbyName: String,
@@ -122,7 +117,7 @@ fun TopBar(
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
                     contentDescription = stringResource(R.string.content_desc_back_button)
                 )
             }
@@ -209,7 +204,6 @@ fun MessageInputBar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageInputField(
     modifier: Modifier,
@@ -239,10 +233,8 @@ fun MessageInputField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 fun KeyEvent.isEnterClick() = (key == Key.Enter) && (type == KeyEventType.KeyDown)
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendButton(
     enabled: Boolean,
@@ -271,7 +263,7 @@ fun SendButton(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Send,
+                imageVector = Icons.AutoMirrored.Default.Send,
                 contentDescription = stringResource(R.string.content_desc_send_button)
             )
         }

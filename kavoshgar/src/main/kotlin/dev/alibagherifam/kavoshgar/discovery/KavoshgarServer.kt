@@ -20,7 +20,7 @@ class KavoshgarServer(private val serverName: String) {
         private const val TAG = "Server"
     }
 
-    private var advertismentSocket: DatagramSocket? = null
+    private var advertisementSocket: DatagramSocket? = null
     private lateinit var serverInformationPacket: DatagramPacket
 
     /**
@@ -33,7 +33,7 @@ class KavoshgarServer(private val serverName: String) {
             openSocket()
             while (true) {
                 broadcastServerInformation()
-                delay(Constants.ADVERTISMENT_INTERVALS)
+                delay(Constants.ADVERTISEMENT_INTERVALS)
             }
         } finally {
             closeSocket()
@@ -41,7 +41,7 @@ class KavoshgarServer(private val serverName: String) {
     }
 
     private suspend fun openSocket() {
-        if (advertismentSocket != null) {
+        if (advertisementSocket != null) {
             return
         }
         withContext(Dispatchers.IO) {
@@ -50,27 +50,27 @@ class KavoshgarServer(private val serverName: String) {
                 data,
                 data.size,
                 InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-                Constants.ADVERTISMENT_PORT
+                Constants.ADVERTISEMENT_PORT
             )
-            advertismentSocket = DatagramSocket().apply {
+            advertisementSocket = DatagramSocket().apply {
                 broadcast = true
             }
-            Log.i(TAG, message = "Advertisment socket created!")
+            Log.i(TAG, message = "Advertisement socket created!")
         }
     }
 
     private suspend fun broadcastServerInformation() {
         withContext(Dispatchers.IO) {
             Log.i(TAG, message = "Broadcasting server information...")
-            advertismentSocket!!.send(serverInformationPacket)
+            advertisementSocket!!.send(serverInformationPacket)
             Log.i(TAG, message = "Server information broadcast!")
         }
     }
 
     private suspend fun closeSocket() {
         withContext(Dispatchers.IO) {
-            advertismentSocket?.close()
-            advertismentSocket = null
+            advertisementSocket?.close()
+            advertisementSocket = null
         }
     }
 }

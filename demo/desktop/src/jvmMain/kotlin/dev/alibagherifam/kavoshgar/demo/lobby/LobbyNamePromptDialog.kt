@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,9 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.StringResources
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.lobby.isValidLobbyName
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun LobbyNamePromptDialog(
     onCreateButtonClick: (String) -> Unit,

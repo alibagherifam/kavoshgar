@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,10 +33,6 @@ import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.R
 import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import dev.alibagherifam.kavoshgar.demo.lobby.Lobby
-import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListUiState
-import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListViewModel
-import dev.alibagherifam.kavoshgar.demo.lobby.getRandomLobbies
 
 @Composable
 fun LobbyListScreen(
@@ -76,7 +71,6 @@ fun LobbyListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LobbyListContent(
     uiState: LobbyListUiState,

@@ -15,15 +15,15 @@ class MessengerViewModel(
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
 ) : BaseViewModel<ChatUiState>(viewModelScope, initialState = ChatUiState()) {
-    private var serverAdvertismentJob: Job? = null
+    private var serverAdvertisementJob: Job? = null
 
     init {
         launchInUi {
             receiveMessages()
         }
         if (server != null) {
-            serverAdvertismentJob = viewModelScope.launch {
-                startServerAdvertisment()
+            serverAdvertisementJob = viewModelScope.launch {
+                startServerAdvertisement()
             }
         }
     }
@@ -53,8 +53,8 @@ class MessengerViewModel(
             }
         }.collect { message ->
             if (message.isBlank()) {
-                if (serverAdvertismentJob?.isActive == true) {
-                    stopServerAdvertisment()
+                if (serverAdvertisementJob?.isActive == true) {
+                    stopServerAdvertisement()
                 }
             } else {
                 _uiState.update {
@@ -64,15 +64,15 @@ class MessengerViewModel(
         }
     }
 
-    private suspend fun startServerAdvertisment() {
+    private suspend fun startServerAdvertisement() {
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
         server!!.advertisePresence()
     }
 
-    private fun stopServerAdvertisment() {
-        serverAdvertismentJob!!.cancel()
+    private fun stopServerAdvertisement() {
+        serverAdvertisementJob!!.cancel()
         _uiState.update {
             it.copy(isLookingForClient = false)
         }

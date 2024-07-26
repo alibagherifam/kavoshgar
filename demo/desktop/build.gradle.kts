@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.composeMultiplatform)
 }
 
@@ -14,8 +15,8 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation(libs.compose.desktop.material3)
-                implementation(project(":logger"))
-                implementation(project(":demo:common"))
+                implementation(projects.logger)
+                implementation(projects.demo.common)
             }
         }
     }

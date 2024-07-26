@@ -14,7 +14,11 @@ dependencyResolutionManagement {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
-rootProject.name = "kavoshgar"
+
+// Root project name and a subproject name can not being the same
+// See https://github.com/gradle/gradle/issues/16608
+rootProject.name = "kavoshgar-project"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":logger")
 include(":kavoshgar")
