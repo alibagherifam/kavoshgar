@@ -163,7 +163,7 @@ fun TableHeader() {
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(R.string.label_lobby_address),
+            text = stringResource(R.string.label_ip_address),
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle

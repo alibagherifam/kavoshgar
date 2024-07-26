@@ -1,14 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Kavoshgar Demo</string>
-    <string name="label_dismiss">بازگشت</string>
-    <string name="label_create_lobby">ایجاد گروه</string>
-    <string name="label_join_lobby">ورود به گروه</string>
-    <string name="label_lobby_name">نام گروه</string>
-    <string name="label_lobby_address">آدرس IP</string>
-    <string name="label_lobby_latency">تاخیر</string>
+    <string name="app_name" translatable="false">Kavoshgar Demo</string>
+
+    <string name="label_dismiss">Dismiss</string>
+    <string name="label_create_lobby">Create Lobby</string>
+    <string name="label_join_lobby">Join Lobby</string>
+    <string name="label_lobby_name">Lobby Name</string>
+    <string name="label_ip_address">IP Address</string>
+    <string name="label_lobby_latency">Latency</string>
     <string name="placeholder_message_input">Message</string>
-    <string name="content_desc_back_button">دکمه بازگشت</string>
-    <string name="content_desc_send_button">دکمه ارسال</string>
-    <string name="message_lobby_name_selection">انتخاب نام گروه</string>
-    <string name="message_wait_for_other_client">لطفا منتظر کاربر دیگر بمانید</string>
+    <string name="content_desc_back_button">Back Button</string>
+    <string name="content_desc_send_button">Send Button</string>
+    <string name="message_lobby_name_selection">Lobby Name Selection</string>
+    <string name="message_wait_for_other_client">Please wait for other client to join</string>
 </resources>
