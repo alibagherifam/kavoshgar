@@ -117,8 +117,8 @@ private fun TopBar(
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        modifier = modifier,
         title = { Text(text = title) },
+        modifier = modifier,
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
                 Icon(

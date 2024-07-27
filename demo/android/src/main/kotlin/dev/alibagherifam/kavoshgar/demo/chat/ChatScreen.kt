@@ -119,6 +119,7 @@ private fun TopBar(
 ) {
     TopAppBar(
         title = { Text(text = title) },
+        modifier = modifier,
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
                 Icon(
@@ -126,8 +127,7 @@ private fun TopBar(
                     contentDescription = stringResource(R.string.content_desc_back_button)
                 )
             }
-        },
-        modifier = modifier
+        }
     )
 }
 
@@ -205,11 +205,11 @@ private fun MessageInputBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         MessageInputField(
-            modifier = Modifier.weight(1f),
             inputValue = inputValue,
             enabled = enabled,
             onSendMessageClick = onSendMessageClick,
-            onMessageInputValueChange = onMessageInputValueChange
+            onMessageInputValueChange = onMessageInputValueChange,
+            modifier = Modifier.weight(1f)
         )
         SendButton(
             enabled = enabled && inputValue.isNotBlank(),

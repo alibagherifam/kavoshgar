@@ -41,6 +41,7 @@ private fun NavHost() {
                 currentDestination = NavigationDestination.Chat(args)
             }
         )
+
         is NavigationDestination.Chat -> ChatDestination(
             args = (currentDestination as NavigationDestination.Chat).args,
             onCloserRequest = {
@@ -79,7 +80,10 @@ private fun LobbyListDestination(
     val viewModel = remember {
         provideLobbyListViewModel(lobbyScope)
     }
-    LobbyListScreen(viewModel, onChatPageRequest)
+    LobbyListScreen(
+        viewModel = viewModel,
+        onChatPageRequest = onChatPageRequest
+    )
 }
 
 private fun getLogger() = Logger { priority, tag, message, error ->

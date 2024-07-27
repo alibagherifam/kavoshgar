@@ -35,13 +35,15 @@ import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun LobbyListScreen(
+internal fun LobbyListScreen(
     viewModel: LobbyListViewModel,
-    onChatPageRequest: (ChatNavigationArgs) -> Unit
+    onChatPageRequest: (ChatNavigationArgs) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsState()
     LobbyListContent(
+        modifier = modifier,
         uiState = uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
@@ -76,9 +78,11 @@ private fun LobbyListContent(
     uiState: LobbyListUiState,
     onLobbySelectionChange: (Lobby) -> Unit,
     onCreateLobbyClick: () -> Unit,
-    onJoinLobbyClick: () -> Unit
+    onJoinLobbyClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             LobbyNavigationBar(
                 onCreateLobbyClick = onCreateLobbyClick,
@@ -90,7 +94,7 @@ private fun LobbyListContent(
             contentPadding = innerPadding,
             lobbies = uiState.lobbies,
             selectedLobby = uiState.selectedLobby,
-            onLobbySelectionChange
+            onLobbySelectionChange = onLobbySelectionChange
         )
     }
 }
@@ -98,10 +102,11 @@ private fun LobbyListContent(
 @Composable
 private fun LobbyNavigationBar(
     onCreateLobbyClick: () -> Unit,
-    onJoinLobbyClick: () -> Unit
+    onJoinLobbyClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly

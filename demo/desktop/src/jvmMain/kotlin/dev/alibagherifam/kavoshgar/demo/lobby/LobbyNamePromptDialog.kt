@@ -59,7 +59,7 @@ internal fun LobbyNamePromptDialog(
                     }
                 }
             ) {
-                Text(StringResources.LABEL_CREATE_LOBBY)
+                Text(text = StringResources.LABEL_CREATE_LOBBY)
             }
         },
         dismissButton = {
@@ -67,7 +67,7 @@ internal fun LobbyNamePromptDialog(
                 modifier = Modifier.width(100.dp),
                 onClick = onDismissRequest
             ) {
-                Text(StringResources.LABEL_DISMISS)
+                Text(text = StringResources.LABEL_DISMISS)
             }
         }
     )
@@ -77,6 +77,9 @@ internal fun LobbyNamePromptDialog(
 @Composable
 private fun LobbyNamePromptDialogPreview() {
     AppTheme {
-        LobbyNamePromptDialog({}, {})
+        LobbyNamePromptDialog(
+            onCreateButtonClick = {},
+            onDismissRequest = {}
+        )
     }
 }

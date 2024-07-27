@@ -251,7 +251,10 @@ private fun LobbyListContentPreview() {
     val lobbies = List(size = 5) { getRandomLobbies() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(lobbies, selectedLobby = lobbies[1]),
+            uiState = LobbyListUiState(
+                lobbies = lobbies,
+                selectedLobby = lobbies[1]
+            ),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}
