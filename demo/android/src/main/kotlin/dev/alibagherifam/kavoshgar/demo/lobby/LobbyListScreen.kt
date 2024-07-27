@@ -42,7 +42,7 @@ fun LobbyListScreen(
     var isDialogOpen by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsState()
     LobbyListContent(
-        uiState,
+        uiState = uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
             val selectedLobby = uiState.selectedLobby
@@ -72,7 +72,7 @@ fun LobbyListScreen(
 }
 
 @Composable
-fun LobbyListContent(
+private fun LobbyListContent(
     uiState: LobbyListUiState,
     onLobbySelectionChange: (Lobby) -> Unit,
     onCreateLobbyClick: () -> Unit,
@@ -96,7 +96,7 @@ fun LobbyListContent(
 }
 
 @Composable
-fun LobbyNavigationBar(
+private fun LobbyNavigationBar(
     onCreateLobbyClick: () -> Unit,
     onJoinLobbyClick: () -> Unit
 ) {
@@ -110,31 +110,35 @@ fun LobbyNavigationBar(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onCreateLobbyClick
         ) {
-            Text(stringResource(R.string.label_create_lobby))
+            Text(text = stringResource(R.string.label_create_lobby))
         }
         Button(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onJoinLobbyClick
         ) {
-            Text(stringResource(R.string.label_join_lobby))
+            Text(text = stringResource(R.string.label_join_lobby))
         }
     }
 }
 
 @Composable
-fun LobbyTable(
+private fun LobbyTable(
     contentPadding: PaddingValues,
     lobbies: List<Lobby>,
     selectedLobby: Lobby?,
-    onLobbySelectionChange: (Lobby) -> Unit
+    onLobbySelectionChange: (Lobby) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(contentPadding = contentPadding) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding
+    ) {
         item { TableHeader() }
         items(lobbies) {
             TableRow(
                 lobby = it,
                 isSelected = selectedLobby?.name == it.name,
-                onLobbySelectionChange
+                onLobbySelectionChange = onLobbySelectionChange
             )
             Box(
                 modifier = Modifier
@@ -147,12 +151,14 @@ fun LobbyTable(
 }
 
 @Composable
-fun TableHeader() {
+private fun TableHeader(
+    modifier: Modifier = Modifier
+) {
     val backgroundColor = MaterialTheme.colorScheme.primary
     val contentColor = contentColorFor(backgroundColor)
     val textStyle = MaterialTheme.typography.titleLarge
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor)
     ) {
@@ -178,10 +184,11 @@ fun TableHeader() {
 }
 
 @Composable
-fun TableRow(
+private fun TableRow(
     lobby: Lobby,
     isSelected: Boolean,
-    onLobbySelectionChange: (Lobby) -> Unit
+    onLobbySelectionChange: (Lobby) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
         isSelected -> MaterialTheme.colorScheme.primaryContainer
@@ -190,7 +197,7 @@ fun TableRow(
     val contentColor = contentColorFor(backgroundColor)
     val textStyle = MaterialTheme.typography.titleMedium
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onLobbySelectionChange(lobby) }
             .background(backgroundColor)
@@ -217,15 +224,16 @@ fun TableRow(
 }
 
 @Composable
-fun RowScope.TableCell(
+private fun RowScope.TableCell(
     text: String,
     weight: Float,
     textColor: Color,
-    textStyle: TextStyle
+    textStyle: TextStyle,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = text,
-        modifier = Modifier
+        modifier = modifier
             .weight(weight)
             .padding(12.dp),
         color = textColor,
@@ -235,11 +243,14 @@ fun RowScope.TableCell(
 
 @Preview
 @Composable
-fun LobbyListContentPreview() {
+private fun LobbyListContentPreview() {
     val lobbies = List(size = 5) { getRandomLobbies() }
     AppTheme {
         LobbyListContent(
-            LobbyListUiState(lobbies, selectedLobby = lobbies[1]),
+            uiState = LobbyListUiState(
+                lobbies = lobbies,
+                selectedLobby = lobbies[1]
+            ),
             onLobbySelectionChange = {},
             onCreateLobbyClick = {},
             onJoinLobbyClick = {}

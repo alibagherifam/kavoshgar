@@ -22,10 +22,12 @@ import dev.alibagherifam.kavoshgar.demo.StringResources
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun LookingForClientDialog(
-    onDismissRequest: () -> Unit
+internal fun LookingForClientDialog(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = {},
         text = {
             Column(
@@ -52,7 +54,7 @@ fun LookingForClientDialog(
                     modifier = Modifier.widthIn(min = 180.dp),
                     onClick = { onDismissRequest() }
                 ) {
-                    Text(StringResources.LABEL_DISMISS)
+                    Text(text = StringResources.LABEL_DISMISS)
                 }
             }
         }
@@ -61,8 +63,10 @@ fun LookingForClientDialog(
 
 @Preview
 @Composable
-fun LookingForClientDialogPreview() {
+private fun LookingForClientDialogPreview() {
     AppTheme {
-        LookingForClientDialog {}
+        LookingForClientDialog(
+            onDismissRequest = {}
+        )
     }
 }

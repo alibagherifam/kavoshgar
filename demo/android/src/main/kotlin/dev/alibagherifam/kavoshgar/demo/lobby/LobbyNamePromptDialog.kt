@@ -24,12 +24,14 @@ import dev.alibagherifam.kavoshgar.demo.R
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun LobbyNamePromptDialog(
+internal fun LobbyNamePromptDialog(
     onCreateButtonClick: (String) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var inputValue by remember { mutableStateOf("") }
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         text = {
             Column(
@@ -37,8 +39,8 @@ fun LobbyNamePromptDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.End),
                     text = stringResource(R.string.message_lobby_name_selection),
+                    modifier = Modifier.align(Alignment.End),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.headlineSmall
                 )
@@ -58,7 +60,7 @@ fun LobbyNamePromptDialog(
                     }
                 }
             ) {
-                Text(stringResource(R.string.label_create_lobby))
+                Text(text = stringResource(R.string.label_create_lobby))
             }
         },
         dismissButton = {
@@ -66,7 +68,7 @@ fun LobbyNamePromptDialog(
                 modifier = Modifier.width(100.dp),
                 onClick = onDismissRequest
             ) {
-                Text(stringResource(R.string.label_dismiss))
+                Text(text = stringResource(R.string.label_dismiss))
             }
         }
     )
@@ -74,8 +76,11 @@ fun LobbyNamePromptDialog(
 
 @Preview
 @Composable
-fun LobbyNamePromptDialogPreview() {
+private fun LobbyNamePromptDialogPreview() {
     AppTheme {
-        LobbyNamePromptDialog({}, {})
+        LobbyNamePromptDialog(
+            onCreateButtonClick = {},
+            onDismissRequest = {}
+        )
     }
 }

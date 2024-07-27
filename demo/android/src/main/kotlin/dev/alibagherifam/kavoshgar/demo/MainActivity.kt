@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavHost() {
+private fun NavHost() {
     var currentDestination: NavigationDestination by remember {
         mutableStateOf(NavigationDestination.LobbyList)
     }
@@ -51,7 +51,7 @@ fun NavHost() {
 }
 
 @Composable
-fun ChatDestination(
+private fun ChatDestination(
     args: ChatNavigationArgs,
     onCloserRequest: () -> Unit
 ) {
@@ -72,7 +72,7 @@ fun ChatDestination(
 }
 
 @Composable
-fun LobbyListDestination(
+private fun LobbyListDestination(
     onChatPageRequest: (ChatNavigationArgs) -> Unit
 ) {
     val lobbyScope = rememberCoroutineScope()

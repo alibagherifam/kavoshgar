@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -35,14 +34,16 @@ import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun LobbyListScreen(
+internal fun LobbyListScreen(
     viewModel: LobbyListViewModel,
-    onChatPageRequest: (ChatNavigationArgs) -> Unit
+    onChatPageRequest: (ChatNavigationArgs) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsState()
     LobbyListContent(
-        uiState,
+        modifier = modifier,
+        uiState = uiState,
         onLobbySelectionChange = viewModel::selectLobby,
         onJoinLobbyClick = {
             val selectedLobby = uiState.selectedLobby
@@ -71,15 +72,16 @@ fun LobbyListScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LobbyListContent(
+private fun LobbyListContent(
     uiState: LobbyListUiState,
     onLobbySelectionChange: (Lobby) -> Unit,
     onCreateLobbyClick: () -> Unit,
-    onJoinLobbyClick: () -> Unit
+    onJoinLobbyClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             LobbyNavigationBar(
                 onCreateLobbyClick = onCreateLobbyClick,
@@ -91,18 +93,19 @@ fun LobbyListContent(
             contentPadding = innerPadding,
             lobbies = uiState.lobbies,
             selectedLobby = uiState.selectedLobby,
-            onLobbySelectionChange
+            onLobbySelectionChange = onLobbySelectionChange
         )
     }
 }
 
 @Composable
-fun LobbyNavigationBar(
+private fun LobbyNavigationBar(
     onCreateLobbyClick: () -> Unit,
-    onJoinLobbyClick: () -> Unit
+    onJoinLobbyClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
@@ -111,31 +114,35 @@ fun LobbyNavigationBar(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onCreateLobbyClick
         ) {
-            Text(StringResources.LABEL_CREATE_LOBBY)
+            Text(text = StringResources.LABEL_CREATE_LOBBY)
         }
         Button(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onJoinLobbyClick
         ) {
-            Text(StringResources.LABEL_JOIN_LOBBY)
+            Text(text = StringResources.LABEL_JOIN_LOBBY)
         }
     }
 }
 
 @Composable
-fun LobbyTable(
+private fun LobbyTable(
     contentPadding: PaddingValues,
     lobbies: List<Lobby>,
     selectedLobby: Lobby?,
-    onLobbySelectionChange: (Lobby) -> Unit
+    onLobbySelectionChange: (Lobby) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(contentPadding = contentPadding) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding
+    ) {
         item { TableHeader() }
         items(lobbies) {
             TableRow(
                 lobby = it,
                 isSelected = selectedLobby?.name == it.name,
-                onLobbySelectionChange
+                onLobbySelectionChange = onLobbySelectionChange
             )
             Box(
                 modifier = Modifier
@@ -148,12 +155,14 @@ fun LobbyTable(
 }
 
 @Composable
-fun TableHeader() {
+private fun TableHeader(
+    modifier: Modifier = Modifier
+) {
     val backgroundColor = MaterialTheme.colorScheme.primary
     val contentColor = contentColorFor(backgroundColor)
     val textStyle = MaterialTheme.typography.titleLarge
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(backgroundColor)
     ) {
@@ -179,10 +188,11 @@ fun TableHeader() {
 }
 
 @Composable
-fun TableRow(
+private fun TableRow(
     lobby: Lobby,
     isSelected: Boolean,
-    onLobbySelectionChange: (Lobby) -> Unit
+    onLobbySelectionChange: (Lobby) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
         isSelected -> MaterialTheme.colorScheme.primaryContainer
@@ -191,7 +201,7 @@ fun TableRow(
     val contentColor = contentColorFor(backgroundColor)
     val textStyle = MaterialTheme.typography.titleMedium
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onLobbySelectionChange(lobby) }
             .background(backgroundColor)
@@ -218,15 +228,16 @@ fun TableRow(
 }
 
 @Composable
-fun RowScope.TableCell(
+private fun RowScope.TableCell(
     text: String,
     weight: Float,
     textColor: Color,
-    textStyle: TextStyle
+    textStyle: TextStyle,
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = text,
-        modifier = Modifier
+        modifier = modifier
             .weight(weight)
             .padding(12.dp),
         color = textColor,
@@ -236,7 +247,7 @@ fun RowScope.TableCell(
 
 @Preview
 @Composable
-fun LobbyListContentPreview() {
+private fun LobbyListContentPreview() {
     val lobbies = List(size = 5) { getRandomLobbies() }
     AppTheme {
         LobbyListContent(

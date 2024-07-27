@@ -52,18 +52,20 @@ import dev.alibagherifam.kavoshgar.demo.R
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun ChatScreen(
+internal fun ChatScreen(
     lobbyName: String,
     viewModel: MessengerViewModel,
-    onCloseRequest: () -> Unit
+    onCloseRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
     ChatContent(
-        lobbyName,
-        uiState,
+        lobbyName = lobbyName,
+        uiState = uiState,
         onSendMessageClick = viewModel::sendMessage,
         onMessageInputValueChange = viewModel::changeMessageInputValue,
-        onBackPressed = onCloseRequest
+        onBackPressed = onCloseRequest,
+        modifier = modifier
     )
     if (uiState.isConnectionLost) {
         onCloseRequest()
@@ -76,14 +78,16 @@ fun ChatScreen(
 }
 
 @Composable
-fun ChatContent(
+private fun ChatContent(
     lobbyName: String,
     uiState: ChatUiState,
     onSendMessageClick: () -> Unit,
     onMessageInputValueChange: (String) -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBar(
                 title = lobbyName,
@@ -108,12 +112,13 @@ fun ChatContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(
+private fun TopBar(
     title: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(title) },
+        title = { Text(text = title) },
         navigationIcon = {
             IconButton(onClick = onBackPressed) {
                 Icon(
@@ -121,16 +126,21 @@ fun TopBar(
                     contentDescription = stringResource(R.string.content_desc_back_button)
                 )
             }
-        }
+        },
+        modifier = modifier
     )
 }
 
 @Composable
-fun MessageList(
+private fun MessageList(
     messages: List<Message>,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(contentPadding = contentPadding) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding
+    ) {
         items(messages) {
             MessageItem(it)
         }
@@ -138,9 +148,12 @@ fun MessageList(
 }
 
 @Composable
-fun MessageItem(message: Message) {
+private fun MessageItem(
+    message: Message,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 8.dp, start = 8.dp, end = 8.dp),
         horizontalAlignment = if (message.isMine) Alignment.End else Alignment.Start
@@ -161,8 +174,8 @@ fun MessageItem(message: Message) {
                 )
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.End),
                     text = message.content,
+                    modifier = Modifier.align(Alignment.End),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.End
                 )
@@ -176,14 +189,15 @@ fun MessageItem(message: Message) {
 }
 
 @Composable
-fun MessageInputBar(
+private fun MessageInputBar(
     inputValue: String,
     enabled: Boolean,
     onSendMessageClick: () -> Unit,
-    onMessageInputValueChange: (String) -> Unit
+    onMessageInputValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 12.dp),
@@ -191,11 +205,11 @@ fun MessageInputBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         MessageInputField(
-            Modifier.weight(1f),
-            inputValue,
-            enabled,
-            onSendMessageClick,
-            onMessageInputValueChange
+            modifier = Modifier.weight(1f),
+            inputValue = inputValue,
+            enabled = enabled,
+            onSendMessageClick = onSendMessageClick,
+            onMessageInputValueChange = onMessageInputValueChange
         )
         SendButton(
             enabled = enabled && inputValue.isNotBlank(),
@@ -205,12 +219,12 @@ fun MessageInputBar(
 }
 
 @Composable
-fun MessageInputField(
-    modifier: Modifier,
+private fun MessageInputField(
     inputValue: String,
     enabled: Boolean,
     onSendMessageClick: () -> Unit,
-    onMessageInputValueChange: (String) -> Unit
+    onMessageInputValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         modifier = modifier.onPreviewKeyEvent { event ->
@@ -224,7 +238,7 @@ fun MessageInputField(
         onValueChange = onMessageInputValueChange,
         textStyle = MaterialTheme.typography.bodyLarge,
         placeholder = {
-            Text(stringResource(R.string.placeholder_message_input))
+            Text(text = stringResource(R.string.placeholder_message_input))
         },
         singleLine = true,
         shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50)),
@@ -233,12 +247,13 @@ fun MessageInputField(
     )
 }
 
-fun KeyEvent.isEnterClick() = (key == Key.Enter) && (type == KeyEventType.KeyDown)
+private fun KeyEvent.isEnterClick() = (key == Key.Enter) && (type == KeyEventType.KeyDown)
 
 @Composable
-fun SendButton(
+private fun SendButton(
     enabled: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val contentColor = when {
         enabled -> MaterialTheme.colorScheme.onPrimary
@@ -251,6 +266,7 @@ fun SendButton(
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
     val shape: Shape = MaterialTheme.shapes.small.copy(CornerSize(percent = 50))
     Surface(
+        modifier = modifier,
         onClick = onClick,
         enabled = enabled,
         shape = shape,
@@ -272,7 +288,7 @@ fun SendButton(
 
 @Preview
 @Composable
-fun ChatContentPreview() {
+private fun ChatContentPreview() {
     val messages = listOf(
         Message(
             isMine = true,

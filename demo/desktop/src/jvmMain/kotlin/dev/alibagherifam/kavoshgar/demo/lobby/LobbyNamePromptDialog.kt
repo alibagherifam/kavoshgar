@@ -23,12 +23,14 @@ import dev.alibagherifam.kavoshgar.demo.StringResources
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 
 @Composable
-fun LobbyNamePromptDialog(
+internal fun LobbyNamePromptDialog(
     onCreateButtonClick: (String) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var inputValue by remember { mutableStateOf("") }
     AlertDialog(
+        modifier = modifier,
         onDismissRequest = onDismissRequest,
         text = {
             Column(
@@ -36,8 +38,8 @@ fun LobbyNamePromptDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.End),
                     text = StringResources.MESSAGE_LOBBY_NAME_SELECTION,
+                    modifier = Modifier.align(Alignment.End),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.headlineSmall
                 )
@@ -73,7 +75,7 @@ fun LobbyNamePromptDialog(
 
 @Preview
 @Composable
-fun LobbyNamePromptDialogPreview() {
+private fun LobbyNamePromptDialogPreview() {
     AppTheme {
         LobbyNamePromptDialog({}, {})
     }
