@@ -20,8 +20,8 @@ dependencyResolutionManagement {
 rootProject.name = "kavoshgar-project"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":logger")
+include(":demo:android-app")
+include(":demo:desktop-app")
+include(":demo:shared")
 include(":kavoshgar")
-include(":demo:common")
-include(":demo:android")
-include(":demo:desktop")
+include(":logger")
