@@ -1,6 +1,6 @@
 package dev.alibagherifam.kavoshgar
 
-object Constants {
+internal object Constants {
     const val BROADCAST_ADDRESS = "255.255.255.255"
     const val MESSAGING_PORT = 5200
     const val MESSAGING_INTERVALS = 500L
