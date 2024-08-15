@@ -6,9 +6,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import kavoshgar_project.demo.shared.generated.resources.Res
-import kavoshgar_project.demo.shared.generated.resources.iran_sans_bold
-import kavoshgar_project.demo.shared.generated.resources.iran_sans_regular
+import kavoshgar_project.demo.generated.resources.Res
+import kavoshgar_project.demo.generated.resources.iran_sans_bold
+import kavoshgar_project.demo.generated.resources.iran_sans_regular
 import org.jetbrains.compose.resources.Font
 
 @Composable

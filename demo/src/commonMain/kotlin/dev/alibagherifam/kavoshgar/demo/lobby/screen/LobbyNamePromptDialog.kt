@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.isValidLobbyName
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import kavoshgar_project.demo.shared.generated.resources.Res
-import kavoshgar_project.demo.shared.generated.resources.label_create_lobby
-import kavoshgar_project.demo.shared.generated.resources.label_dismiss
-import kavoshgar_project.demo.shared.generated.resources.message_lobby_name_selection
+import kavoshgar_project.demo.generated.resources.Res
+import kavoshgar_project.demo.generated.resources.label_create_lobby
+import kavoshgar_project.demo.generated.resources.label_dismiss
+import kavoshgar_project.demo.generated.resources.message_lobby_name_selection
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

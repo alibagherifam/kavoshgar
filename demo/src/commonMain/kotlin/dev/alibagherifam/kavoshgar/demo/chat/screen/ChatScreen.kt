@@ -50,10 +50,10 @@ import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiState
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.Message
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.MessengerViewModel
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import kavoshgar_project.demo.shared.generated.resources.Res
-import kavoshgar_project.demo.shared.generated.resources.content_desc_back_button
-import kavoshgar_project.demo.shared.generated.resources.content_desc_send_button
-import kavoshgar_project.demo.shared.generated.resources.placeholder_message_input
+import kavoshgar_project.demo.generated.resources.Res
+import kavoshgar_project.demo.generated.resources.content_desc_back_button
+import kavoshgar_project.demo.generated.resources.content_desc_send_button
+import kavoshgar_project.demo.generated.resources.placeholder_message_input
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

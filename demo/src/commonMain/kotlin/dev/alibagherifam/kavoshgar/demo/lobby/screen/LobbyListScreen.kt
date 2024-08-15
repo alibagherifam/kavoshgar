@@ -34,12 +34,12 @@ import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiState
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListViewModel
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.getRandomLobbies
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import kavoshgar_project.demo.shared.generated.resources.Res
-import kavoshgar_project.demo.shared.generated.resources.label_create_lobby
-import kavoshgar_project.demo.shared.generated.resources.label_ip_address
-import kavoshgar_project.demo.shared.generated.resources.label_join_lobby
-import kavoshgar_project.demo.shared.generated.resources.label_lobby_latency
-import kavoshgar_project.demo.shared.generated.resources.label_lobby_name
+import kavoshgar_project.demo.generated.resources.Res
+import kavoshgar_project.demo.generated.resources.label_create_lobby
+import kavoshgar_project.demo.generated.resources.label_ip_address
+import kavoshgar_project.demo.generated.resources.label_join_lobby
+import kavoshgar_project.demo.generated.resources.label_lobby_latency
+import kavoshgar_project.demo.generated.resources.label_lobby_name
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
