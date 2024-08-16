@@ -22,4 +22,3 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":demo")
 include(":kavoshgar")
-include(":logger")

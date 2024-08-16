@@ -10,6 +10,7 @@ androidxCore = "1.13.1"
 androidxLifecycle = "2.8.4"
 kotlin = "2.0.10"
 kotlinxCoroutines = "1.8.1"
+logger = "0.6"
 multiplatform = "1.7.0-alpha02"
 versionsPlugin = "0.51.0"
 
@@ -28,6 +29,7 @@ compose-desktop-material3 = { group = "org.jetbrains.compose.material3", name = 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+logger = { group = "de.halfbit", name = "logger", version.ref = "logger" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidPlugin" }

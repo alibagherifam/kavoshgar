@@ -1,13 +1,13 @@
 package dev.alibagherifam.kavoshgar.discovery
 
 import dev.alibagherifam.kavoshgar.Constants
-import dev.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import de.halfbit.logger.i as logInfo
 
 /**
  * A server that constantly advertises its presence information for
@@ -16,10 +16,6 @@ import java.net.InetAddress
  * @param[serverName] an arbitrary name will be shown to clients.
  */
 class KavoshgarServer(private val serverName: String) {
-    companion object {
-        private const val TAG = "Server"
-    }
-
     private var advertisementSocket: DatagramSocket? = null
     private lateinit var serverInformationPacket: DatagramPacket
 
@@ -55,15 +51,15 @@ class KavoshgarServer(private val serverName: String) {
             advertisementSocket = DatagramSocket().apply {
                 broadcast = true
             }
-            Log.i(TAG, message = "Advertisement socket created!")
+            logInfo(TAG) { "Advertisement socket created!" }
         }
     }
 
     private suspend fun broadcastServerInformation() {
         withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Broadcasting server information...")
+            logInfo(TAG) { "Broadcasting server information..." }
             advertisementSocket!!.send(serverInformationPacket)
-            Log.i(TAG, message = "Server information broadcast!")
+            logInfo(TAG) { "Server information broadcast!" }
         }
     }
 
@@ -72,5 +68,9 @@ class KavoshgarServer(private val serverName: String) {
             advertisementSocket?.close()
             advertisementSocket = null
         }
+    }
+
+    companion object {
+        private const val TAG = "Server"
     }
 }

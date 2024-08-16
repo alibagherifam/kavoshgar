@@ -1,7 +1,6 @@
 package dev.alibagherifam.kavoshgar.messenger
 
 import dev.alibagherifam.kavoshgar.Constants
-import dev.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -11,25 +10,22 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.net.Socket
+import de.halfbit.logger.i as logInfo
 
 class MessengerService(private val socketProvider: SocketProvider) {
-    companion object {
-        private const val TAG = "Messenger"
-    }
-
     private var messagingSocket: Socket? = null
     private lateinit var reader: BufferedReader
     private lateinit var writer: BufferedWriter
 
     suspend fun sendMessage(message: String) {
         withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Sending message...")
+            logInfo(TAG) { "Sending message..." }
             writer.run {
                 write(message)
                 newLine()
                 flush()
             }
-            Log.i(TAG, message = "Message sent!")
+            logInfo(TAG) { "Message sent!" }
         }
     }
 
@@ -47,9 +43,9 @@ class MessengerService(private val socketProvider: SocketProvider) {
 
     private suspend fun readMessage(): String? {
         return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Receiving message...")
+            logInfo(TAG) { "Receiving message..." }
             val message = reader.readLine()
-            Log.i(TAG, message = "Message received!")
+            logInfo(TAG) { "Message received!" }
             message
         }
     }
@@ -57,11 +53,11 @@ class MessengerService(private val socketProvider: SocketProvider) {
     private suspend fun connect() {
         val socket = messagingSocket ?: return
         withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Creating messaging socket...")
+            logInfo(TAG) { "Creating messaging socket..." }
             messagingSocket = socketProvider.openSocket()
             reader = socket.getInputStream().bufferedReader()
             writer = socket.getOutputStream().bufferedWriter()
-            Log.i(TAG, message = "Messaging socket created!")
+            logInfo(TAG) { "Messaging socket created!" }
         }
     }
 
@@ -70,5 +66,9 @@ class MessengerService(private val socketProvider: SocketProvider) {
             messagingSocket?.close()
             messagingSocket = null
         }
+    }
+
+    companion object {
+        private const val TAG = "Messenger"
     }
 }

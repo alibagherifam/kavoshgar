@@ -1,7 +1,6 @@
 package dev.alibagherifam.kavoshgar.discovery
 
 import dev.alibagherifam.kavoshgar.Constants
-import dev.alibagherifam.kavoshgar.logger.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,15 +11,12 @@ import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
 import kotlin.system.measureTimeMillis
+import de.halfbit.logger.i as logInfo
 
 /**
  * A client constantly listens to the network to discover available servers.
  */
 class KavoshgarClient {
-    companion object {
-        private const val TAG = "Client"
-    }
-
     private var discoverySocket: DatagramSocket? = null
     private lateinit var serverAdvertisementPacket: DatagramPacket
 
@@ -49,15 +45,15 @@ class KavoshgarClient {
                 Constants.SERVER_NAME_MAX_SIZE
             )
             discoverySocket = DatagramSocket(Constants.ADVERTISEMENT_PORT)
-            Log.i(TAG, message = "Discovery socket created!")
+            logInfo(TAG) { "Discovery socket created!" }
         }
     }
 
     private suspend fun awaitServerAdvertisement(): DatagramPacket {
         return withContext(Dispatchers.IO) {
-            Log.i(TAG, message = "Awaiting server advertisement...")
+            logInfo(TAG) { "Awaiting server advertisement..." }
             discoverySocket!!.receive(serverAdvertisementPacket)
-            Log.i(TAG, message = "Server advertisement received!")
+            logInfo(TAG) { "Server advertisement received!" }
             serverAdvertisementPacket
         }
     }
@@ -87,5 +83,9 @@ class KavoshgarClient {
             discoverySocket?.close()
             discoverySocket = null
         }
+    }
+
+    companion object {
+        private const val TAG = "Client"
     }
 }

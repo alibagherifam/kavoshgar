@@ -18,6 +18,6 @@ java {
 }
 
 dependencies {
-    implementation(projects.logger)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.logger)
 }

@@ -2,13 +2,13 @@ package dev.alibagherifam.kavoshgar.demo.chat.presenter
 
 import dev.alibagherifam.kavoshgar.demo.BaseViewModel
 import dev.alibagherifam.kavoshgar.discovery.KavoshgarServer
-import dev.alibagherifam.kavoshgar.logger.Log
 import dev.alibagherifam.kavoshgar.messenger.MessengerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import de.halfbit.logger.e as logError
 
 internal class MessengerViewModel(
     viewModelScope: CoroutineScope,
@@ -47,7 +47,7 @@ internal class MessengerViewModel(
 
     private suspend fun receiveMessages() {
         messenger.receiveMessages().catch {
-            Log.e(tag = "ChatViewModel", error = it)
+            logError(tag = "ChatViewModel", err = it)
             _uiState.update { state ->
                 state.copy(isConnectionLost = true)
             }
