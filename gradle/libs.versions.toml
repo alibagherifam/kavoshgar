@@ -1,32 +1,29 @@
 [versions]
 androidCompileSdk = "35"
 androidMinSdk = "24"
-androidPlugin = "8.5.0"
-androidTargetSdk = "34"
-androidxActivity = "1.9.1"
-androidxAppCompat = "1.7.0"
+androidPlugin = "8.6.1"
+androidTargetSdk = "35"
+androidxActivity = "1.10.0-alpha02"
+androidxComposeBom = "2024.09.02"
 androidxCore = "1.13.1"
-androidxLifecycle = "2.8.4"
-composeMultiplatform = "1.7.0-alpha03"
+androidxLifecycle = "2.8.6"
+composeMultiplatform = "1.7.0-rc01"
 kotlin = "2.0.20"
-kotlinxCoroutines = "1.8.1"
+kotlinxCoroutines = "1.9.0-RC.2"
 logger = "0.6"
 versionsPlugin = "0.51.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
-androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
-compose-desktop-material3 = { group = "org.jetbrains.compose.material3", name = "material3-desktop", version.ref = "composeMultiplatform" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 logger = { group = "de.halfbit", name = "logger", version.ref = "logger" }
 
 [plugins]

@@ -2,9 +2,7 @@ package dev.alibagherifam.kavoshgar.demo.lobby
 
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListViewModel
 import dev.alibagherifam.kavoshgar.discovery.KavoshgarClient
-import kotlinx.coroutines.CoroutineScope
 
-internal fun provideLobbyListViewModel(viewModelScope: CoroutineScope) =
-    LobbyListViewModel(viewModelScope, provideClient())
+internal fun provideLobbyListViewModel() = LobbyListViewModel(provideClient())
 
 private fun provideClient() = KavoshgarClient()

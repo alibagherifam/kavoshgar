@@ -1,10 +1,9 @@
-package dev.alibagherifam.kavoshgar.demo.lobby.screen
+package dev.alibagherifam.kavoshgar.demo.lobby.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,11 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.Lobby
+import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
+import dev.alibagherifam.kavoshgar.demo.lobby.model.FakeLobbyFactory
+import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbySelection
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiState
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListViewModel
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.getRandomLobbies
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.label_create_lobby
@@ -41,32 +40,47 @@ import kavoshgar_project.demo.generated.resources.label_join_lobby
 import kavoshgar_project.demo.generated.resources.label_lobby_latency
 import kavoshgar_project.demo.generated.resources.label_lobby_name
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun LobbyListScreen(
-    viewModel: LobbyListViewModel,
+internal fun LobbyListUi(
+    uiState: LobbyListUiState,
+    eventSink: (LobbyListUiEvent) -> Unit,
     onChatPageRequest: (ChatNavigationArgs) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
-    val uiState by viewModel.uiState.collectAsState()
-    LobbyListContent(
+    Scaffold(
         modifier = modifier,
-        uiState = uiState,
-        onLobbySelectionChange = viewModel::selectLobby,
-        onJoinLobbyClick = {
-            val selectedLobby = uiState.selectedLobby
-            if (selectedLobby != null) {
-                val args = ChatNavigationArgs(
-                    isLobbyOwner = false,
-                    lobbyName = selectedLobby.name,
-                    lobbyAddress = selectedLobby.address
-                )
-                onChatPageRequest(args)
-            }
-        },
-        onCreateLobbyClick = { isDialogOpen = true }
-    )
+        bottomBar = {
+            LobbyListBottomBar(
+                onCreateLobbyClick = {
+                    isDialogOpen = true
+                },
+                onJoinLobbyClick = {
+                    val selectedLobby = uiState.selectedLobby
+                    if (selectedLobby != null) {
+                        val args = ChatNavigationArgs(
+                            isLobbyOwner = false,
+                            lobbyName = selectedLobby.name,
+                            lobbyAddress = selectedLobby.address
+                        )
+                        onChatPageRequest(args)
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        LobbyTable(
+            lobbies = uiState.lobbies,
+            selectedLobby = uiState.selectedLobby,
+            onLobbySelectionChange = {
+                eventSink(LobbySelection(it))
+            },
+            modifier = Modifier.padding(innerPadding)
+        )
+    }
+
     if (isDialogOpen) {
         LobbyNamePromptDialog(
             onCreateButtonClick = { lobbyName ->
@@ -82,33 +96,7 @@ internal fun LobbyListScreen(
 }
 
 @Composable
-private fun LobbyListContent(
-    uiState: LobbyListUiState,
-    onLobbySelectionChange: (Lobby) -> Unit,
-    onCreateLobbyClick: () -> Unit,
-    onJoinLobbyClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Scaffold(
-        modifier = modifier,
-        bottomBar = {
-            LobbyNavigationBar(
-                onCreateLobbyClick = onCreateLobbyClick,
-                onJoinLobbyClick = onJoinLobbyClick
-            )
-        }
-    ) { innerPadding ->
-        LobbyTable(
-            contentPadding = innerPadding,
-            lobbies = uiState.lobbies,
-            selectedLobby = uiState.selectedLobby,
-            onLobbySelectionChange = onLobbySelectionChange
-        )
-    }
-}
-
-@Composable
-private fun LobbyNavigationBar(
+private fun LobbyListBottomBar(
     onCreateLobbyClick: () -> Unit,
     onJoinLobbyClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -136,19 +124,18 @@ private fun LobbyNavigationBar(
 
 @Composable
 private fun LobbyTable(
-    contentPadding: PaddingValues,
     lobbies: List<Lobby>,
     selectedLobby: Lobby?,
     onLobbySelectionChange: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = contentPadding
-    ) {
-        item { TableHeader() }
+    LazyColumn(modifier = modifier) {
+        item {
+            LobbyListHeader()
+        }
+
         items(lobbies) {
-            TableRow(
+            LobbyRow(
                 lobby = it,
                 isSelected = selectedLobby?.name == it.name,
                 onLobbySelectionChange = onLobbySelectionChange
@@ -164,7 +151,7 @@ private fun LobbyTable(
 }
 
 @Composable
-private fun TableHeader(
+private fun LobbyListHeader(
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = MaterialTheme.colorScheme.primary
@@ -197,7 +184,7 @@ private fun TableHeader(
 }
 
 @Composable
-private fun TableRow(
+private fun LobbyRow(
     lobby: Lobby,
     isSelected: Boolean,
     onLobbySelectionChange: (Lobby) -> Unit,
@@ -212,8 +199,9 @@ private fun TableRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onLobbySelectionChange(lobby) }
-            .background(backgroundColor)
+            .clickable {
+                onLobbySelectionChange(lobby)
+            }.background(backgroundColor)
     ) {
         TableCell(
             text = lobby.name,
@@ -254,18 +242,21 @@ private fun RowScope.TableCell(
     )
 }
 
+@Preview
 @Composable
-private fun LobbyListContentPreview() {
-    val lobbies = List(size = 5) { getRandomLobbies() }
+private fun LobbyListUiPreview() {
+    val fakeLobbies = List(size = 5) {
+        FakeLobbyFactory.create()
+    }
+
     AppTheme {
-        LobbyListContent(
+        LobbyListUi(
             uiState = LobbyListUiState(
-                lobbies = lobbies,
-                selectedLobby = lobbies[1]
+                lobbies = fakeLobbies,
+                selectedLobby = fakeLobbies[1]
             ),
-            onLobbySelectionChange = {},
-            onCreateLobbyClick = {},
-            onJoinLobbyClick = {}
+            eventSink = {},
+            onChatPageRequest = {}
         )
     }
 }

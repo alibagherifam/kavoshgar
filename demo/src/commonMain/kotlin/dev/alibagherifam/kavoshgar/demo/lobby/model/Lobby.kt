@@ -1,10 +1,10 @@
-package dev.alibagherifam.kavoshgar.demo.lobby.presenter
+package dev.alibagherifam.kavoshgar.demo.lobby.model
 
 import dev.alibagherifam.kavoshgar.Constants
 import dev.alibagherifam.kavoshgar.discovery.ServerInformation
 import java.net.InetAddress
 
-internal data class Lobby(
+data class Lobby(
     val name: String,
     val address: InetAddress,
     val latency: Long

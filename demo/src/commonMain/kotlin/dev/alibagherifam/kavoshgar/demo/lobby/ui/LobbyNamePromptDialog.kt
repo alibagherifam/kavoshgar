@@ -1,4 +1,4 @@
-package dev.alibagherifam.kavoshgar.demo.lobby.screen
+package dev.alibagherifam.kavoshgar.demo.lobby.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,13 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.isValidLobbyName
+import dev.alibagherifam.kavoshgar.demo.lobby.model.isValidLobbyName
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.label_create_lobby
 import kavoshgar_project.demo.generated.resources.label_dismiss
 import kavoshgar_project.demo.generated.resources.message_lobby_name_selection
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LobbyNamePromptDialog(
@@ -77,6 +78,7 @@ internal fun LobbyNamePromptDialog(
     )
 }
 
+@Preview
 @Composable
 private fun LobbyNamePromptDialogPreview() {
     AppTheme {

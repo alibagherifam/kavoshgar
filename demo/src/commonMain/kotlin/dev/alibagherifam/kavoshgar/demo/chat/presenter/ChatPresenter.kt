@@ -1,46 +1,54 @@
 package dev.alibagherifam.kavoshgar.demo.chat.presenter
 
-import dev.alibagherifam.kavoshgar.demo.BaseViewModel
+import dev.alibagherifam.kavoshgar.demo.Presenter
+import dev.alibagherifam.kavoshgar.demo.chat.model.Message
+import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent.MessageSend
 import dev.alibagherifam.kavoshgar.discovery.KavoshgarServer
 import dev.alibagherifam.kavoshgar.messenger.MessengerService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import de.halfbit.logger.e as logError
 
-internal class MessengerViewModel(
-    viewModelScope: CoroutineScope,
+internal class ChatPresenter(
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
-) : BaseViewModel<ChatUiState>(viewModelScope, initialState = ChatUiState()) {
+) : Presenter<ChatUiState, ChatUiEvent>() {
     private var serverAdvertisementJob: Job? = null
 
+    private val _uiState = MutableStateFlow(ChatUiState())
+    override val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
+
+    override val eventSink: (ChatUiEvent) -> Unit = { event ->
+        when (event) {
+            is MessageSend -> {
+                presenterScope.launch {
+                    sendMessage(event.message)
+                }
+            }
+        }
+    }
+
     init {
-        launchInUi {
+        presenterScope.launch {
             receiveMessages()
         }
         if (server != null) {
-            serverAdvertisementJob = viewModelScope.launch {
+            serverAdvertisementJob = presenterScope.launch {
                 startServerAdvertisement()
             }
         }
     }
 
-    fun changeMessageInputValue(newValue: String) {
-        _uiState.update {
-            it.copy(messageInputValue = newValue)
-        }
-    }
-
-    fun sendMessage() = launchInUi {
-        val message = uiState.value.messageInputValue
+    private suspend fun sendMessage(message: String) {
         messenger.sendMessage(message)
         _uiState.update {
             it.copy(
                 messages = addMessageToList(message, isFromUser = true),
-                messageInputValue = ""
             )
         }
     }

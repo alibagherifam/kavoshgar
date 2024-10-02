@@ -26,28 +26,21 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.runtime)
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.logger)
             implementation(projects.kavoshgar)
-        }
-
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
         }
 
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.androidx.appcompat)
             implementation(libs.androidx.core.ktx)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.kotlinx.coroutines.android)
         }
 
-        named("desktopMain") {
-            dependencies {
-                implementation(compose.desktop.currentOs)
-            }
+        named("desktopMain").dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

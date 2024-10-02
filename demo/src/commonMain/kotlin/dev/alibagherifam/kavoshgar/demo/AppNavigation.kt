@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import dev.alibagherifam.kavoshgar.demo.chat.ChatDestination
-import dev.alibagherifam.kavoshgar.demo.chat.ChatNavigationArgs
-import dev.alibagherifam.kavoshgar.demo.lobby.LobbyListDestination
+import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatDestination
+import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
+import dev.alibagherifam.kavoshgar.demo.lobby.ui.LobbyListDestination
 
 sealed class NavigationDestination {
     data object LobbyList : NavigationDestination()

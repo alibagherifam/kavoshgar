@@ -1,9 +1,10 @@
-package dev.alibagherifam.kavoshgar.demo.chat
+package dev.alibagherifam.kavoshgar.demo.chat.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import dev.alibagherifam.kavoshgar.demo.chat.screen.ChatScreen
+import dev.alibagherifam.kavoshgar.demo.chat.provideMessengerViewModel
 import java.net.InetAddress
 
 @Composable
@@ -11,19 +12,20 @@ fun ChatDestination(
     args: ChatNavigationArgs,
     onCloserRequest: () -> Unit
 ) {
-    val chatScope = rememberCoroutineScope()
     val viewModel = remember {
         provideMessengerViewModel(
-            viewModelScope = chatScope,
             isLobbyOwner = args.isLobbyOwner,
             lobbyAddress = args.lobbyAddress,
             lobbyName = args.lobbyName
         )
     }
-    ChatScreen(
+
+    val uiState by viewModel.uiState.collectAsState()
+    ChatUi(
         lobbyName = args.lobbyName,
-        viewModel = viewModel,
-        onCloseRequest = onCloserRequest
+        uiState = uiState,
+        eventSink = viewModel.eventSink,
+        onBackPress = onCloserRequest
     )
 }
 

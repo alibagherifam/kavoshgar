@@ -1,4 +1,4 @@
-package dev.alibagherifam.kavoshgar.demo.chat.screen
+package dev.alibagherifam.kavoshgar.demo.chat.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,9 +31,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
@@ -46,65 +48,60 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent
+import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent.MessageSend
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiState
-import dev.alibagherifam.kavoshgar.demo.chat.presenter.Message
-import dev.alibagherifam.kavoshgar.demo.chat.presenter.MessengerViewModel
+import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.content_desc_back_button
 import kavoshgar_project.demo.generated.resources.content_desc_send_button
 import kavoshgar_project.demo.generated.resources.placeholder_message_input
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-internal fun ChatScreen(
-    lobbyName: String,
-    viewModel: MessengerViewModel,
-    onCloseRequest: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val uiState by viewModel.uiState.collectAsState()
-    ChatContent(
-        lobbyName = lobbyName,
-        uiState = uiState,
-        onSendMessageClick = viewModel::sendMessage,
-        onMessageInputValueChange = viewModel::changeMessageInputValue,
-        onBackPressed = onCloseRequest,
-        modifier = modifier
-    )
-    if (uiState.isConnectionLost) {
-        onCloseRequest()
-    }
-    if (uiState.isLookingForClient) {
-        LookingForClientDialog(
-            onDismissRequest = onCloseRequest
-        )
-    }
-}
-
-@Composable
-private fun ChatContent(
+internal fun ChatUi(
     lobbyName: String,
     uiState: ChatUiState,
-    onSendMessageClick: () -> Unit,
-    onMessageInputValueChange: (String) -> Unit,
-    onBackPressed: () -> Unit,
+    eventSink: (ChatUiEvent) -> Unit,
+    onBackPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (uiState.isConnectionLost) {
+        LaunchedEffect(Unit) {
+            onBackPress()
+        }
+    }
+
+    if (uiState.isLookingForClient) {
+        LookingForClientDialog(
+            onDismissRequest = onBackPress
+        )
+    }
+
+    var messageInputValue by remember {
+        mutableStateOf("")
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopBar(
+            ChatTopBar(
                 title = lobbyName,
-                onBackPressed = onBackPressed
+                onBackPress = onBackPress
             )
         },
         bottomBar = {
             MessageInputBar(
-                inputValue = uiState.messageInputValue,
+                inputValue = messageInputValue,
                 enabled = !uiState.isLookingForClient,
-                onSendMessageClick = onSendMessageClick,
-                onMessageInputValueChange = onMessageInputValueChange
+                onSendMessageClick = {
+                    eventSink(MessageSend(messageInputValue))
+                },
+                onMessageInputValueChange = {
+                    messageInputValue = it
+                }
             )
         }
     ) { innerPadding ->
@@ -117,16 +114,18 @@ private fun ChatContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TopBar(
+private fun ChatTopBar(
     title: String,
-    onBackPressed: () -> Unit,
+    onBackPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = {
+            Text(text = title)
+        },
         modifier = modifier,
         navigationIcon = {
-            IconButton(onClick = onBackPressed) {
+            IconButton(onClick = onBackPress) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
                     contentDescription = stringResource(Res.string.content_desc_back_button)
@@ -291,9 +290,10 @@ private fun SendButton(
     }
 }
 
+@Preview
 @Composable
 private fun ChatContentPreview() {
-    val messages = listOf(
+    val fakeMessages = listOf(
         Message(
             isMine = true,
             content = "سلام! برای امتحان فردا چیزی خوندی؟"
@@ -308,15 +308,11 @@ private fun ChatContentPreview() {
         )
     )
     AppTheme {
-        ChatContent(
+        ChatUi(
             lobbyName = "محمد عطایی",
-            uiState = ChatUiState(
-                messages = messages,
-                messageInputValue = "فردا سر کلاس میبی"
-            ),
-            onMessageInputValueChange = {},
-            onSendMessageClick = {},
-            onBackPressed = {}
+            uiState = ChatUiState(messages = fakeMessages),
+            eventSink = {},
+            onBackPress = {}
         )
     }
 }

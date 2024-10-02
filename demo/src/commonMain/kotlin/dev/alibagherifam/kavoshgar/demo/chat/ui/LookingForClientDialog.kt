@@ -1,4 +1,4 @@
-package dev.alibagherifam.kavoshgar.demo.chat.screen
+package dev.alibagherifam.kavoshgar.demo.chat.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +22,7 @@ import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.label_dismiss
 import kavoshgar_project.demo.generated.resources.message_wait_for_other_client
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LookingForClientDialog(
@@ -30,7 +31,9 @@ internal fun LookingForClientDialog(
 ) {
     AlertDialog(
         modifier = modifier,
-        onDismissRequest = {},
+        onDismissRequest = {
+            /* no-op */
+        },
         text = {
             Column(
                 modifier = Modifier.widthIn(min = 280.dp),
@@ -63,6 +66,7 @@ internal fun LookingForClientDialog(
     )
 }
 
+@Preview
 @Composable
 private fun LookingForClientDialogPreview() {
     AppTheme {

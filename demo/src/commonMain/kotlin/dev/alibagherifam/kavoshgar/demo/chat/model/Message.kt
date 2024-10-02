@@ -1,4 +1,4 @@
-package dev.alibagherifam.kavoshgar.demo.chat.presenter
+package dev.alibagherifam.kavoshgar.demo.chat.model
 
 import java.text.SimpleDateFormat
 import java.util.Date
