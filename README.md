@@ -1,8 +1,8 @@
 ![Banner](https://raw.github.com/alibagherifam/kavoshgar/master/banner.png)
 
-Kavoshgar is a Simple Service Discovery Protocol (SSDP) written in Kotlin.
+Kavoshgar is a Simple Service Discovery Protocol (SSDP) for JVM written in Kotlin.
 
-As a demo, I also developed a LAN messenger on top of it.
+As a demo, I also developed a LAN messenger on top of it for both Android and Desktop using KMP.
 
 ## SSDP
 
@@ -39,16 +39,10 @@ client.startServerDiscovery().collect { server ->
 
 This repository contains a demo application built on top of Kavoshgar to showcase its features and
 usage. It is a LAN messenger that you can chat with anybody on the same network. The application
-supports both Android and Desktop platforms:
+supports both Android and Desktop platforms using Compose Multiplatform:
 
-- [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android) - Built
-  with [Jetpack Compose](https://developer.android.com/jetpack/compose).
-- [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop) - Built with
-  [KMP](https://kotlinlang.org/docs/multiplatform.html)
-  and [Compose Multiplatform](https://www.jetbrains.com/lp/compose-desktop) technologies.
-
-I will merge the Android version into the multiplatform one for code-sharing benefits. So stay tuned
-;)
+- [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android)
+- [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop)
 
 ## ⚙ Technologies
 
