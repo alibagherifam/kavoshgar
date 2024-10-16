@@ -37,7 +37,7 @@ import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.label_create_lobby
 import kavoshgar_project.demo.generated.resources.label_ip_address
 import kavoshgar_project.demo.generated.resources.label_join_lobby
-import kavoshgar_project.demo.generated.resources.label_lobby_latency
+import kavoshgar_project.demo.generated.resources.label_latency
 import kavoshgar_project.demo.generated.resources.label_lobby_name
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -90,7 +90,9 @@ internal fun LobbyListUi(
                 )
                 onChatPageRequest(args)
             },
-            onDismissRequest = { isDialogOpen = false }
+            onDismissRequest = {
+                isDialogOpen = false
+            }
         )
     }
 }
@@ -175,7 +177,7 @@ private fun LobbyListHeader(
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(Res.string.label_lobby_latency),
+            text = stringResource(Res.string.label_latency),
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle

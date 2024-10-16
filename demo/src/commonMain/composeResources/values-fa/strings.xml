@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_dismiss">بازگشت</string>
+    <string name="label_back">بازگشت</string>
     <string name="label_create_lobby">ایجاد گروه</string>
-    <string name="label_join_lobby">ورود به گروه</string>
-    <string name="label_lobby_name">نام گروه</string>
+    <string name="label_dismiss">بستن</string>
     <string name="label_ip_address">آدرس IP</string>
-    <string name="label_lobby_latency">تاخیر</string>
-    <string name="placeholder_message_input">Message</string>
-    <string name="content_desc_back_button">دکمه بازگشت</string>
-    <string name="content_desc_send_button">دکمه ارسال</string>
-    <string name="message_lobby_name_selection">انتخاب نام گروه</string>
+    <string name="label_join_lobby">ورود به گروه</string>
+    <string name="label_latency">تاخیر</string>
+    <string name="label_lobby_name">نام گروه</string>
+    <string name="label_send">ارسال</string>
     <string name="message_wait_for_other_client">لطفا منتظر کاربر دیگر بمانید</string>
+    <string name="placeholder_message_input">Message</string>
 </resources>
