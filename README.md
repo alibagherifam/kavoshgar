@@ -29,10 +29,11 @@ server.advertisePresence()
 All other network nodes are clients by default and should start discovering available servers:
 
 ```kotlin
-val client = KavoshgarClient()
-client.startServerDiscovery().collect { server ->
-    println("Server discovered: ${server.addressName}")
-}
+KavoshgarClient()
+    .startServerDiscovery()
+    .collect { server ->
+        println("Server discovered: ${server.addressName}")
+    }
 ```
 
 ## ▶ Demo
