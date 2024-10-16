@@ -29,60 +29,61 @@ class KavoshgarClient {
     fun startServerDiscovery(): Flow<ServerInformation> = flow {
         openSocket()
         while (true) {
-            emit(awaitServerAdvertisement().asServerInformation())
+            val packet = awaitServerAdvertisement()
+            emit(packet.extractServerInformation())
             flushServerAdvertisementPacket()
             yield()
         }
     }.onCompletion { closeSocket() }
 
     private suspend fun openSocket() {
-        if (discoverySocket != null) {
-            return
-        }
+        check(discoverySocket == null) { "Discovery socket is already opened!" }
         withContext(Dispatchers.IO) {
             serverAdvertisementPacket = DatagramPacket(
                 ByteArray(Constants.SERVER_NAME_MAX_SIZE),
                 Constants.SERVER_NAME_MAX_SIZE
             )
             discoverySocket = DatagramSocket(Constants.ADVERTISEMENT_PORT)
-            logInfo(TAG) { "Discovery socket created!" }
         }
+        logInfo(TAG) { "Discovery socket created!" }
     }
 
     private suspend fun awaitServerAdvertisement(): DatagramPacket {
-        return withContext(Dispatchers.IO) {
-            logInfo(TAG) { "Awaiting server advertisement..." }
-            discoverySocket!!.receive(serverAdvertisementPacket)
-            logInfo(TAG) { "Server advertisement received!" }
-            serverAdvertisementPacket
+        val socket = checkNotNull(discoverySocket) { "Discovery socket is not opened!" }
+        logInfo(TAG) { "Awaiting server advertisement..." }
+        withContext(Dispatchers.IO) {
+            socket.receive(serverAdvertisementPacket)
         }
+        logInfo(TAG) { "Server advertisement received!" }
+        return serverAdvertisementPacket
     }
 
-    private suspend fun DatagramPacket.asServerInformation() = ServerInformation(
-        name = String(data, 0, length),
-        address = address,
-        latency = calculateLatency(address)
-    )
+    private suspend fun DatagramPacket.extractServerInformation() =
+        ServerInformation(
+            name = String(data, 0, length),
+            address = address,
+            latency = calculateLatency(address)
+        )
 
-    private suspend fun calculateLatency(destinationAddress: InetAddress): Long {
-        return withContext(Dispatchers.IO) {
+    private suspend fun calculateLatency(destinationAddress: InetAddress): Long =
+        withContext(Dispatchers.IO) {
             val isReachable: Boolean
             val latency = measureTimeMillis {
                 isReachable = destinationAddress.isReachable(Constants.PING_TIMEOUT)
             }
             if (isReachable) latency else -1
         }
-    }
 
     private fun flushServerAdvertisementPacket() {
         serverAdvertisementPacket.length = Constants.SERVER_NAME_MAX_SIZE
     }
 
     private suspend fun closeSocket() {
+        val socket = checkNotNull(discoverySocket) { "Discovery socket is not opened!" }
         withContext(Dispatchers.IO) {
-            discoverySocket?.close()
-            discoverySocket = null
+            socket.close()
         }
+        discoverySocket = null
     }
 
     companion object {
