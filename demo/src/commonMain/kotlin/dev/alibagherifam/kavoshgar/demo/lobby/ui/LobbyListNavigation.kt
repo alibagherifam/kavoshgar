@@ -8,7 +8,7 @@ import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.lobby.provideLobbyListViewModel
 
 @Composable
-internal fun LobbyListDestination(
+fun LobbyListDestination(
     onChatPageRequest: (ChatNavigationArgs) -> Unit
 ) {
     val viewModel = remember {

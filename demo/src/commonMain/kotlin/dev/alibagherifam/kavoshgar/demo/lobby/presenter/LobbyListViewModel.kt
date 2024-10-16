@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-internal class LobbyListViewModel(
+class LobbyListViewModel internal constructor(
     private val client: KavoshgarClient
 ) : Presenter<LobbyListUiState, LobbyListUiEvent>() {
     private val lobbyTTLs: MutableMap<String, Long> = mutableMapOf()

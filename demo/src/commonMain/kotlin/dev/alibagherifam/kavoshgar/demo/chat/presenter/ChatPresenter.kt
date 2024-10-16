@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import de.halfbit.logger.e as logError
 
-internal class ChatPresenter(
+class ChatPresenter internal constructor(
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
 ) : Presenter<ChatUiState, ChatUiEvent>() {
