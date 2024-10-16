@@ -22,10 +22,6 @@ misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
 
-# Code styles
-!.idea/codeStyles/
-!.idea/icon.svg
-
 # Keystore
 *.jks
 *.keystore

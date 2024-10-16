@@ -52,8 +52,7 @@ Other technologies used in demo applications:
 
 - Kotlin Coroutines
 - Kotlin Multiplatform
-- Compose for Desktop
-- Jetpack Compose
+- Compose Multiplatform
 - Material 3
 - AndroidX Lifecycle
 - Version Catalog
