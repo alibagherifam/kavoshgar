@@ -8,7 +8,7 @@ group = "dev.alibagherifam.kavoshgar"
 
 kotlin {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
+        jvmTarget = JvmTarget.JVM_11
     }
 }
 

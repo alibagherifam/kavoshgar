@@ -13,7 +13,7 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget = JvmTarget.JVM_11
         }
     }
 
@@ -101,7 +101,7 @@ compose.desktop {
             version = "1.0.0"
             description = "Demonstrates features of Kavoshgar library"
             copyright = "© 2023 Ali Bagherifam. All rights reserved."
-            licenseFile.set(project.file("LICENSE"))
+            licenseFile = project.file("LICENSE")
 
             windows {
                 menuGroup = packageName
@@ -109,7 +109,7 @@ compose.desktop {
                 dirChooser = true
 
                 val iconPath = "src/jvmMain/resources/images/ic_launcher_windows"
-                iconFile.set(project.file(iconPath))
+                iconFile = project.file(iconPath)
 
                 // a unique ID, which enables users to update an app via installer, when an
                 // updated version is newer, than an installed version. The value must
