@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
-import kavoshgar_project.demo.generated.resources.label_dismiss
-import kavoshgar_project.demo.generated.resources.message_wait_for_other_client
+import kavoshgar_project.demo.generated.resources.dismiss
+import kavoshgar_project.demo.generated.resources.wait_for_other_client
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -40,7 +40,7 @@ internal fun LookingForClientDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(Res.string.message_wait_for_other_client),
+                    text = stringResource(Res.string.wait_for_other_client),
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.headlineSmall
                 )
@@ -60,7 +60,7 @@ internal fun LookingForClientDialog(
                     modifier = Modifier.widthIn(min = 180.dp),
                     onClick = { onDismissRequest() }
                 ) {
-                    Text(text = stringResource(Res.string.label_dismiss))
+                    Text(text = stringResource(Res.string.dismiss))
                 }
             }
         }

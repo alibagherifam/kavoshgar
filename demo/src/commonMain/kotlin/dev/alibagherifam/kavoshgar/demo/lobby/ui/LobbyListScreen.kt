@@ -6,13 +6,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,11 +43,11 @@ import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbySe
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiState
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
-import kavoshgar_project.demo.generated.resources.label_create_lobby
-import kavoshgar_project.demo.generated.resources.label_ip_address
-import kavoshgar_project.demo.generated.resources.label_join_lobby
-import kavoshgar_project.demo.generated.resources.label_latency
-import kavoshgar_project.demo.generated.resources.label_lobby_name
+import kavoshgar_project.demo.generated.resources.create_lobby
+import kavoshgar_project.demo.generated.resources.ip_address
+import kavoshgar_project.demo.generated.resources.join_lobby
+import kavoshgar_project.demo.generated.resources.latency
+import kavoshgar_project.demo.generated.resources.lobby_name
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -49,13 +58,13 @@ internal fun LobbyListUi(
     onChatPageRequest: (ChatNavigationArgs) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isDialogOpen by remember { mutableStateOf(false) }
+    var isLobbyPromptVisible by remember { mutableStateOf(false) }
     Scaffold(
         modifier = modifier,
         bottomBar = {
             LobbyListBottomBar(
                 onCreateLobbyClick = {
-                    isDialogOpen = true
+                    isLobbyPromptVisible = true
                 },
                 onJoinLobbyClick = {
                     val selectedLobby = uiState.selectedLobby
@@ -81,9 +90,9 @@ internal fun LobbyListUi(
         )
     }
 
-    if (isDialogOpen) {
+    if (isLobbyPromptVisible) {
         LobbyNamePromptDialog(
-            onCreateButtonClick = { lobbyName ->
+            onCreateLobbyClick = { lobbyName ->
                 val args = ChatNavigationArgs(
                     isLobbyOwner = true,
                     lobbyName = lobbyName
@@ -91,7 +100,7 @@ internal fun LobbyListUi(
                 onChatPageRequest(args)
             },
             onDismissRequest = {
-                isDialogOpen = false
+                isLobbyPromptVisible = false
             }
         )
     }
@@ -106,20 +115,36 @@ private fun LobbyListBottomBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp),
+            .navigationBarsPadding()
+            .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Button(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onCreateLobbyClick
         ) {
-            Text(text = stringResource(Res.string.label_create_lobby))
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+            Text(text = stringResource(Res.string.create_lobby))
         }
+
         Button(
             modifier = Modifier.widthIn(min = 150.dp),
             onClick = onJoinLobbyClick
         ) {
-            Text(text = stringResource(Res.string.label_join_lobby))
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = null,
+                modifier = Modifier.size(ButtonDefaults.IconSize)
+            )
+
+            Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+            Text(text = stringResource(Res.string.join_lobby))
         }
     }
 }
@@ -132,7 +157,7 @@ private fun LobbyTable(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        item {
+        stickyHeader {
             LobbyListHeader()
         }
 
@@ -165,19 +190,19 @@ private fun LobbyListHeader(
             .background(backgroundColor)
     ) {
         TableCell(
-            text = stringResource(Res.string.label_lobby_name),
+            text = stringResource(Res.string.lobby_name),
             weight = 4f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(Res.string.label_ip_address),
+            text = stringResource(Res.string.ip_address),
             weight = 3f,
             textColor = contentColor,
             textStyle = textStyle
         )
         TableCell(
-            text = stringResource(Res.string.label_latency),
+            text = stringResource(Res.string.latency),
             weight = 1.6f,
             textColor = contentColor,
             textStyle = textStyle
@@ -247,9 +272,7 @@ private fun RowScope.TableCell(
 @Preview
 @Composable
 private fun LobbyListUiPreview() {
-    val fakeLobbies = List(size = 5) {
-        FakeLobbyFactory.create()
-    }
+    val fakeLobbies = FakeLobbyFactory.createList()
 
     AppTheme {
         LobbyListUi(

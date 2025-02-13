@@ -12,12 +12,6 @@ import kavoshgar_project.demo.generated.resources.iran_sans_regular
 import org.jetbrains.compose.resources.Font
 
 @Composable
-private fun getIranSansFamily() = FontFamily(
-    Font(Res.font.iran_sans_regular),
-    Font(Res.font.iran_sans_bold, FontWeight.Bold)
-)
-
-@Composable
 internal fun getAppTypography() = Typography(
     displayLarge = TextStyle(
         fontFamily = getIranSansFamily(),
@@ -26,6 +20,7 @@ internal fun getAppTypography() = Typography(
         letterSpacing = 0.sp
     ),
     displayMedium = TextStyle(
+        fontFamily = getIranSansFamily(),
         fontWeight = FontWeight.Bold,
         fontSize = 21.sp,
         letterSpacing = 0.sp
@@ -108,4 +103,10 @@ internal fun getAppTypography() = Typography(
         fontSize = 10.sp,
         letterSpacing = 0.sp
     )
+)
+
+@Composable
+private fun getIranSansFamily() = FontFamily(
+    Font(Res.font.iran_sans_regular),
+    Font(Res.font.iran_sans_bold, FontWeight.Bold)
 )

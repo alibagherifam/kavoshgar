@@ -1,8 +1,5 @@
 package dev.alibagherifam.kavoshgar.demo.lobby.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
@@ -18,63 +15,59 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.lobby.model.isValidLobbyName
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
-import kavoshgar_project.demo.generated.resources.label_create_lobby
-import kavoshgar_project.demo.generated.resources.label_dismiss
-import kavoshgar_project.demo.generated.resources.label_lobby_name
+import kavoshgar_project.demo.generated.resources.create_lobby
+import kavoshgar_project.demo.generated.resources.dismiss
+import kavoshgar_project.demo.generated.resources.lobby_name
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LobbyNamePromptDialog(
-    onCreateButtonClick: (String) -> Unit,
+    onCreateLobbyClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var inputValue by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     val isValid by remember {
         derivedStateOf {
-            isValidLobbyName(inputValue)
+            isValidLobbyName(name)
         }
     }
 
-    val onCreateClick = remember(onCreateButtonClick) {
-        { onCreateButtonClick(inputValue) }
+    val onCreateClick = remember(onCreateLobbyClick) {
+        { onCreateLobbyClick(name) }
     }
 
     AlertDialog(
-        modifier = modifier,
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
+        title = {
+            Text(
+                text = stringResource(Res.string.lobby_name),
+                style = MaterialTheme.typography.headlineSmall
+            )
+        },
         text = {
-            Column(
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
                 modifier = Modifier.widthIn(min = 280.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(Res.string.label_lobby_name),
-                    modifier = Modifier.align(Alignment.End),
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(Modifier.height(16.dp))
-                OutlinedTextField(
-                    value = inputValue,
-                    onValueChange = { inputValue = it },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = if (isValid) ImeAction.Done else ImeAction.None
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { onCreateClick() }
-                    )
-                )
-            }
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = if (isValid) ImeAction.Done else ImeAction.None
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { onCreateClick() }
+                ),
+                singleLine = true
+            )
         },
         confirmButton = {
             TextButton(
@@ -82,7 +75,7 @@ internal fun LobbyNamePromptDialog(
                 modifier = Modifier.widthIn(min = 100.dp),
                 enabled = isValid
             ) {
-                Text(text = stringResource(Res.string.label_create_lobby))
+                Text(text = stringResource(Res.string.create_lobby))
             }
         },
         dismissButton = {
@@ -90,7 +83,7 @@ internal fun LobbyNamePromptDialog(
                 onClick = onDismissRequest,
                 modifier = Modifier.width(100.dp)
             ) {
-                Text(text = stringResource(Res.string.label_dismiss))
+                Text(text = stringResource(Res.string.dismiss))
             }
         }
     )
@@ -101,7 +94,7 @@ internal fun LobbyNamePromptDialog(
 private fun LobbyNamePromptDialogPreview() {
     AppTheme {
         LobbyNamePromptDialog(
-            onCreateButtonClick = {},
+            onCreateLobbyClick = {},
             onDismissRequest = {}
         )
     }

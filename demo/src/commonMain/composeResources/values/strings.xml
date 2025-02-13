@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_back">Back</string>
-    <string name="label_create_lobby">Create Lobby</string>
-    <string name="label_dismiss">Dismiss</string>
-    <string name="label_ip_address">IP Address</string>
-    <string name="label_join_lobby">Join Lobby</string>
-    <string name="label_latency">Latency</string>
-    <string name="label_lobby_name">Lobby Name</string>
-    <string name="label_send">Send</string>
-    <string name="message_wait_for_other_client">Please wait for other client to join</string>
+    <string name="back">Back</string>
+    <string name="create_lobby">Create Lobby</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="ip_address">IP Address</string>
+    <string name="join_lobby">Join Lobby</string>
+    <string name="latency">Latency</string>
+    <string name="lobby_name">Lobby Name</string>
+    <string name="send">Send</string>
+    <string name="wait_for_other_client">Please wait for other client to join</string>
     <string name="placeholder_message_input">Message</string>
 </resources>

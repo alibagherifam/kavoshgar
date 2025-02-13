@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_back">بازگشت</string>
-    <string name="label_create_lobby">ایجاد گروه</string>
-    <string name="label_dismiss">بستن</string>
-    <string name="label_ip_address">آدرس IP</string>
-    <string name="label_join_lobby">ورود به گروه</string>
-    <string name="label_latency">تاخیر</string>
-    <string name="label_lobby_name">نام گروه</string>
-    <string name="label_send">ارسال</string>
-    <string name="message_wait_for_other_client">لطفا منتظر کاربر دیگر بمانید</string>
+    <string name="back">بازگشت</string>
+    <string name="create_lobby">ایجاد گروه</string>
+    <string name="dismiss">بستن</string>
+    <string name="ip_address">آدرس IP</string>
+    <string name="join_lobby">ورود به گروه</string>
+    <string name="latency">تاخیر</string>
+    <string name="lobby_name">نام گروه</string>
+    <string name="send">ارسال</string>
+    <string name="wait_for_other_client">لطفا منتظر کاربر دیگر بمانید</string>
     <string name="placeholder_message_input">Message</string>
 </resources>

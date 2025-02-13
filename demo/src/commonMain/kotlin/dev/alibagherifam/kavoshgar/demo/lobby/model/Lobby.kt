@@ -15,11 +15,12 @@ data class Lobby(
     val addressName: String get() = address.toString().drop(1)
 }
 
-internal fun ServerInformation.toLobby() = Lobby(
-    name,
-    address,
-    latency
-)
+internal fun ServerInformation.toLobby() =
+    Lobby(
+        name,
+        address,
+        latency
+    )
 
 internal fun isValidLobbyName(name: String): Boolean {
     return when {
@@ -27,4 +28,37 @@ internal fun isValidLobbyName(name: String): Boolean {
         name.toByteArray().size > Constants.SERVER_NAME_MAX_SIZE -> false
         else -> true
     }
+}
+
+object FakeLobbyFactory {
+    fun create(): Lobby = createList().first()
+
+    fun createList(): List<Lobby> =
+        listOf(
+            Lobby(
+                name = "Server #1",
+                address = InetAddress.getByName("111.225.179.31"),
+                latency = 32
+            ),
+            Lobby(
+                name = "Server #2",
+                address = InetAddress.getByName("51.97.225.106"),
+                latency = 211
+            ),
+            Lobby(
+                name = "Server #3",
+                address = InetAddress.getByName("194.169.12.147"),
+                latency = 9
+            ),
+            Lobby(
+                name = "Server #4",
+                address = InetAddress.getByName("233.32.222.209"),
+                latency = 153
+            ),
+            Lobby(
+                name = "Server #5",
+                address = InetAddress.getByName("147.221.157.105"),
+                latency = 46
+            )
+        )
 }

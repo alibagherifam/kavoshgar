@@ -54,8 +54,8 @@ import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiState
 import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
-import kavoshgar_project.demo.generated.resources.label_back
-import kavoshgar_project.demo.generated.resources.label_send
+import kavoshgar_project.demo.generated.resources.back
+import kavoshgar_project.demo.generated.resources.send
 import kavoshgar_project.demo.generated.resources.placeholder_message_input
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -128,7 +128,7 @@ private fun ChatTopBar(
             IconButton(onClick = onBackPress) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                    contentDescription = stringResource(Res.string.label_back)
+                    contentDescription = stringResource(Res.string.back)
                 )
             }
         }
@@ -284,7 +284,7 @@ private fun SendButton(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.Send,
-                contentDescription = stringResource(Res.string.label_send)
+                contentDescription = stringResource(Res.string.send)
             )
         }
     }
