@@ -1,16 +1,16 @@
 [versions]
 androidCompileSdk = "35"
 androidMinSdk = "24"
-androidPlugin = "8.7.3"
+androidPlugin = "8.8.0"
 androidTargetSdk = "35"
-androidxActivity = "1.10.0-beta01"
-androidxComposeBom = "2024.11.00"
+androidxActivity = "1.10.0"
+androidxComposeBom = "2025.02.00"
 androidxCore = "1.15.0"
-androidxLifecycle = "2.8.7"
-composeMultiplatform = "1.8.0-alpha01"
-kotlin = "2.1.0"
-kotlinxCoroutines = "1.9.0"
-logger = "0.6"
+androidxLifecycle = "2.9.0-alpha02"
+composeMultiplatform = "1.8.0-alpha03"
+kotlin = "2.1.10"
+kotlinxCoroutines = "1.10.1"
+logger = "0.8"
 versionsPlugin = "0.51.0"
 
 [libraries]
@@ -20,7 +20,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
-androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
