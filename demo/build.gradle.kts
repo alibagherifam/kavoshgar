@@ -11,7 +11,6 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
@@ -56,6 +55,10 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        androidResources {
+            localeFilters += setOf("en", "fa")
+        }
 
         vectorDrawables {
             useSupportLibrary = true
