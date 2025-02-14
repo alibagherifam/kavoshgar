@@ -7,6 +7,5 @@ object Constants {
     const val SERVER_NAME_MAX_SIZE = 64
     const val ADVERTISEMENT_PORT = 3600
     const val ADVERTISEMENT_INTERVALS = 1000L
-    const val LOBBY_DEFAULT_TTL = ADVERTISEMENT_INTERVALS * 5
     const val PING_TIMEOUT = (ADVERTISEMENT_INTERVALS * 2).toInt()
 }

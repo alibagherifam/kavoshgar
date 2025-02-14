@@ -23,6 +23,18 @@ class ChatPresenter internal constructor(
     private val _uiState = MutableStateFlow(ChatUiState())
     override val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
+    init {
+        presenterScope.launch {
+            receiveMessages()
+        }
+
+        if (server != null) {
+            serverAdvertisementJob = presenterScope.launch {
+                startServerAdvertisement()
+            }
+        }
+    }
+
     override val eventSink: (ChatUiEvent) -> Unit = { event ->
         when (event) {
             is MessageSend -> {
@@ -33,43 +45,40 @@ class ChatPresenter internal constructor(
         }
     }
 
-    init {
-        presenterScope.launch {
-            receiveMessages()
-        }
-        if (server != null) {
-            serverAdvertisementJob = presenterScope.launch {
-                startServerAdvertisement()
-            }
-        }
-    }
-
     private suspend fun sendMessage(message: String) {
         messenger.sendMessage(message)
         _uiState.update {
-            it.copy(
-                messages = addMessageToList(message, isFromUser = true),
+            val newMessage = Message(
+                isMine = true,
+                content = message
             )
+            it.copy(messages = it.messages + newMessage)
         }
     }
 
     private suspend fun receiveMessages() {
-        messenger.receiveMessages().catch {
-            logError(tag = "ChatViewModel", err = it)
-            _uiState.update { state ->
-                state.copy(isConnectionLost = true)
-            }
-        }.collect { message ->
-            if (message.isBlank()) {
-                if (serverAdvertisementJob?.isActive == true) {
-                    stopServerAdvertisement()
+        messenger
+            .receiveMessages()
+            .catch {
+                logError(tag = "ChatPresenter", err = it)
+                _uiState.update { state ->
+                    state.copy(isConnectionLost = true)
                 }
-            } else {
-                _uiState.update {
-                    it.copy(messages = addMessageToList(message, isFromUser = false))
+            }.collect { message ->
+                if (message.isBlank()) {
+                    if (serverAdvertisementJob?.isActive == true) {
+                        stopServerAdvertisement()
+                    }
+                } else {
+                    _uiState.update {
+                        val newMessage = Message(
+                            isMine = false,
+                            content = message
+                        )
+                        it.copy(messages = it.messages + newMessage)
+                    }
                 }
             }
-        }
     }
 
     private suspend fun startServerAdvertisement() {
@@ -84,16 +93,5 @@ class ChatPresenter internal constructor(
         _uiState.update {
             it.copy(isLookingForClient = false)
         }
-    }
-
-    private fun addMessageToList(
-        message: String,
-        isFromUser: Boolean
-    ): List<Message> {
-        val newMessage = Message(
-            isMine = isFromUser,
-            content = message
-        )
-        return uiState.value.messages + newMessage
     }
 }

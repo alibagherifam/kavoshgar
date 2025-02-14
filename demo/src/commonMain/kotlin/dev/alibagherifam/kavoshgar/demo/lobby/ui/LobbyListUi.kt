@@ -59,6 +59,7 @@ internal fun LobbyListUi(
     modifier: Modifier = Modifier
 ) {
     var isLobbyPromptVisible by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
