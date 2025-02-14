@@ -5,20 +5,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListPresenter
 import dev.alibagherifam.kavoshgar.demo.lobby.provideLobbyListViewModel
 
 @Composable
 fun LobbyListDestination(
     onChatPageRequest: (ChatNavigationArgs) -> Unit
 ) {
-    val viewModel = remember {
+    val presenter: LobbyListPresenter = remember {
         provideLobbyListViewModel()
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by presenter.uiState.collectAsState()
     LobbyListUi(
         uiState = uiState,
-        eventSink = viewModel.eventSink,
+        eventSink = presenter.eventSink,
         onChatPageRequest = onChatPageRequest
     )
 }

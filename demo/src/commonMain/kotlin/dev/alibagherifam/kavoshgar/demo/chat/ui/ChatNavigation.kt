@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatPresenter
 import dev.alibagherifam.kavoshgar.demo.chat.provideMessengerViewModel
 import java.net.InetAddress
 
@@ -12,7 +13,7 @@ fun ChatDestination(
     args: ChatNavigationArgs,
     onCloserRequest: () -> Unit
 ) {
-    val viewModel = remember {
+    val presenter: ChatPresenter = remember {
         provideMessengerViewModel(
             isLobbyOwner = args.isLobbyOwner,
             lobbyAddress = args.lobbyAddress,
@@ -20,11 +21,11 @@ fun ChatDestination(
         )
     }
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by presenter.uiState.collectAsState()
     ChatUi(
         lobbyName = args.lobbyName,
         uiState = uiState,
-        eventSink = viewModel.eventSink,
+        eventSink = presenter.eventSink,
         onBackPress = onCloserRequest
     )
 }
