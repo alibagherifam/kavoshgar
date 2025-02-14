@@ -26,6 +26,8 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.runtime)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.logger)
             implementation(projects.kavoshgar)
         }

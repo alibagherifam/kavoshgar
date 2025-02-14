@@ -4,26 +4,23 @@ androidMinSdk = "24"
 androidPlugin = "8.8.0"
 androidTargetSdk = "35"
 androidxActivity = "1.10.0"
-androidxComposeBom = "2025.02.00"
 androidxCore = "1.15.0"
 androidxLifecycle = "2.9.0-alpha02"
 composeMultiplatform = "1.8.0-alpha03"
 kotlin = "2.1.10"
 kotlinxCoroutines = "1.10.1"
+kotlinxDatetime = "0.6.1"
 logger = "0.8"
 versionsPlugin = "0.51.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 logger = { group = "de.halfbit", name = "logger", version.ref = "logger" }
 
 [plugins]

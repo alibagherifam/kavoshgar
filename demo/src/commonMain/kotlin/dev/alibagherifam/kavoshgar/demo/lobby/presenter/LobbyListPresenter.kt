@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 class LobbyListPresenter internal constructor(
     private val client: KavoshgarClient
@@ -70,11 +71,11 @@ class LobbyListPresenter internal constructor(
     }
 
     private fun scheduleExpiration(lobby: Lobby) {
-        lobbyExpirationTimes[lobby.addressName] = System.currentTimeMillis() + LOBBY_TTL
+        lobbyExpirationTimes[lobby.addressName] = now() + LOBBY_TTL
     }
 
     private fun removeExpiredLobbies() {
-        val now = System.currentTimeMillis()
+        val now = now()
         val expiredLobbies = lobbyExpirationTimes
             .filterValues { expTime -> expTime < now }
             .keys
@@ -90,6 +91,8 @@ class LobbyListPresenter internal constructor(
             state.copy(lobbies = newList)
         }
     }
+
+    private fun now(): Long = Clock.System.now().toEpochMilliseconds()
 
     companion object {
         const val LOBBY_TTL = Constants.ADVERTISEMENT_INTERVALS * 5

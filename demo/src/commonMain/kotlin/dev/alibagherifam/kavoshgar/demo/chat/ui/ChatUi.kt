@@ -48,15 +48,21 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent.MessageSend
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiState
-import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
 import kavoshgar_project.demo.generated.resources.back
-import kavoshgar_project.demo.generated.resources.send
 import kavoshgar_project.demo.generated.resources.placeholder_message_input
+import kavoshgar_project.demo.generated.resources.send
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.Padding
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -183,8 +189,21 @@ private fun MessageItem(
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.End
                 )
+
+                val timestamp: String = message
+                    .receiveInstant
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .time
+                    .format(
+                        LocalTime.Format {
+                            hour(Padding.NONE)
+                            char(':')
+                            minute()
+                        }
+                    )
+
                 Text(
-                    text = message.timestamp,
+                    text = timestamp,
                     style = MaterialTheme.typography.labelSmall
                 )
             }
