@@ -1,8 +1,7 @@
 package dev.alibagherifam.kavoshgar.demo.chat.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,10 +29,10 @@ internal fun LookingForClientDialog(
     modifier: Modifier = Modifier
 ) {
     AlertDialog(
-        modifier = modifier,
         onDismissRequest = {
             /* no-op */
         },
+        modifier = modifier,
         text = {
             Column(
                 modifier = Modifier.widthIn(min = 280.dp),
@@ -50,15 +49,15 @@ internal fun LookingForClientDialog(
             }
         },
         confirmButton = {
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.Center
+                    .padding(bottom = 8.dp),
+                contentAlignment = Alignment.Center
             ) {
                 TextButton(
                     modifier = Modifier.widthIn(min = 180.dp),
-                    onClick = { onDismissRequest() }
+                    onClick = onDismissRequest
                 ) {
                     Text(text = stringResource(Res.string.dismiss))
                 }
