@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -48,6 +49,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.alibagherifam.kavoshgar.demo.chat.model.FakeMessageFactory
 import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent.MessageSend
@@ -222,6 +224,7 @@ private fun MessageInputBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .navigationBarsPadding()
             .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -311,21 +314,9 @@ private fun SendButton(
 
 @Preview
 @Composable
-private fun ChatContentPreview() {
-    val fakeMessages = listOf(
-        Message(
-            isMine = true,
-            content = "سلام! برای امتحان فردا چیزی خوندی؟"
-        ),
-        Message(
-            isMine = false,
-            content = "سلام. هنوز شروع نکردم 😃 احتمالا راحت باشه."
-        ),
-        Message(
-            isMine = true,
-            content = "منم چیزی نخوندم هنوز"
-        )
-    )
+private fun ChatUiPreview() {
+    val fakeMessages = FakeMessageFactory.createList()
+
     AppTheme {
         ChatUi(
             lobbyName = "محمد عطایی",
