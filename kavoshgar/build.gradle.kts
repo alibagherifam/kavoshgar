@@ -5,6 +5,7 @@ plugins {
 }
 
 group = "dev.alibagherifam.kavoshgar"
+version = "1.0.0"
 
 kotlin {
     compilerOptions {
