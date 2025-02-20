@@ -51,11 +51,12 @@ class KavoshgarClient {
     private suspend fun awaitServerAdvertisement(): DatagramPacket {
         val socket = checkNotNull(discoverySocket) { "Discovery socket is not opened!" }
         logInfo(TAG) { "Awaiting server advertisement..." }
-        withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             socket.receive(serverAdvertisementPacket)
+            serverAdvertisementPacket
+        }.also {
+            logInfo(TAG) { "Server advertisement received!" }
         }
-        logInfo(TAG) { "Server advertisement received!" }
-        return serverAdvertisementPacket
     }
 
     private suspend fun DatagramPacket.extractServerInformation() =
