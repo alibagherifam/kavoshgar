@@ -41,13 +41,8 @@ class KavoshgarServer(private val serverName: String) {
             return
         }
         withContext(Dispatchers.IO) {
-            val data = serverName.toByteArray()
-            serverInformationPacket = DatagramPacket(
-                data,
-                data.size,
-                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-                Constants.ADVERTISEMENT_PORT
-            )
+            serverInformationPacket = buildAdvertisementPacket()
+
             advertisementSocket = DatagramSocket().apply {
                 broadcast = true
             }
@@ -55,10 +50,21 @@ class KavoshgarServer(private val serverName: String) {
         }
     }
 
+    private fun buildAdvertisementPacket(): DatagramPacket {
+        val data = serverName.toByteArray()
+        return DatagramPacket(
+            data,
+            data.size,
+            InetAddress.getByName(Constants.BROADCAST_ADDRESS),
+            Constants.ADVERTISEMENT_PORT
+        )
+    }
+
     private suspend fun broadcastServerInformation() {
         withContext(Dispatchers.IO) {
+            val socket = checkNotNull(advertisementSocket) { "Socket is not opened yet!" }
             logInfo(TAG) { "Broadcasting server information..." }
-            advertisementSocket!!.send(serverInformationPacket)
+            socket.send(serverInformationPacket)
             logInfo(TAG) { "Server information broadcast!" }
         }
     }
