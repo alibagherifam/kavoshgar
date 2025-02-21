@@ -39,7 +39,7 @@ import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.lobby.model.FakeLobbyFactory
 import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbySelection
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbyClick
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiState
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.generated.resources.Res
@@ -84,8 +84,8 @@ internal fun LobbyListUi(
         LobbyTable(
             lobbies = uiState.lobbies,
             selectedLobby = uiState.selectedLobby,
-            onLobbySelectionChange = {
-                eventSink(LobbySelection(it))
+            onLobbyClick = {
+                eventSink(LobbyClick(it))
             },
             modifier = Modifier.padding(innerPadding)
         )
@@ -154,7 +154,7 @@ private fun LobbyListBottomBar(
 private fun LobbyTable(
     lobbies: List<Lobby>,
     selectedLobby: Lobby?,
-    onLobbySelectionChange: (Lobby) -> Unit,
+    onLobbyClick: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -166,7 +166,7 @@ private fun LobbyTable(
             LobbyRow(
                 lobby = it,
                 isSelected = selectedLobby?.name == it.name,
-                onLobbySelectionChange = onLobbySelectionChange
+                onLobbyClick = onLobbyClick
             )
             Box(
                 modifier = Modifier
@@ -215,7 +215,7 @@ private fun LobbyListHeader(
 private fun LobbyRow(
     lobby: Lobby,
     isSelected: Boolean,
-    onLobbySelectionChange: (Lobby) -> Unit,
+    onLobbyClick: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
@@ -228,7 +228,7 @@ private fun LobbyRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                onLobbySelectionChange(lobby)
+                onLobbyClick(lobby)
             }.background(backgroundColor)
     ) {
         TableCell(

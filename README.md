@@ -45,23 +45,9 @@ supports both Android and Desktop platforms using Compose Multiplatform:
 - [Android Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/android)
 - [Desktop Demo](https://github.com/alibagherifam/kavoshgar/tree/master/demo/desktop)
 
-## ⚙ Technologies
-
-The project is based on socket programming.
-
-Other technologies used in demo applications:
-
-- Kotlin Coroutines
-- Kotlin Multiplatform
-- Compose Multiplatform
-- Material 3
-- AndroidX Lifecycle
-- Version Catalog
-
 ## 💡 Inspiration
 
-This was the final project for the Internet Engineering course during my B.Sc. in Computer
-Engineering. I was curious about how in LAN multiplayer video
+I was curious about how in LAN multiplayer video
 games ([Counter-Strike](https://blog.counter-strike.net), for example), players join a lobby and
 start playing the game without knowing each other's network address. And it took me to the SSDP.
 

@@ -4,7 +4,7 @@ import dev.alibagherifam.kavoshgar.Constants
 import dev.alibagherifam.kavoshgar.demo.Presenter
 import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
 import dev.alibagherifam.kavoshgar.demo.lobby.model.toLobby
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbySelection
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbyClick
 import dev.alibagherifam.kavoshgar.discovery.KavoshgarClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +44,7 @@ class LobbyListPresenter internal constructor(
 
     override val eventSink: (LobbyListUiEvent) -> Unit = { event ->
         when (event) {
-            is LobbySelection -> {
+            is LobbyClick -> {
                 selectLobby(event.lobby)
             }
         }
@@ -52,7 +52,7 @@ class LobbyListPresenter internal constructor(
 
     private fun selectLobby(lobby: Lobby) {
         _uiState.update {
-            it.copy(selectedLobby = lobby)
+            it.copy(selectedLobby = if (lobby.name == it.selectedLobby?.name) null else lobby)
         }
     }
 
