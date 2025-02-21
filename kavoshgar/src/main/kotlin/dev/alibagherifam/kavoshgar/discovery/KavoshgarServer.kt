@@ -59,7 +59,7 @@ class KavoshgarServer {
             payload,
             payload.size,
             InetSocketAddress(
-                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
+                Constants.BROADCAST_ADDRESS,
                 Constants.ADVERTISEMENT_PORT
             )
         )
