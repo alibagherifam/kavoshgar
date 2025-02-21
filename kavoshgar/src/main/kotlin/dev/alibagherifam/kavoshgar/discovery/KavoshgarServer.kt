@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
+import java.net.InetSocketAddress
 import de.halfbit.logger.i as logInfo
 
 /**
@@ -57,8 +58,10 @@ class KavoshgarServer {
         DatagramPacket(
             payload,
             payload.size,
-            InetAddress.getByName(Constants.BROADCAST_ADDRESS),
-            Constants.ADVERTISEMENT_PORT
+            InetSocketAddress(
+                InetAddress.getByName(Constants.BROADCAST_ADDRESS),
+                Constants.ADVERTISEMENT_PORT
+            )
         )
 
     private suspend fun broadcastAdvertisementPacket() {
