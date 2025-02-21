@@ -23,18 +23,21 @@ class KavoshgarServer(private val serverName: String) {
     }
 
     private var advertisementSocket: DatagramSocket? = null
-    private lateinit var serverInformationPacket: DatagramPacket
+    private lateinit var advertisementPacket: DatagramPacket
 
     /**
-     * Starts broadcasting the server's presence information over
-     * the network in an infinite loop until the caller scope gets canceled.
+     * Starts broadcasting the server's presence packet over the network
+     * in an infinite loop until the caller scope gets canceled.
      * This function is main-safe.
      */
     suspend fun advertisePresence() {
+        if (advertisementSocket != null) {
+            return
+        }
         try {
             openSocket()
             while (true) {
-                broadcastServerInformation()
+                broadcastAdvertisementPacket()
                 delay(Constants.ADVERTISEMENT_INTERVALS)
             }
         } finally {
@@ -43,11 +46,8 @@ class KavoshgarServer(private val serverName: String) {
     }
 
     private suspend fun openSocket() {
-        if (advertisementSocket != null) {
-            return
-        }
         withContext(Dispatchers.IO) {
-            serverInformationPacket = buildAdvertisementPacket()
+            advertisementPacket = buildAdvertisementPacket()
 
             advertisementSocket = DatagramSocket().apply {
                 broadcast = true
@@ -66,11 +66,10 @@ class KavoshgarServer(private val serverName: String) {
         )
     }
 
-    private suspend fun broadcastServerInformation() {
+    private suspend fun broadcastAdvertisementPacket() {
         withContext(Dispatchers.IO) {
             val socket = checkNotNull(advertisementSocket) { "Socket is not opened yet!" }
-            logInfo(TAG) { "Broadcasting server information..." }
-            socket.send(serverInformationPacket)
+            socket.send(advertisementPacket)
             logInfo(TAG) { "Server information broadcast!" }
         }
     }
