@@ -3,14 +3,17 @@ package dev.alibagherifam.kavoshgar.discovery
 import java.net.InetAddress
 
 /**
- * Data model which contains information that will be shown to clients.
+ * Server information that will be shown to clients.
  *
- * @param[name] an arbitrary name.
- * @param[address] Internet Protocol address of server.
+ * @param[address] IP address of server.
  * @param[latency] round-trip time for messages sent to server.
+ * @param[payload] an arbitrary payload.
  */
-data class ServerInformation(
-    val name: String,
+class ServerInformation(
     val address: InetAddress,
-    val latency: Long
-)
+    val latency: Long,
+    val payload: ByteArray
+) {
+    override fun toString(): String =
+        "ServerInformation(address = $address, latency = $latency, payload = $payload)"
+}

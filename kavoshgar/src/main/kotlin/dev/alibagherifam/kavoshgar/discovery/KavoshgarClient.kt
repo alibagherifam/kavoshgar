@@ -40,8 +40,8 @@ class KavoshgarClient {
         check(discoverySocket == null) { "Discovery socket is already opened!" }
         withContext(Dispatchers.IO) {
             serverAdvertisementPacket = DatagramPacket(
-                ByteArray(Constants.SERVER_NAME_MAX_SIZE),
-                Constants.SERVER_NAME_MAX_SIZE
+                ByteArray(Constants.ADVERTISEMENT_PACKET_MAX_SIZE),
+                Constants.ADVERTISEMENT_PACKET_MAX_SIZE
             )
             discoverySocket = DatagramSocket(Constants.ADVERTISEMENT_PORT)
         }
@@ -61,7 +61,7 @@ class KavoshgarClient {
 
     private suspend fun DatagramPacket.extractServerInformation() =
         ServerInformation(
-            name = String(data, 0, length),
+            payload = data,
             address = address,
             latency = calculateLatency(address)
         )
@@ -76,7 +76,7 @@ class KavoshgarClient {
         }
 
     private fun flushServerAdvertisementPacket() {
-        serverAdvertisementPacket.length = Constants.SERVER_NAME_MAX_SIZE
+        serverAdvertisementPacket.length = Constants.ADVERTISEMENT_PACKET_MAX_SIZE
     }
 
     private suspend fun closeSocket() {

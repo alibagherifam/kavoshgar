@@ -12,16 +12,8 @@ import de.halfbit.logger.i as logInfo
 /**
  * A server that constantly advertises its presence information for
  * any potential [client][KavoshgarClient] listening to the network.
- *
- * @param[serverName] an arbitrary name will be shown to clients.
  */
-class KavoshgarServer(private val serverName: String) {
-    init {
-        require(serverName.toByteArray().size < Constants.SERVER_NAME_MAX_SIZE) {
-            "Server name cannot be larger than ${Constants.SERVER_NAME_MAX_SIZE} bytes."
-        }
-    }
-
+class KavoshgarServer {
     private var advertisementSocket: DatagramSocket? = null
     private lateinit var advertisementPacket: DatagramPacket
 
@@ -29,13 +21,20 @@ class KavoshgarServer(private val serverName: String) {
      * Starts broadcasting the server's presence packet over the network
      * in an infinite loop until the caller scope gets canceled.
      * This function is main-safe.
+     *
+     * @param[payload] an arbitrary payload for advertisement packets.
      */
-    suspend fun advertisePresence() {
+    suspend fun advertisePresence(payload: ByteArray) {
+        require(payload.size < Constants.ADVERTISEMENT_PACKET_MAX_SIZE) {
+            "Payload cannot be larger than ${Constants.ADVERTISEMENT_PACKET_MAX_SIZE} bytes."
+        }
+
         if (advertisementSocket != null) {
             return
         }
         try {
             openSocket()
+            advertisementPacket = buildAdvertisementPacket(payload)
             while (true) {
                 broadcastAdvertisementPacket()
                 delay(Constants.ADVERTISEMENT_INTERVALS)
@@ -47,8 +46,6 @@ class KavoshgarServer(private val serverName: String) {
 
     private suspend fun openSocket() {
         withContext(Dispatchers.IO) {
-            advertisementPacket = buildAdvertisementPacket()
-
             advertisementSocket = DatagramSocket().apply {
                 broadcast = true
             }
@@ -56,15 +53,13 @@ class KavoshgarServer(private val serverName: String) {
         }
     }
 
-    private fun buildAdvertisementPacket(): DatagramPacket {
-        val data = serverName.toByteArray()
-        return DatagramPacket(
-            data,
-            data.size,
+    private fun buildAdvertisementPacket(payload: ByteArray): DatagramPacket =
+        DatagramPacket(
+            payload,
+            payload.size,
             InetAddress.getByName(Constants.BROADCAST_ADDRESS),
             Constants.ADVERTISEMENT_PORT
         )
-    }
 
     private suspend fun broadcastAdvertisementPacket() {
         withContext(Dispatchers.IO) {

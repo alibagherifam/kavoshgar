@@ -22,7 +22,7 @@ and, other nodes (i.e., clients) will be notified about the presence of servers.
 Only the network nodes you want to be a server should start advertising presence information:
 
 ```kotlin
-val server = KavoshgarServer(name = "Test Server")
+val server = KavoshgarServer()
 server.advertisePresence()
 ```
 
@@ -69,15 +69,10 @@ start playing the game without knowing each other's network address. And it took
 
 Feel free to create pull requests.
 
-## 🙏 Acknowledgment
-
-Thanks to [Dr. Nastooh Taheri Javan](https://scholar.google.com/citations?user=PmjCrgMAAAAJ&hl=en)
-for his guidance toward the project.
-
 License
 --------
 
-    Copyright 2023 Ali Bagherifam
+    Copyright 2025 Ali Bagherifam
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

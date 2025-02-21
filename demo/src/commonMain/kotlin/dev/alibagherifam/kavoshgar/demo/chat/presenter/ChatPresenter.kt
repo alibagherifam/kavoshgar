@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import de.halfbit.logger.e as logError
 
 class ChatPresenter internal constructor(
+    private val lobbyName: String,
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
 ) : Presenter<ChatUiState, ChatUiEvent>() {
@@ -85,7 +86,7 @@ class ChatPresenter internal constructor(
         _uiState.update {
             it.copy(isLookingForClient = true)
         }
-        server!!.advertisePresence()
+        server!!.advertisePresence(lobbyName.toByteArray())
     }
 
     private fun stopServerAdvertisement() {

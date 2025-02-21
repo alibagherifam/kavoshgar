@@ -17,15 +17,15 @@ data class Lobby(
 
 internal fun ServerInformation.toLobby() =
     Lobby(
-        name,
-        address,
-        latency
+        name = String(payload),
+        address = address,
+        latency = latency
     )
 
 internal fun isValidLobbyName(name: String): Boolean {
     return when {
         name.isBlank() -> false
-        name.toByteArray().size > Constants.SERVER_NAME_MAX_SIZE -> false
+        name.toByteArray().size > Constants.ADVERTISEMENT_PACKET_MAX_SIZE -> false
         else -> true
     }
 }

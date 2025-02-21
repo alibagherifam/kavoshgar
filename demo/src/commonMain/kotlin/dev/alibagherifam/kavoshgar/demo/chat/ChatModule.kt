@@ -12,14 +12,12 @@ internal fun provideMessengerViewModel(
     lobbyAddress: InetAddress?,
     lobbyName: String
 ) = ChatPresenter(
+    lobbyName = lobbyName,
     messenger = provideMessengerService(
         isLobbyOwner,
         lobbyAddress
     ),
-    server = provideServer(
-        isLobbyOwner,
-        lobbyName
-    )
+    server = provideServer(isLobbyOwner)
 )
 
 private fun provideMessengerService(
@@ -32,10 +30,8 @@ private fun provideMessengerService(
     }
 )
 
-private fun provideServer(
-    isLobbyOwner: Boolean,
-    lobbyName: String
-) = when {
-    isLobbyOwner -> KavoshgarServer(lobbyName)
-    else -> null
-}
+private fun provideServer(isLobbyOwner: Boolean) =
+    when {
+        isLobbyOwner -> KavoshgarServer()
+        else -> null
+    }
