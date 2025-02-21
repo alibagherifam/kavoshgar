@@ -12,7 +12,7 @@ data class Lobby(
     /**
      * @return server address in dot-decimal notation (e.g., 192.168.10.64).
      */
-    val addressName: String get() = address.toString().drop(1)
+    val addressName: String get() = address.hostAddress
 }
 
 internal fun ServerInformation.toLobby() =
