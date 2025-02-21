@@ -16,6 +16,12 @@ import de.halfbit.logger.i as logInfo
  * @param[serverName] an arbitrary name will be shown to clients.
  */
 class KavoshgarServer(private val serverName: String) {
+    init {
+        require(serverName.toByteArray().size < Constants.SERVER_NAME_MAX_SIZE) {
+            "Server name cannot be larger than ${Constants.SERVER_NAME_MAX_SIZE} bytes."
+        }
+    }
+
     private var advertisementSocket: DatagramSocket? = null
     private lateinit var serverInformationPacket: DatagramPacket
 
