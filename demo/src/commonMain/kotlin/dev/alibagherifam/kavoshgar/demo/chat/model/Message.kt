@@ -1,7 +1,7 @@
 package dev.alibagherifam.kavoshgar.demo.chat.model
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class Message(
     val isMine: Boolean,

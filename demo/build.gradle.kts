@@ -18,6 +18,7 @@ kotlin {
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "androidx.compose.foundation.ExperimentalFoundationApi",
                 "androidx.compose.material3.ExperimentalMaterial3Api",
+                "kotlin.time.ExperimentalTime"
             )
         )
     }
@@ -74,6 +75,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         androidResources {
+            @Suppress("UnstableApiUsage")
             localeFilters += setOf("en", "fa")
         }
 
@@ -97,7 +99,12 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "/META-INF/LICENSE.md",
+                "/META-INF/LICENSE-notice.md",
+                "/META-INF/INDEX.LIST"
+            )
         }
     }
 
