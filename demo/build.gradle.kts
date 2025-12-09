@@ -37,6 +37,7 @@ kotlin {
         implementation(libs.androidx.lifecycle.viewmodel)
         implementation(libs.compose.foundation)
         implementation(libs.compose.material3)
+        implementation(libs.compose.materialIcons)
         implementation(libs.compose.preview)
         implementation(libs.compose.resources)
         implementation(libs.compose.runtime)
