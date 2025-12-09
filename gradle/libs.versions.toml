@@ -1,22 +1,33 @@
 [versions]
-androidCompileSdk = "35"
+androidCompileSdk = "36"
 androidMinSdk = "24"
-androidPlugin = "8.10.0"
-androidTargetSdk = "35"
-androidxActivity = "1.10.1"
-androidxCore = "1.16.0"
-androidxLifecycle = "2.9.0-beta01"
-composeMultiplatform = "1.8.0"
-kotlin = "2.1.20"
+androidPlugin = "8.13.1"
+androidTargetSdk = "36"
+androidxActivity = "1.12.1"
+androidxCore = "1.17.0"
+androidxLifecycle = "2.10.0-alpha06"
+composeHotReload = "1.1.0-alpha02"
+composeMaterial3 = "1.10.0-alpha05"
+composeMaterialIcons = "1.7.3"
+composeMultiplatform = "1.10.0-rc01"
+kotlin = "2.2.21"
 kotlinxCoroutines = "1.10.2"
-
-kotlinxDatetime = "0.6.2"
-logger = "0.8"
+kotlinxDatetime = "0.7.1"
+logger = "0.9"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-lifecycle-core = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+compose-backhandler = { group = "org.jetbrains.compose.ui", name = "ui-backhandler", version.ref = "composeMultiplatform" }
+compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "composeMultiplatform" }
+compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "composeMaterial3" }
+compose-materialIcons = { group = "org.jetbrains.compose.material", name = "material-icons-extended", version.ref = "composeMaterialIcons" }
+compose-preview = { group = "org.jetbrains.compose.components", name = "components-ui-tooling-preview", version.ref = "composeMultiplatform" }
+compose-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "composeMultiplatform" }
+compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "composeMultiplatform" }
+compose-ui = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "composeMultiplatform" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
@@ -26,6 +37,7 @@ logger = { group = "de.halfbit", name = "logger", version.ref = "logger" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidPlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-hotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

@@ -5,11 +5,23 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.hotReload)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
 }
 
 kotlin {
+    compilerOptions {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        optIn.addAll(
+            listOf(
+                "kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "androidx.compose.foundation.ExperimentalFoundationApi",
+                "androidx.compose.material3.ExperimentalMaterial3Api",
+            )
+        )
+    }
+
     androidTarget {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
@@ -18,20 +30,23 @@ kotlin {
 
     jvm("desktop")
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.runtime)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.logger)
-            implementation(projects.kavoshgar)
-        }
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    dependencies {
+        implementation(libs.androidx.lifecycle.core)
+        implementation(libs.androidx.lifecycle.viewmodel)
+        implementation(libs.compose.foundation)
+        implementation(libs.compose.material3)
+        implementation(libs.compose.preview)
+        implementation(libs.compose.resources)
+        implementation(libs.compose.runtime)
+        implementation(libs.compose.ui)
+        implementation(libs.kotlinx.coroutines.core)
+        implementation(libs.kotlinx.datetime)
+        implementation(libs.logger)
+        implementation(projects.kavoshgar)
+    }
 
+    sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.ktx)
