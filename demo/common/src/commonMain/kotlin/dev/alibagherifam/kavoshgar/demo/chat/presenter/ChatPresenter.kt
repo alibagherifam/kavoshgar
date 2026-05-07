@@ -1,6 +1,7 @@
 package dev.alibagherifam.kavoshgar.demo.chat.presenter
 
-import dev.alibagherifam.kavoshgar.demo.Presenter
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.alibagherifam.kavoshgar.demo.chat.model.Message
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatUiEvent.MessageSend
 import dev.alibagherifam.kavoshgar.discovery.KavoshgarServer
@@ -8,7 +9,6 @@ import dev.alibagherifam.kavoshgar.messenger.MessengerService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,28 +18,28 @@ class ChatPresenter internal constructor(
     private val lobbyName: String,
     private val messenger: MessengerService,
     private val server: KavoshgarServer? = null
-) : Presenter<ChatUiState, ChatUiEvent>() {
+) : ViewModel() {
     private var serverAdvertisementJob: Job? = null
 
-    private val _uiState = MutableStateFlow(ChatUiState())
-    override val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<ChatUiState>
+        field = MutableStateFlow(ChatUiState())
 
     init {
-        presenterScope.launch {
+        viewModelScope.launch {
             receiveMessages()
         }
 
         if (server != null) {
-            serverAdvertisementJob = presenterScope.launch {
+            serverAdvertisementJob = viewModelScope.launch {
                 startServerAdvertisement()
             }
         }
     }
 
-    override val eventSink: (ChatUiEvent) -> Unit = { event ->
+    val eventSink: (ChatUiEvent) -> Unit = { event ->
         when (event) {
             is MessageSend -> {
-                presenterScope.launch {
+                viewModelScope.launch {
                     sendMessage(event.message)
                 }
             }
@@ -48,7 +48,7 @@ class ChatPresenter internal constructor(
 
     private suspend fun sendMessage(message: String) {
         messenger.sendMessage(message)
-        _uiState.update {
+        uiState.update {
             val newMessage = Message(
                 isMine = true,
                 content = message
@@ -62,7 +62,7 @@ class ChatPresenter internal constructor(
             .receiveMessages()
             .catch {
                 logError(tag = "ChatPresenter", err = it)
-                _uiState.update { state ->
+                uiState.update { state ->
                     state.copy(isConnectionLost = true)
                 }
             }.collect { message ->
@@ -71,7 +71,7 @@ class ChatPresenter internal constructor(
                         stopServerAdvertisement()
                     }
                 } else {
-                    _uiState.update {
+                    uiState.update {
                         val newMessage = Message(
                             isMine = false,
                             content = message
@@ -83,7 +83,7 @@ class ChatPresenter internal constructor(
     }
 
     private suspend fun startServerAdvertisement() {
-        _uiState.update {
+        uiState.update {
             it.copy(isLookingForClient = true)
         }
         server!!.advertisePresence(lobbyName.toByteArray())
@@ -91,7 +91,7 @@ class ChatPresenter internal constructor(
 
     private fun stopServerAdvertisement() {
         serverAdvertisementJob!!.cancel()
-        _uiState.update {
+        uiState.update {
             it.copy(isLookingForClient = false)
         }
     }

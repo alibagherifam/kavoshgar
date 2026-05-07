@@ -19,6 +19,13 @@ kotlin {
                 "kotlin.time.ExperimentalTime"
             )
         )
+
+        freeCompilerArgs.addAll(
+            listOf(
+                "-Xreturn-value-checker=full",
+                "-Xexplicit-backing-fields"
+            )
+        )
     }
 
     android {

@@ -1,7 +1,8 @@
 package dev.alibagherifam.kavoshgar.demo.lobby.presenter
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.alibagherifam.kavoshgar.Constants
-import dev.alibagherifam.kavoshgar.demo.Presenter
 import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
 import dev.alibagherifam.kavoshgar.demo.lobby.model.toLobby
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbyClick
@@ -9,7 +10,6 @@ import dev.alibagherifam.kavoshgar.discovery.KavoshgarClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,14 +17,14 @@ import kotlin.time.Clock
 
 class LobbyListPresenter internal constructor(
     private val client: KavoshgarClient
-) : Presenter<LobbyListUiState, LobbyListUiEvent>() {
+) : ViewModel() {
     private val lobbyExpirationTimes: MutableMap<String, Long> = mutableMapOf()
 
-    private val _uiState = MutableStateFlow(LobbyListUiState())
-    override val uiState: StateFlow<LobbyListUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<LobbyListUiState>
+        field = MutableStateFlow(LobbyListUiState())
 
     init {
-        presenterScope.launch {
+        viewModelScope.launch {
             client
                 .startServerDiscovery()
                 .map { serverInfo -> serverInfo.toLobby() }
@@ -34,7 +34,7 @@ class LobbyListPresenter internal constructor(
                 }
         }
 
-        presenterScope.launch {
+        viewModelScope.launch {
             while (true) {
                 removeExpiredLobbies()
                 delay(Constants.ADVERTISEMENT_INTERVALS)
@@ -42,7 +42,7 @@ class LobbyListPresenter internal constructor(
         }
     }
 
-    override val eventSink: (LobbyListUiEvent) -> Unit = { event ->
+    val eventSink: (LobbyListUiEvent) -> Unit = { event ->
         when (event) {
             is LobbyClick -> {
                 selectLobby(event.lobby)
@@ -51,13 +51,13 @@ class LobbyListPresenter internal constructor(
     }
 
     private fun selectLobby(lobby: Lobby) {
-        _uiState.update {
+        uiState.update {
             it.copy(selectedLobby = if (lobby.name == it.selectedLobby?.name) null else lobby)
         }
     }
 
     private fun upsertLobby(lobby: Lobby) {
-        _uiState.update { state ->
+        uiState.update { state ->
             val currentList = state.lobbies
             val newList = if (currentList.any { it.name == lobby.name }) {
                 currentList.map {
@@ -84,7 +84,7 @@ class LobbyListPresenter internal constructor(
             lobbyExpirationTimes.remove(it)
         }
 
-        _uiState.update { state ->
+        uiState.update { state ->
             val newList = state.lobbies.filterNot {
                 it.addressName in expiredLobbies
             }
