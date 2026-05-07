@@ -15,13 +15,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
-import kavoshgar_project.demo.generated.resources.Res
-import kavoshgar_project.demo.generated.resources.dismiss
-import kavoshgar_project.demo.generated.resources.wait_for_other_client
+import kavoshgar_project.demo.common.generated.resources.Res
+import kavoshgar_project.demo.common.generated.resources.dismiss
+import kavoshgar_project.demo.common.generated.resources.wait_for_other_client
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun LookingForClientDialog(

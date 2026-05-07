@@ -49,5 +49,7 @@ plugins {
 rootProject.name = "kavoshgar-project"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include(":demo")
 include(":kavoshgar")
+include(":demo:common")
+include(":demo:android")
+include(":demo:desktop")
