@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kmp.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.kotlin.multiplatform)
 }
 
 kotlin {
@@ -16,7 +16,6 @@ kotlin {
                 "kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "androidx.compose.foundation.ExperimentalFoundationApi",
                 "androidx.compose.material3.ExperimentalMaterial3Api",
-                "kotlin.time.ExperimentalTime"
             )
         )
 

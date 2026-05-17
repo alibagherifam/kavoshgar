@@ -1,12 +1,10 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
+    alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.compose.hotReload)
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.compose.hotReload)
 }
 
 kotlin {
@@ -18,15 +16,11 @@ kotlin {
             )
         )
     }
+}
 
-    jvm("desktop")
-
-    sourceSets {
-        named("desktopMain").dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(projects.demo.common)
-        }
-    }
+dependencies {
+    implementation(compose.desktop.currentOs)
+    implementation(projects.demo.common)
 }
 
 compose.desktop {
@@ -49,7 +43,7 @@ compose.desktop {
                 perUserInstall = true
                 dirChooser = true
 
-                val iconPath = "src/jvmMain/resources/images/ic_launcher_windows"
+                val iconPath = "src/main/resources/images/ic_launcher_windows"
                 iconFile = project.file(iconPath)
 
                 // a unique ID, which enables users to update an app via installer, when an
