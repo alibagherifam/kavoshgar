@@ -29,22 +29,22 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Msi)
+
             packageName = "KavoshgarDemo"
             packageVersion = "1.0.0"
-
-            // Metadata
-            version = "1.0.0"
             description = "Demonstrates features of Kavoshgar library"
             copyright = "© 2023 Ali Bagherifam. All rights reserved."
+            vendor = "Ali Bagherifam"
             licenseFile = project.file("LICENSE")
 
-            windows {
-                menuGroup = packageName
-                perUserInstall = true
-                dirChooser = true
+            val iconDir = project.file("src/main/resources/drawable/")
 
-                val iconPath = "src/main/resources/images/ic_launcher_windows"
-                iconFile = project.file(iconPath)
+            windows {
+                iconFile = iconDir.resolve("kavoshgar.ico")
+                upgradeUuid = "AF792DA6-2EA3-495A-95E5-C3C6CBCB9948"
+                dirChooser = true
+                perUserInstall = true
+                menuGroup = packageName
 
                 // a unique ID, which enables users to update an app via installer, when an
                 // updated version is newer, than an installed version. The value must
