@@ -1,14 +1,20 @@
 package dev.alibagherifam.kavoshgar.discovery
 
 import dev.alibagherifam.kavoshgar.Constants
+import io.ktor.network.selector.SelectorManager
+import io.ktor.network.sockets.BoundDatagramSocket
+import io.ktor.network.sockets.Datagram
+import io.ktor.network.sockets.SocketAddress
+import io.ktor.network.sockets.aSocket
+import io.ktor.network.sockets.toJavaAddress
+import io.ktor.util.network.address
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
-import java.net.DatagramPacket
-import java.net.DatagramSocket
+import kotlinx.io.readByteArray
 import java.net.InetAddress
 import kotlin.system.measureTimeMillis
 import de.halfbit.logger.i as logInfo
@@ -17,8 +23,7 @@ import de.halfbit.logger.i as logInfo
  * A client constantly listens to the network to discover available servers.
  */
 class KavoshgarClient {
-    private var discoverySocket: DatagramSocket? = null
-    private lateinit var serverAdvertisementPacket: DatagramPacket
+    private var discoverySocket: BoundDatagramSocket? = null
 
     /**
      * Starts awaiting server advertisement in an infinite loop
@@ -31,7 +36,6 @@ class KavoshgarClient {
         while (true) {
             val packet = awaitServerAdvertisement()
             emit(packet.extractServerInformation())
-            flushServerAdvertisementPacket()
             yield()
         }
     }.onCompletion { closeSocket() }
@@ -39,32 +43,36 @@ class KavoshgarClient {
     private suspend fun openSocket() {
         check(discoverySocket == null) { "Discovery socket is already opened!" }
         withContext(Dispatchers.IO) {
-            serverAdvertisementPacket = DatagramPacket(
-                ByteArray(Constants.ADVERTISEMENT_PACKET_MAX_SIZE),
-                Constants.ADVERTISEMENT_PACKET_MAX_SIZE
-            )
-            discoverySocket = DatagramSocket(Constants.ADVERTISEMENT_PORT)
+            discoverySocket =
+                aSocket(SelectorManager(Dispatchers.IO))
+                    .udp()
+                    .bind(port = Constants.ADVERTISEMENT_PORT)
         }
         logInfo(TAG) { "Discovery socket created!" }
     }
 
-    private suspend fun awaitServerAdvertisement(): DatagramPacket {
+    private suspend fun awaitServerAdvertisement(): Datagram {
         val socket = checkNotNull(discoverySocket) { "Discovery socket is not opened!" }
         logInfo(TAG) { "Awaiting server advertisement..." }
         return withContext(Dispatchers.IO) {
-            socket.receive(serverAdvertisementPacket)
-            serverAdvertisementPacket
+            socket.receive()
         }.also {
             logInfo(TAG) { "Server advertisement received!" }
         }
     }
 
-    private suspend fun DatagramPacket.extractServerInformation() =
-        ServerInformation(
-            payload = data,
+    private suspend fun Datagram.extractServerInformation(): ServerInformation {
+        val address = address.toInetAddress()
+        return ServerInformation(
             address = address,
-            latency = calculateLatency(address)
+            latency = calculateLatency(address),
+            payload = packet.readByteArray()
         )
+    }
+
+    private fun SocketAddress.toInetAddress() =
+        this.toJavaAddress()
+            .let { InetAddress.getByName(it.address) }
 
     private suspend fun calculateLatency(destinationAddress: InetAddress): Long =
         withContext(Dispatchers.IO) {
@@ -74,10 +82,6 @@ class KavoshgarClient {
             }
             if (isReachable) latency else -1
         }
-
-    private fun flushServerAdvertisementPacket() {
-        serverAdvertisementPacket.length = Constants.ADVERTISEMENT_PACKET_MAX_SIZE
-    }
 
     private suspend fun closeSocket() {
         val socket = checkNotNull(discoverySocket) { "Discovery socket is not opened!" }

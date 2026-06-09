@@ -13,6 +13,7 @@ composeMultiplatform = "1.11.1"
 kotlin = "2.4.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
+ktor = "3.5.0"
 logger = "0.10"
 
 [libraries]
@@ -32,6 +33,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 logger = { group = "de.halfbit", name = "logger", version.ref = "logger" }
 
 [plugins]
