@@ -1,25 +1,31 @@
 package dev.alibagherifam.kavoshgar.demo.lobby.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListPresenter
 import dev.alibagherifam.kavoshgar.demo.lobby.provideLobbyListViewModel
 
-@Composable
-fun LobbyListDestination(
-    onChatPageRequest: (ChatNavigationArgs) -> Unit
+fun NavGraphBuilder.lobbyList(
+    onCreateLobbyClick: (String) -> Unit,
+    onJoinLobbyClick: (Lobby) -> Unit
 ) {
-    val presenter: LobbyListPresenter = remember {
-        provideLobbyListViewModel()
-    }
+    composable<LobbyList> {
+        val presenter: LobbyListPresenter = viewModel {
+            provideLobbyListViewModel()
+        }
 
-    val uiState by presenter.uiState.collectAsState()
-    LobbyListUi(
-        uiState = uiState,
-        eventSink = presenter.eventSink,
-        onChatPageRequest = onChatPageRequest
-    )
+        val uiState by presenter.uiState.collectAsStateWithLifecycle()
+        LobbyListUi(
+            uiState = uiState,
+            eventSink = presenter.eventSink,
+            onCreateLobbyClick = onCreateLobbyClick,
+            onJoinLobbyClick = onJoinLobbyClick
+        )
+    }
 }
+
+data object LobbyList

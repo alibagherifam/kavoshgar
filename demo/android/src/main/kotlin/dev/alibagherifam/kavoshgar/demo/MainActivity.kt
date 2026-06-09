@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                NavHost()
+                AppNavHost()
             }
         }
     }

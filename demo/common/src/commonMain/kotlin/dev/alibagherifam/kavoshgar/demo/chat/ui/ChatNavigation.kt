@@ -1,36 +1,39 @@
 package dev.alibagherifam.kavoshgar.demo.chat.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import dev.alibagherifam.kavoshgar.demo.chat.presenter.ChatPresenter
 import dev.alibagherifam.kavoshgar.demo.chat.provideMessengerViewModel
 import java.net.InetAddress
 
-@Composable
-fun ChatDestination(
-    args: ChatNavigationArgs,
-    onCloserRequest: () -> Unit
+fun NavGraphBuilder.chat(
+    onCloseLobby: () -> Unit
 ) {
-    val presenter: ChatPresenter = remember {
-        provideMessengerViewModel(
-            isLobbyOwner = args.isLobbyOwner,
-            lobbyAddress = args.lobbyAddress,
-            lobbyName = args.lobbyName
+    composable<Chat> { backStackEntry ->
+        val args = backStackEntry.toRoute<Chat>()
+        val presenter: ChatPresenter = viewModel {
+            provideMessengerViewModel(
+                isLobbyOwner = args.isLobbyOwner,
+                lobbyAddress = args.lobbyAddress,
+                lobbyName = args.lobbyName
+            )
+        }
+
+        val uiState by presenter.uiState.collectAsStateWithLifecycle()
+        ChatUi(
+            lobbyName = args.lobbyName,
+            uiState = uiState,
+            eventSink = presenter.eventSink,
+            onBackPress = onCloseLobby
         )
     }
-
-    val uiState by presenter.uiState.collectAsState()
-    ChatUi(
-        lobbyName = args.lobbyName,
-        uiState = uiState,
-        eventSink = presenter.eventSink,
-        onBackPress = onCloserRequest
-    )
 }
 
-data class ChatNavigationArgs(
+data class Chat(
     val isLobbyOwner: Boolean,
     val lobbyName: String,
     val lobbyAddress: InetAddress? = null

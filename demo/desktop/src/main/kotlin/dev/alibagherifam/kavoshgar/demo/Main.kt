@@ -10,7 +10,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication
     ) {
         AppTheme {
-            NavHost()
+            AppNavHost()
         }
     }
 }

@@ -36,11 +36,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
 import dev.alibagherifam.kavoshgar.demo.lobby.model.FakeLobbyFactory
 import dev.alibagherifam.kavoshgar.demo.lobby.model.Lobby
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent
-import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbyClick
+import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiEvent.LobbySelection
 import dev.alibagherifam.kavoshgar.demo.lobby.presenter.LobbyListUiState
 import dev.alibagherifam.kavoshgar.demo.theme.AppTheme
 import kavoshgar_project.demo.common.generated.resources.Res
@@ -55,7 +54,8 @@ import org.jetbrains.compose.resources.stringResource
 internal fun LobbyListUi(
     uiState: LobbyListUiState,
     eventSink: (LobbyListUiEvent) -> Unit,
-    onChatPageRequest: (ChatNavigationArgs) -> Unit,
+    onCreateLobbyClick: (String) -> Unit,
+    onJoinLobbyClick: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isLobbyPromptVisible by remember { mutableStateOf(false) }
@@ -70,12 +70,7 @@ internal fun LobbyListUi(
                 onJoinLobbyClick = {
                     val selectedLobby = uiState.selectedLobby
                     if (selectedLobby != null) {
-                        val args = ChatNavigationArgs(
-                            isLobbyOwner = false,
-                            lobbyName = selectedLobby.name,
-                            lobbyAddress = selectedLobby.address
-                        )
-                        onChatPageRequest(args)
+                        onJoinLobbyClick(selectedLobby)
                     }
                 }
             )
@@ -84,8 +79,8 @@ internal fun LobbyListUi(
         LobbyTable(
             lobbies = uiState.lobbies,
             selectedLobby = uiState.selectedLobby,
-            onLobbyClick = {
-                eventSink(LobbyClick(it))
+            onLobbySelectionChange = {
+                eventSink(LobbySelection(it))
             },
             modifier = Modifier.padding(innerPadding)
         )
@@ -93,13 +88,7 @@ internal fun LobbyListUi(
 
     if (isLobbyPromptVisible) {
         LobbyNamePromptDialog(
-            onCreateLobbyClick = { lobbyName ->
-                val args = ChatNavigationArgs(
-                    isLobbyOwner = true,
-                    lobbyName = lobbyName
-                )
-                onChatPageRequest(args)
-            },
+            onCreateLobbyClick = onCreateLobbyClick,
             onDismissRequest = {
                 isLobbyPromptVisible = false
             }
@@ -154,7 +143,7 @@ private fun LobbyListBottomBar(
 private fun LobbyTable(
     lobbies: List<Lobby>,
     selectedLobby: Lobby?,
-    onLobbyClick: (Lobby) -> Unit,
+    onLobbySelectionChange: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -166,7 +155,7 @@ private fun LobbyTable(
             LobbyRow(
                 lobby = it,
                 isSelected = selectedLobby?.name == it.name,
-                onLobbyClick = onLobbyClick
+                onLobbySelectionChange = onLobbySelectionChange
             )
             Box(
                 modifier = Modifier
@@ -215,7 +204,7 @@ private fun LobbyListHeader(
 private fun LobbyRow(
     lobby: Lobby,
     isSelected: Boolean,
-    onLobbyClick: (Lobby) -> Unit,
+    onLobbySelectionChange: (Lobby) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val backgroundColor = when {
@@ -228,7 +217,7 @@ private fun LobbyRow(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                onLobbyClick(lobby)
+                onLobbySelectionChange(lobby)
             }.background(backgroundColor)
     ) {
         TableCell(
@@ -282,7 +271,8 @@ private fun LobbyListUiPreview() {
                 selectedLobby = fakeLobbies[1]
             ),
             eventSink = {},
-            onChatPageRequest = {}
+            onCreateLobbyClick = {},
+            onJoinLobbyClick = {}
         )
     }
 }

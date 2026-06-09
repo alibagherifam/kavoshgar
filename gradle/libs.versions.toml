@@ -6,6 +6,7 @@ androidTargetSdk = "36"
 androidxActivity = "1.13.0"
 androidxCore = "1.19.0"
 androidxLifecycle = "2.10.0"
+androidxNavigation = "2.9.2"
 composeHotReload = "1.1.1"
 composeMaterial3 = "1.10.0-alpha05"
 composeMaterialIcons = "1.7.3"
@@ -20,6 +21,7 @@ androidx-activity = { group = "androidx.activity", name = "activity-compose", ve
 androidx-core = { group = "androidx.core", name = "core", version.ref = "androidxCore" }
 androidx-lifecycle-core = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 compose-backhandler = { group = "org.jetbrains.compose.ui", name = "ui-backhandler", version.ref = "composeMultiplatform" }
 compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "composeMultiplatform" }
 compose-material3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "composeMaterial3" }

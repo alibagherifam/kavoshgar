@@ -1,35 +1,43 @@
 package dev.alibagherifam.kavoshgar.demo
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatDestination
-import dev.alibagherifam.kavoshgar.demo.chat.ui.ChatNavigationArgs
-import dev.alibagherifam.kavoshgar.demo.lobby.ui.LobbyListDestination
-
-sealed class NavigationDestination {
-    data object LobbyList : NavigationDestination()
-    data class Chat(val args: ChatNavigationArgs) : NavigationDestination()
-}
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import dev.alibagherifam.kavoshgar.demo.chat.ui.Chat
+import dev.alibagherifam.kavoshgar.demo.chat.ui.chat
+import dev.alibagherifam.kavoshgar.demo.lobby.ui.LobbyList
+import dev.alibagherifam.kavoshgar.demo.lobby.ui.lobbyList
 
 @Composable
-fun NavHost() {
-    var currentDestination: NavigationDestination by remember {
-        mutableStateOf(NavigationDestination.LobbyList)
-    }
-    when (currentDestination) {
-        NavigationDestination.LobbyList -> LobbyListDestination(
-            onChatPageRequest = { args ->
-                currentDestination = NavigationDestination.Chat(args)
+fun AppNavHost(
+    navController: NavHostController = rememberNavController()
+) {
+    NavHost(
+        navController = navController,
+        startDestination = LobbyList,
+    ) {
+        lobbyList(
+            onCreateLobbyClick = { lobbyName ->
+                val args = Chat(
+                    isLobbyOwner = true,
+                    lobbyName = lobbyName
+                )
+                navController.navigate(chat)
+            },
+            onJoinLobbyClick = { lobby ->
+                val args = Chat(
+                    isLobbyOwner = false,
+                    lobbyName = selectedLobby.name,
+                    lobbyAddress = selectedLobby.address
+                )
+                navController.navigate(chat)
             }
         )
 
-        is NavigationDestination.Chat -> ChatDestination(
-            args = (currentDestination as NavigationDestination.Chat).args,
-            onCloserRequest = {
-                currentDestination = NavigationDestination.LobbyList
+        chat(
+            onCloseLobby = {
+                navController.navigate(LobbyList)
             }
         )
     }

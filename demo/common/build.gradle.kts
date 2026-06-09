@@ -43,6 +43,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.androidx.lifecycle.core)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.navigation)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
             implementation(libs.compose.materialIcons)
